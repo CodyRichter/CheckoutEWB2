@@ -21,8 +21,9 @@ public class Item {
 
     private int number = -1; //Identifying number for a Item. Must be specific.
 
+    @SuppressWarnings("StatementWithEmptyBody")
     public Item() {
-
+        for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
 

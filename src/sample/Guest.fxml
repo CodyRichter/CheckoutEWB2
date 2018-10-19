@@ -88,7 +88,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label text="Select Guest:" />
-                  <ComboBox fx:id="guestSelect" prefWidth="150.0" />
+                  <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
@@ -244,6 +244,7 @@
       </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
          <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save" />
             <VBox alignment="CENTER" />
          </children>
       </FlowPane>

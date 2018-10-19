@@ -19,8 +19,9 @@ public class Guest {
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
 
+    @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
-
+        for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
 
@@ -74,6 +75,26 @@ public class Guest {
      */
     public void remove(String type) {
         map.remove(map);
+    }
+
+    @Override
+    public String toString() {
+        //Ensure We Have Data For All Fields, And Remove Null Entries
+        String firstName = get("firstName");
+        if (firstName==null) firstName="";
+        String lastName = get("lastName");
+        if (lastName==null) lastName="";
+
+        //Only Return Fields That We Have
+        if (firstName.equals("") && lastName.equals("")) {
+            return "" + number;
+        } else if (firstName.equals("")) {
+            return ""+number+" | " + lastName;
+        } else if (lastName.equals("")) {
+            return ""+number+" | " + firstName;
+        }
+        //Ideal Case: Return:   # | Last Name, First Name
+        return ""+number+" | " + lastName + ", " + firstName;
     }
 
 }

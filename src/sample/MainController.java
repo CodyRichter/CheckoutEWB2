@@ -55,7 +55,7 @@ public class MainController {
     TextField firstName,lastName,phoneNumber,emailAddress,entryDonation,additionalDonation,amountPaid,changeGiven;
 
     @FXML
-    Button manageAddOns;
+    Button manageAddOns,saveButton;
 
     @FXML
     Label totalDue;
@@ -71,7 +71,7 @@ public class MainController {
      */
     @FXML
     private void saveData() {
-
+        saveFields(); //Saves all fields in form to the guest object
     }
 
     /**
@@ -79,7 +79,8 @@ public class MainController {
      */
     @FXML
     private void loadData() {
-
+        DataManager.loadData(); //Loads data from file
+        //TODO: Use code from init method to update form.
     }
 
     /**
@@ -97,7 +98,11 @@ public class MainController {
      */
     @FXML
     private void newGuest() {
-        //TODO: Create new guest object, add to list, set form to guest values.
+        Guest g = new Guest();
+        DataManager.guests.add(g); //Add guest to total guest list
+        guestSelect.setItems(DataManager.guests);
+        //TODO: Sort Guest Based On ##
+        //TODO: Update Combo Box with new name if changed after saving!!
     }
 
     /**
@@ -140,6 +145,15 @@ public class MainController {
     @FXML
     private void showItemPage() {
         loadNewWindow("Checkout-EWB Version II: Item Page","Items.fxml");
+    }
+
+    /**
+     * Loads the guest that has been clicked on in the Guest Selector combobox
+     * into the form, and populates all of the fields accordingly.
+     */
+    @FXML
+    private void showGuestFromSelector() {
+        updateForm(guestSelect.getValue());
     }
 
     //
@@ -214,6 +228,7 @@ public class MainController {
             }
             totalDue.setText("");
             manageAddOns.setDisable(true);
+            saveButton.setDisable(true);
 
 
             //TODO: Remove currently loaded guest from GuestSelect Menu.
@@ -227,6 +242,7 @@ public class MainController {
             t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }
             manageAddOns.setDisable(false);
+            saveButton.setDisable(false);
             totalDue.setText(g.get("totalDue"));
             //TODO: Ensure Guest is selected in GuestSelect Menu
             //TODO: Load Guest's Items To Form
@@ -238,6 +254,7 @@ public class MainController {
      * This method must run before exiting/loading new window, or all changes made will be lost
      * from lastSave->present.
      */
+    @FXML
     private void saveForm() {
         Guest g = guestSelect.getValue();
         for (String s: textFields.keySet()) {
