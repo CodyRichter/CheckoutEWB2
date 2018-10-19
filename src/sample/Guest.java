@@ -10,7 +10,7 @@ import java.util.HashMap;
  * @author Cody R
  * @version 1.0
  */
-public class Guest {
+public class Guest implements Comparable<Guest> {
 
     private static ArrayList<Integer> validNumbers = new ArrayList<>();
 
@@ -97,4 +97,14 @@ public class Guest {
         return ""+number+" | " + lastName + ", " + firstName;
     }
 
+    /**
+     * Compares guests based on number
+     * @return 0 if equal, 1 if this is greater than other guest's number, less if this is less than other guest's number
+     */
+    public int compareTo(Guest g2) {
+        Guest g1 = this;
+        if (g1.number == g2.number) return 0; //If both are equal
+        if (g1.number > g2.number) return 1; //If this is greater than that
+        return -1; //If this is less than that
+    }
 }

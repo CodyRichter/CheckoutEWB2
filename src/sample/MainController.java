@@ -100,7 +100,8 @@ public class MainController {
     private void newGuest() {
         Guest g = new Guest();
         DataManager.guests.add(g); //Add guest to total guest list
-        guestSelect.setItems(DataManager.guests);
+        guestSelect.getItems().add(g);
+        guestSelect.getItems().sorted();
         //TODO: Sort Guest Based On ##
         //TODO: Update Combo Box with new name if changed after saving!!
     }
@@ -111,7 +112,12 @@ public class MainController {
      */
     @FXML
     private void removeGuest() {
-        //TODO: Remove guest object, and load new form that is blank
+        if (guestSelect.getValue() == null) return; //If guestSelect has no items selected, don't try to remove nothing
+        DataManager.guests.remove(guestSelect.getValue()); //Remove guest from master list
+        guestSelect.getItems().remove(guestSelect.getValue()); //Remove guest from combo box
+        if (!DataManager.guests.isEmpty()) //Try to update next value to display
+            guestSelect.setValue(DataManager.guests.get(0));
+        updateForm(guestSelect.getValue()); //Update fields in form
     }
 
     /**
@@ -264,6 +270,10 @@ public class MainController {
 
         //TODO: Handle Adding Items To Guest. Should likely be through Item class rather than Guest class.
 
+        guestSelect.getItems().remove(g);
+        guestSelect.getItems().add(g);
+        guestSelect.getItems().sorted();
+        guestSelect.setValue(g);
     }
 
     /**
