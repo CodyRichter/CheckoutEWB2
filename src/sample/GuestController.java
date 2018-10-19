@@ -10,11 +10,11 @@ import javafx.stage.Stage;
 import java.net.URI;
 import java.util.HashMap;
 
-public class MainController {
+public class GuestController {
 
     private HashMap<String,TextField> textFields; //Hashmap containing all textfields in program
 
-    public MainController() {
+    public GuestController() {
 
     }
 
