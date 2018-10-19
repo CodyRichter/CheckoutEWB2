@@ -10,8 +10,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
-        primaryStage.setTitle("Checkout-EWB Version II");
+        Parent root = FXMLLoader.load(getClass().getResource("Guest.fxml"));
+        primaryStage.setTitle("Checkout-EWB Version II: Guest Page");
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(700);
         primaryStage.setScene(new Scene(root, 700, 600));

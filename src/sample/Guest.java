@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * User data storage file: Contains all data that is saved/loaded into the
+ * Guest data storage file: Contains all data that is saved/loaded into the
  * .csv file.
  *
  * @author Cody R
  * @version 1.0
  */
-public class User {
+public class Guest {
 
     private static ArrayList<Integer> validNumbers = new ArrayList<>();
 
     private ArrayList<String> content = new ArrayList<>();
     private HashMap<String,String> map = new HashMap<>();
 
-    private int number = -1; //Identifying number for a User. Must be specific.
+    private int number = -1; //Identifying number for a Guest. Must be specific.
 
-    public User() {
+    public Guest() {
 
     }
 
@@ -48,7 +48,7 @@ public class User {
     }
 
     /**
-     * Adds a value to the User class containing information
+     * Adds a value to the Guest class containing information
      * @param type Identifier used to determine data type
      * @param value Value being stored
      */
@@ -57,7 +57,17 @@ public class User {
     }
 
     /**
-     * Removes a value from the User class containing the specified type
+     * Returns the desired value from the guest's inventory
+     * It is possible for this value to be null!
+     * @param key Key of item to get value of.
+     * @return Value stored in guest's hashmap of inventory items.
+     */
+    public String get(String key) {
+        return map.get(key);
+    }
+
+    /**
+     * Removes a value from the Guest class containing the specified type
      * @param type Type of data to remove
      */
     public void remove(String type) {
