@@ -63,7 +63,9 @@ public class Guest {
      * @return Value stored in guest's hashmap of inventory items.
      */
     public String get(String key) {
-        return map.get(key);
+        String toReturn = map.get(key);
+        if (toReturn == null) toReturn = "";
+        return toReturn;
     }
 
     /**

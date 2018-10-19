@@ -16,6 +16,8 @@ public class Item {
 
     private ArrayList<String> content = new ArrayList<>();
     private HashMap<String,String> map = new HashMap<>();
+    private Guest owner = null; //Owner of item. Null for no owner assigned.
+
 
     private int number = -1; //Identifying number for a Item. Must be specific.
 

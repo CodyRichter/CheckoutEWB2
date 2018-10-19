@@ -41,7 +41,7 @@ public class MainController {
     MenuItem save,load,saveAndExit,info,newGuest,removeGuest;
 
     @FXML
-    ComboBox<String> guestSelect;
+    ComboBox<Guest> guestSelect;
 
     @FXML
     TextField firstName,lastName,phoneNumber,emailAddress,entryDonation,additionalDonation,amountPaid,changeGiven;
@@ -105,7 +105,7 @@ public class MainController {
      */
     @FXML
     private void exit() {
-
+        System.exit(0);
     }
 
     /**
@@ -210,13 +210,30 @@ public class MainController {
 
         for (String s: textFields.keySet()) {
             TextField t = textFields.get(s); //Load desired TextField from HashMap
-            t.setText(g.get(s));
+            t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }
 
-
+            totalDue.setText(g.get("totalDue"));
+            //TODO: Ensure Guest is selected in GuestSelect Menu
+            //TODO: Load Guest's Items To Form
 
     }
 
+    /**
+     * Saves all values currently loaded into the form to the Guest's data class file.
+     * This method must run before exiting/loading new window, or all changes made will be lost
+     * from lastSave->present.
+     */
+    private void saveForm() {
+        Guest g = guestSelect.getValue();
+        for (String s: textFields.keySet()) {
+            g.add(s,textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
+        }
+        g.add("totalDue",totalDue.getText());
+
+        //TODO: Handle Adding Items To Guest. Should likely be through Item class rather than Guest class.
+
+    }
 
     /**
      * Loads a new window with the specified title and filepath
