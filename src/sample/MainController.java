@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URI;
@@ -35,6 +32,17 @@ public class MainController {
         textFields.put("additionalDonation",additionalDonation);
         textFields.put("amountPaid",amountPaid);
         textFields.put("changeGiven",changeGiven);
+
+        if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
+            DataManager.loadData();
+        }
+        if (DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
+            //TODO: Display Alert To User That No Guest Data To Load
+        } else {
+            guestSelect.setItems(DataManager.guests); //Populate the selector with the loaded guests
+            guestSelect.setValue(DataManager.guests.get(0));
+        }
+        updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
     }
 
     @FXML
@@ -45,6 +53,9 @@ public class MainController {
 
     @FXML
     TextField firstName,lastName,phoneNumber,emailAddress,entryDonation,additionalDonation,amountPaid,changeGiven;
+
+    @FXML
+    Button manageAddOns;
 
     @FXML
     Label totalDue;
@@ -202,6 +213,8 @@ public class MainController {
                 t.setDisable(true);
             }
             totalDue.setText("");
+            manageAddOns.setDisable(true);
+
 
             //TODO: Remove currently loaded guest from GuestSelect Menu.
             //TODO: Correctly handle items that are loaded and need to be cleared
@@ -210,9 +223,10 @@ public class MainController {
 
         for (String s: textFields.keySet()) {
             TextField t = textFields.get(s); //Load desired TextField from HashMap
+            t.setDisable(false);
             t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }
-
+            manageAddOns.setDisable(false);
             totalDue.setText(g.get("totalDue"));
             //TODO: Ensure Guest is selected in GuestSelect Menu
             //TODO: Load Guest's Items To Form
