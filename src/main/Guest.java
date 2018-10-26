@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -83,6 +84,30 @@ public class Guest implements Comparable<Guest> {
         String toReturn = map.get(key);
         if (toReturn == null) toReturn = "";
         return toReturn;
+    }
+
+
+    /**
+     * Returns all values in the guest's inventory, sorted alphabetically by key
+     * @return ArrayList containing all values in sorted order of keys
+     */
+    public ArrayList<String> getAll() {
+        ArrayList<String> keys = getHeader(); //Get the sorted header to return all the values in the correct order
+        ArrayList<String> toReturn = new ArrayList<>();
+        for (int i = 0; i < map.size(); i++) {
+            toReturn.add(i,map.get(keys.get(i))); //Put HashMap value in ArrayList to Return.
+        }
+        return toReturn;
+    }
+
+    /**
+     * Returns header of all hashmap keys for the guest's inventory items
+     * @return ArrayList containing hashmap keys sorted alphabetically
+     */
+    public ArrayList<String> getHeader() {
+        ArrayList<String> keys = new ArrayList<>(map.keySet());
+        keys.sort(Comparator.naturalOrder());
+        return keys;
     }
 
     /**
