@@ -51,8 +51,8 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Action">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#newGuest" text="New User" />
-                        <MenuItem mnemonicParsing="false" onAction="#removeGuest" text="Delete User" />
+                    <MenuItem fx:id="newGuest" mnemonicParsing="false" onAction="#newGuest" text="New User" />
+                        <MenuItem fx:id="removeGuest" mnemonicParsing="false" onAction="#removeGuest" text="Delete User" />
                   </items>
                 </Menu>
               </menus>

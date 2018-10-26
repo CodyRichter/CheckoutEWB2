@@ -33,12 +33,13 @@ public class ItemController {
 
         if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
             ownerSelect.setItems(DataManager.guests); //Populate the selector with the loaded Items
+            ownerSelect.getItems().sort(Guest::compareTo);
         }
         updateForm(itemSelect.getValue()); //If this value is null, it will load a blank form.
     }
 
     @FXML
-    MenuItem save,load,saveAndExit;
+    MenuItem save,load,saveAndExit,newItem,removeItem;
 
     @FXML
     ComboBox<Item> itemSelect;
@@ -63,7 +64,8 @@ public class ItemController {
      */
     @FXML
     private void saveData() {
-        saveForm(); //Saves all fields in form to the item object
+        if (itemSelect.getValue() != null)
+            saveForm(); //Saves all fields in form to the item object
         DataManager.saveData();
     }
 
@@ -96,6 +98,13 @@ public class ItemController {
         itemSelect.getItems().add(i);
         itemSelect.getItems().sorted();
         itemSelect.setValue(i);
+        newItem.setDisable(true);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        newItem.setDisable(false);
+                    }}, 500);
     }
 
     /**
@@ -112,6 +121,13 @@ public class ItemController {
             itemSelect.setValue(DataManager.items.get(0));
         else itemSelect.getItems().clear();
         updateForm(itemSelect.getValue()); //Update fields in form
+        removeItem.setDisable(true);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        removeItem.setDisable(false);
+                    }}, 500);
     }
 
     /**
@@ -227,11 +243,7 @@ public class ItemController {
             ownerSelect.getValue().addItem(i);
         }
 
-        //This last few lines of code ensure the combobox displays the correct value.
-        itemSelect.getItems().remove(i);
-        itemSelect.getItems().add(i);
-        itemSelect.getItems().sorted();
-        itemSelect.setValue(i);
+        itemSelect.getItems().sort(Item::compareTo);
     }
 
     /**

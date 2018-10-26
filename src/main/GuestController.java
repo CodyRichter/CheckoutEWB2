@@ -50,7 +50,7 @@ public class GuestController {
     }
 
     @FXML
-    MenuItem save, load, saveAndExit, info, newGuest, removeGuest;
+    MenuItem save, load, saveAndExit, newGuest, removeGuest;
 
     @FXML
     ComboBox<Guest> guestSelect;
@@ -78,7 +78,8 @@ public class GuestController {
      */
     @FXML
     private void saveData() {
-        saveForm(); //Saves all fields in form to the guest object
+        if (guestSelect.getValue() != null)
+            saveForm(); //Saves all fields in form to the guest object
         DataManager.saveData();
     }
 
@@ -111,6 +112,13 @@ public class GuestController {
         guestSelect.getItems().add(g);
         guestSelect.getItems().sorted();
         guestSelect.setValue(g);
+        newGuest.setDisable(true);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        newGuest.setDisable(false);
+                    }}, 500);
     }
 
     /**
@@ -128,6 +136,13 @@ public class GuestController {
             guestSelect.setValue(DataManager.guests.get(0));
         else guestSelect.getItems().clear();
         updateForm(guestSelect.getValue()); //Update fields in form
+        removeGuest.setDisable(true);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        removeGuest.setDisable(false);
+                    }}, 500);
     }
 
     /**
@@ -324,10 +339,7 @@ public class GuestController {
 
         //TODO: Handle Adding Items To Guest. Should likely be through Item class rather than Guest class.
 
-        guestSelect.getItems().remove(g);
-        guestSelect.getItems().add(g);
-        guestSelect.getItems().sorted();
-        guestSelect.setValue(g);
+        guestSelect.getItems().sort(Guest::compareTo);
     }
 
 
