@@ -18,6 +18,7 @@ public class DataManager {
 
     public static void loadData() {
         //TODO: Read Data From .csv Files and Populate Lists
+        //TODO: Separately put items into Guest's arraylist from the other objects.
 
 
         hasLoaded = true; //Tell program that data has been loaded

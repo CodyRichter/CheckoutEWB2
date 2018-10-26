@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
+<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,8 +45,8 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Action">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#newItem" text="New User" />
-                        <MenuItem mnemonicParsing="false" onAction="#removeItem" text="Delete User" />
+                    <MenuItem mnemonicParsing="false" onAction="#newItem" text="New Item" />
+                        <MenuItem mnemonicParsing="false" onAction="#removeItem" text="Delete Item" />
                   </items>
                 </Menu>
               </menus>

@@ -15,6 +15,7 @@ public class Guest implements Comparable<Guest> {
     private static ArrayList<Integer> validNumbers = new ArrayList<>();
 
     private HashMap<String,String> map = new HashMap<>();
+    private ArrayList<Item> items; //TODO: Implement methods to handle adding and removing items from a guest
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
     private boolean temp; //Whether the current guest is for temporary use. (Temp guests have no item #)
@@ -90,6 +91,14 @@ public class Guest implements Comparable<Guest> {
     public void remove(String type) {
         if (map.containsKey(type))
             map.remove(type);
+    }
+
+    public void addItem(Item i) {
+        //TODO: add item to guest's inventory
+    }
+
+    public void removeItem(Item i) {
+        //TODO: Remove item from guest's inventory
     }
 
     @Override

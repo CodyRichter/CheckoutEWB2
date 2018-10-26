@@ -151,6 +151,16 @@ public class ItemController {
         updateForm(itemSelect.getValue());
     }
 
+
+    /**
+     * Sets the owner of the current item to the guest that is selected in the ownerSelect combobox.
+     */
+    @FXML
+    private void setItemOwner() {
+        Guest g = ownerSelect.getValue();
+        g.addItem(itemSelect.getValue());
+    }
+
     /**
      * Removes the owner of the current item and sets the currently loaded item
      * to have no owner.
@@ -160,7 +170,7 @@ public class ItemController {
         for (int k = 0; k < 5; k++) { //Loop through all loaded Items and see if the
             Guest g = DataManager.guests.get(k);
             if (g.get("items").contains(itemSelect.getValue().get("itemName"))) {
-                //TODO: Remove The Line in the HashMap with the Item Information For The Guest.
+                g.removeItem(itemSelect.getValue());
             }
         }
         ownerSelect.setValue(new Guest (true,"No Owner"));
@@ -198,7 +208,7 @@ public class ItemController {
         ownerSelect.setDisable(false);
         removeOwner.setDisable(false);
         ownerSelect.setValue(new Guest (true,"No Owner"));
-        for (int k = 0; k < 5; k++) { //Loop through all loaded Items and see if the
+        for (int k = 0; k < DataManager.guests.size(); k++) { //Loop through all loaded Items and see if the
             Guest g = DataManager.guests.get(k);
             if (g.get("items").contains(i.get("itemName"))) {
                 ownerSelect.setValue(g);
