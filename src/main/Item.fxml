@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ItemController">
+<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -70,6 +70,11 @@
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Label>
+                  <Button mnemonicParsing="false" onAction="#switchPages" text="Switch To Guest Page">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
                </children>
             </VBox>
          </children>
@@ -115,6 +120,14 @@
                </children>
             </VBox>
             <ComboBox fx:id="ownerSelect" onAction="#setItemOwner" prefWidth="150.0" />
+            <Button fx:id="removeOwner" mnemonicParsing="false" onAction="#removeItemOwner" text="Remove Owner">
+               <padding>
+                  <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+               </padding>
+               <FlowPane.margin>
+                  <Insets top="5.0" />
+               </FlowPane.margin>
+            </Button>
          </children>
       </FlowPane>
       <FlowPane alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">

@@ -1,4 +1,4 @@
-package sample;
+package main;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URI;
-import java.util.HashMap;
 
 public class ItemController {
 
@@ -47,7 +46,7 @@ public class ItemController {
     TextField itemName,itemPrice;
 
     @FXML
-    Button saveButton;
+    Button saveButton,removeOwner;
 
     //
     // --------------------------------------
@@ -152,6 +151,21 @@ public class ItemController {
         updateForm(itemSelect.getValue());
     }
 
+    /**
+     * Removes the owner of the current item and sets the currently loaded item
+     * to have no owner.
+     */
+    @FXML
+    private void removeItemOwner() {
+        for (int k = 0; k < 5; k++) { //Loop through all loaded Items and see if the
+            Guest g = DataManager.guests.get(k);
+            if (g.get("items").contains(itemSelect.getValue().get("itemName"))) {
+                //TODO: Remove The Line in the HashMap with the Item Information For The Guest.
+            }
+        }
+        ownerSelect.setValue(new Guest (true,"No Owner"));
+    }
+
     //
     // --------------------------------------
     // Utility Methods
@@ -172,6 +186,7 @@ public class ItemController {
             saveButton.setDisable(true);
             ownerSelect.setDisable(true);
             ownerSelect.setValue(null);
+            removeOwner.setDisable(true);
             return;
         }
 
@@ -181,6 +196,7 @@ public class ItemController {
         itemPrice.setDisable(false);
         saveButton.setDisable(false);
         ownerSelect.setDisable(false);
+        removeOwner.setDisable(false);
         ownerSelect.setValue(new Guest (true,"No Owner"));
         for (int k = 0; k < 5; k++) { //Loop through all loaded Items and see if the
             Guest g = DataManager.guests.get(k);
@@ -207,6 +223,14 @@ public class ItemController {
         itemSelect.getItems().add(i);
         itemSelect.getItems().sorted();
         itemSelect.setValue(i);
+    }
+
+    /**
+     * Loads the FXML page for Guests, and switches the current window to that.
+     */
+    @FXML
+    private void switchPages() {
+        loadNewWindow("Checkout-EWB Version II: Guest Page","Guest.fxml");
     }
 
     /**

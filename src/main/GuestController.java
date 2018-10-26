@@ -1,4 +1,4 @@
-package sample;
+package main;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -265,6 +265,15 @@ public class GuestController {
         guestSelect.getItems().add(g);
         guestSelect.getItems().sorted();
         guestSelect.setValue(g);
+    }
+
+
+    /**
+     * Loads the FXML page for Items, and switches the current window to that.
+     */
+    @FXML
+    private void switchPages() {
+        loadNewWindow("Checkout-EWB Version II: Item Page","Item.fxml");
     }
 
     /**
