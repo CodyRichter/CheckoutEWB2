@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class Guest implements Comparable<Guest> {
 
-    private static ArrayList<Integer> validNumbers = new ArrayList<>();
+    private static ArrayList<Integer> usedNumbers;
 
     private HashMap<String,String> map = new HashMap<>();
     private ArrayList<Item> items = new ArrayList<>(); //TODO: Implement methods to handle adding and removing items from a guest
@@ -22,6 +22,7 @@ public class Guest implements Comparable<Guest> {
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
+        if (usedNumbers == null) usedNumbers = new ArrayList<>();
         for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
@@ -47,11 +48,11 @@ public class Guest implements Comparable<Guest> {
      * @return Successful set of guest's number
      */
     public boolean setNumber(int num) {
-        if (temp || validNumbers.contains(num)) {
+        if (temp || usedNumbers.contains(num)) {
             return false; //Return false if the guest's desired number is already in use or if guest is temp
         }
         this.number = num;
-        validNumbers.add(num); //Add the new number to the list of current numbers.
+        usedNumbers.add(num); //Add the new number to the list of current numbers.
         return true;
     }
 
@@ -93,6 +94,10 @@ public class Guest implements Comparable<Guest> {
             map.remove(type);
     }
 
+    public boolean contains(String type) {
+        return map.containsKey(type);
+    }
+
     public void addItem(Item i) {
         if (items.contains(i)) return; //Don't add an item that already is in inventory multiple times
         items.add(i);
@@ -125,6 +130,18 @@ public class Guest implements Comparable<Guest> {
         }
         //Ideal Case: Return:   # | Last Name, First Name
         return ""+number+" | " + lastName + ", " + firstName;
+    }
+
+    /**
+     * Frees data associated with the guest, the main one being the number.
+     */
+    public void free() {
+        assert usedNumbers != null;
+        if (usedNumbers.size()>1 && usedNumbers.contains(number))
+            usedNumbers.remove(number);
+        else if (usedNumbers.size()==1) {
+            usedNumbers.clear();
+        }
     }
 
     /**

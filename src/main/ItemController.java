@@ -105,10 +105,12 @@ public class ItemController {
     @FXML
     private void removeItem() {
         if (itemSelect.getValue() == null) return; //If ItemSelect has no items selected, don't try to remove nothing
+        itemSelect.getValue().free();
         DataManager.items.remove(itemSelect.getValue()); //Remove Item from master list
         itemSelect.getItems().remove(itemSelect.getValue()); //Remove Item from combo box
         if (!DataManager.items.isEmpty()) //Try to update next value to display
             itemSelect.setValue(DataManager.items.get(0));
+        else itemSelect.getItems().clear();
         updateForm(itemSelect.getValue()); //Update fields in form
     }
 

@@ -154,7 +154,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label text="Entry Donation:" />
-                  <TextField fx:id="entryDonation" />
+                  <TextField fx:id="entryDonation" onKeyReleased="#updateTotal" />
                </children>
             </VBox>
          </children>
@@ -164,7 +164,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label text="Additional Donation:" />
-                  <TextField fx:id="additionalDonation" />
+                  <TextField fx:id="additionalDonation" onKeyReleased="#updateTotal" />
                </children>
             </VBox>
          </children>
@@ -180,11 +180,7 @@
             <VBox alignment="CENTER" />
             <ScrollPane hbarPolicy="NEVER" prefWidth="500.0" vbarPolicy="ALWAYS">
                <content>
-                  <VBox fx:id="itemList" alignment="CENTER_LEFT" prefHeight="80.0">
-                     <children>
-                        <Label text="Items Will Appear Here" />
-                     </children>
-                  </VBox>
+                  <VBox fx:id="itemList" alignment="CENTER_LEFT" prefHeight="80.0" />
                </content>
                <padding>
                   <Insets left="10.0" />
@@ -194,12 +190,6 @@
          <GridPane.margin>
             <Insets left="20.0" />
          </GridPane.margin>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
-         <children>
-            <VBox alignment="CENTER" />
-         </children>
       </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="5">
          <children>
@@ -216,7 +206,8 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="totalDue" text="[Amount Here]" />
+                  <Label fx:id="totalDue" text="0" />
+                  <Label fx:id="additionalPaymentInfo" />
                </children>
             </VBox>
          </children>
@@ -232,7 +223,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label alignment="CENTER" text="Amount Paid:" />
-                  <TextField fx:id="amountPaid" />
+                  <TextField fx:id="amountPaid" onKeyReleased="#getChangeNeeded" />
                </children>
             </VBox>
          </children>
@@ -242,7 +233,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label alignment="CENTER" text="Change Given:" />
-                  <TextField fx:id="changeGiven" />
+                  <TextField fx:id="changeGiven" onKeyReleased="#getChangeNeeded" />
                </children>
             </VBox>
          </children>

@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class Item implements Comparable<Item> {
 
-    private static ArrayList<Integer> validNumbers = new ArrayList<>();
+    private static ArrayList<Integer> usedNumbers;
 
     private HashMap<String,String> map = new HashMap<>();
 
@@ -20,6 +20,7 @@ public class Item implements Comparable<Item> {
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Item() {
+        if (usedNumbers == null) usedNumbers = new ArrayList<>();
         for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
@@ -31,11 +32,11 @@ public class Item implements Comparable<Item> {
      * @return Successful set of item's number
      */
     public boolean setNumber(int num) {
-        if (validNumbers.contains(num)) {
+        if (usedNumbers.contains(num)) {
             return false; //Return false if the item's desired number is already in use.
         }
         this.number = num;
-        validNumbers.add(num); //Add the new number to the list of current numbers.
+        usedNumbers.add(num); //Add the new number to the list of current numbers.
         return true;
     }
 
@@ -89,6 +90,18 @@ public class Item implements Comparable<Item> {
         }
         //Ideal Case: Return:   # | Item Name
         return ""+number+" | " + itemName;
+    }
+
+    /**
+     * Frees data associated with the item, the main one being the number.
+     */
+    public void free() {
+        assert usedNumbers != null;
+        if (usedNumbers.size()>1 && usedNumbers.contains(number))
+            usedNumbers.remove(number);
+        else if (usedNumbers.size()==1) {
+            usedNumbers.clear();
+        }
     }
 
     /**
