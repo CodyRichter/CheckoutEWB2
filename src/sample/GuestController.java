@@ -71,7 +71,8 @@ public class GuestController {
      */
     @FXML
     private void saveData() {
-        saveFields(); //Saves all fields in form to the guest object
+        saveForm(); //Saves all fields in form to the guest object
+        DataManager.saveData();
     }
 
     /**
@@ -205,16 +206,6 @@ public class GuestController {
     }
 
 
-    /**
-     * Saves all of the information in the form into the Guest object associated with the loaded profile.
-     * Must correctly handle the order in which the object is added to the Guest.java account, in order to handle
-     * the generic data storage type that the Guest class uses.
-     */
-    @FXML
-    private void saveFields() {
-        //TODO: Implement Method
-    }
-
     //
     // --------------------------------------
     // Utility Methods
@@ -286,7 +277,7 @@ public class GuestController {
         try {
             Stage stage = (Stage) firstName.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlFilepath));
-            Scene scene = new Scene(root, 600, 450);
+            Scene scene = new Scene(root, 600, 300);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.show();

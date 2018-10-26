@@ -7,8 +7,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -17,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="300" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GuestController">
+<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ItemController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -26,14 +24,10 @@
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <FlowPane columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+      <FlowPane columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0">
          <children>
             <MenuBar>
               <menus>
@@ -51,8 +45,8 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Action">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#newGuest" text="New User" />
-                        <MenuItem mnemonicParsing="false" onAction="#removeGuest" text="Delete User" />
+                    <MenuItem mnemonicParsing="false" onAction="#newItem" text="New User" />
+                        <MenuItem mnemonicParsing="false" onAction="#removeItem" text="Delete User" />
                   </items>
                 </Menu>
               </menus>
@@ -62,7 +56,7 @@
             <Insets left="7.0" top="7.0" />
          </GridPane.margin>
       </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1">
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1">
          <children>
             <VBox alignment="TOP_CENTER" spacing="8.0">
                <children>
@@ -83,169 +77,53 @@
             <Insets top="10.0" />
          </padding>
       </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2">
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
          <children>
             <VBox alignment="CENTER">
                <children>
                   <Label text="Select Item:" />
-                  <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
+                  <ComboBox fx:id="itemSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
                </children>
             </VBox>
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="1">
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" text="First Name:" />
-                  <TextField fx:id="firstName" />
+                  <Label alignment="CENTER" text="Item Name:" />
+                  <TextField fx:id="itemName" />
                </children>
             </VBox>
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" text="Last Name:" />
-                  <TextField fx:id="lastName" />
+                  <Label alignment="CENTER" text="Price:" />
+                  <TextField fx:id="itemPrice" />
                </children>
             </VBox>
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
             <VBox alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" text="Phone Number:" />
-                  <TextField fx:id="phoneNumber" />
+                  <Label alignment="CENTER" text="Item Owner:" />
                </children>
             </VBox>
+            <ComboBox fx:id="ownerSelect" onAction="#setItemOwner" prefWidth="150.0" />
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="2">
+      <FlowPane alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <children>
-            <Separator prefWidth="200.0" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Email Address:" />
-                  <TextField fx:id="emailAddress" />
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <children>
-            <Separator prefWidth="200.0" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="3">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Entry Donation:" />
-                  <TextField fx:id="entryDonation" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Additional Donation:" />
-                  <TextField fx:id="additionalDonation" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-         <children>
-            <Button fx:id="manageAddOns" mnemonicParsing="false" text="Manage Add-On Items" />
-            <VBox alignment="CENTER" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="4">
-         <children>
-            <VBox alignment="CENTER" />
-            <ScrollPane hbarPolicy="NEVER" prefWidth="500.0" vbarPolicy="ALWAYS">
-               <content>
-                  <VBox fx:id="itemList" alignment="CENTER_LEFT" prefHeight="80.0">
-                     <children>
-                        <Label text="Items Will Appear Here" />
-                     </children>
-                  </VBox>
-               </content>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
-            </ScrollPane>
-         </children>
-         <GridPane.margin>
-            <Insets left="20.0" />
-         </GridPane.margin>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
-         <children>
-            <VBox alignment="CENTER" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="5">
-         <children>
-            <Separator prefWidth="200.0" />
-            <VBox alignment="CENTER" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Total Due:">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="totalDue" text="[Amount Here]" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-         <children>
-            <Separator prefWidth="200.0" />
-            <VBox alignment="CENTER" />
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="6">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Amount Paid:" />
-                  <TextField fx:id="amountPaid" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Change Given:" />
-                  <TextField fx:id="changeGiven" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
-         <children>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save" />
-            <VBox alignment="CENTER" />
+            <Button fx:id="saveButton" mnemonicParsing="false" text="Save">
+               <FlowPane.margin>
+                  <Insets bottom="20.0" right="20.0" />
+               </FlowPane.margin>
+            </Button>
          </children>
       </FlowPane>
    </children>

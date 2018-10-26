@@ -14,14 +14,28 @@ public class Guest implements Comparable<Guest> {
 
     private static ArrayList<Integer> validNumbers = new ArrayList<>();
 
-    private ArrayList<String> content = new ArrayList<>();
     private HashMap<String,String> map = new HashMap<>();
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
+    private boolean temp; //Whether the current guest is for temporary use. (Temp guests have no item #)
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
         for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
+    }
+
+    /**
+     * Creates a temporary guest for use within the program. A temporary guest does not have an item number
+     * and is not meant to be saved into the config file
+     * @param temp
+     */
+    @SuppressWarnings("StatementWithEmptyBody")
+    public Guest(boolean temp,String name) {
+        if (!temp) { //Only run this if the guest is not a temp
+            for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
+        } else {
+            map.put("firstName",name);
+        }
     }
 
 
@@ -32,8 +46,8 @@ public class Guest implements Comparable<Guest> {
      * @return Successful set of guest's number
      */
     public boolean setNumber(int num) {
-        if (validNumbers.contains(num)) {
-            return false; //Return false if the guest's desired number is already in use.
+        if (temp || validNumbers.contains(num)) {
+            return false; //Return false if the guest's desired number is already in use or if guest is temp
         }
         this.number = num;
         validNumbers.add(num); //Add the new number to the list of current numbers.
@@ -74,7 +88,8 @@ public class Guest implements Comparable<Guest> {
      * @param type Type of data to remove
      */
     public void remove(String type) {
-        map.remove(map);
+        if (map.containsKey(type))
+            map.remove(type);
     }
 
     @Override
