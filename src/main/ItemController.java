@@ -96,8 +96,6 @@ public class ItemController {
         itemSelect.getItems().add(i);
         itemSelect.getItems().sorted();
         itemSelect.setValue(i);
-        //TODO: Sort Item Based On ##
-        //TODO: Update Combo Box with new name if changed after saving!!
     }
 
     /**

@@ -104,8 +104,6 @@ public class GuestController {
         guestSelect.getItems().add(g);
         guestSelect.getItems().sorted();
         guestSelect.setValue(g);
-        //TODO: Sort Guest Based On ##
-        //TODO: Update Combo Box with new name if changed after saving!!
     }
 
     /**
