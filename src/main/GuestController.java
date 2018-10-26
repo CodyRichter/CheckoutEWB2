@@ -55,7 +55,7 @@ public class GuestController {
     TextField firstName,lastName,phoneNumber,emailAddress,entryDonation,additionalDonation,amountPaid,changeGiven;
 
     @FXML
-    Button manageAddOns,saveButton;
+    Button manageAddOns,saveButton,switchButton;
 
     @FXML
     Label totalDue;
@@ -103,6 +103,7 @@ public class GuestController {
         DataManager.guests.add(g); //Add guest to total guest list
         guestSelect.getItems().add(g);
         guestSelect.getItems().sorted();
+        guestSelect.setValue(g);
         //TODO: Sort Guest Based On ##
         //TODO: Update Combo Box with new name if changed after saving!!
     }
@@ -143,15 +144,6 @@ public class GuestController {
             e.printStackTrace();
             System.out.println("Error In Method: showDocumentation(). Unable to load Github readme.md page");
         }
-    }
-
-    /**
-     * Loads the fxml window containing the item information. Will close the existing
-     * open fxml menus before continuing.
-     */
-    @FXML
-    private void showItemPage() {
-        loadNewWindow("Checkout-EWB Version II: Item Page","Items.fxml");
     }
 
     /**
@@ -272,30 +264,23 @@ public class GuestController {
      * Loads the FXML page for Items, and switches the current window to that.
      */
     @FXML
-    private void switchPages() {
-        loadNewWindow("Checkout-EWB Version II: Item Page","Item.fxml");
-    }
-
-    /**
-     * Loads a new window with the specified title and filepath
-     *
-     * @param title        Title of Window
-     * @param fxmlFilepath Path to FXML File which is loaded
-     */
-    private void loadNewWindow(String title, String fxmlFilepath) {
+    public void changePages() {
         try {
             Stage stage = (Stage) firstName.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlFilepath));
-            Scene scene = new Scene(root, 600, 300);
-            stage.setTitle(title);
+            stage.setMinHeight(300);
+            stage.setMinWidth(700);
+            Parent root = FXMLLoader.load(getClass().getResource("Item.fxml"));
+            Scene scene = new Scene(root, 700, 300);
+            stage.setHeight(300);
+            stage.setWidth(700);
+            stage.setTitle("Checkout-EWB Version II: Item Page");
             stage.setScene(scene);
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error Loading Page: " + title + ". Desired Filepath ("+fxmlFilepath+") not found.");
+            System.out.println("Error Loading Page: Item.fxml.");
             System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
         }
     }
-
 }

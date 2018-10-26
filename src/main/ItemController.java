@@ -30,6 +30,10 @@ public class ItemController {
             itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
             itemSelect.setValue(DataManager.items.get(0));
         }
+
+        if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
+            ownerSelect.setItems(DataManager.guests); //Populate the selector with the loaded Items
+        }
         updateForm(itemSelect.getValue()); //If this value is null, it will load a blank form.
     }
 
@@ -46,7 +50,7 @@ public class ItemController {
     TextField itemName,itemPrice;
 
     @FXML
-    Button saveButton,removeOwner;
+    Button saveButton,removeOwner,switchButton;
 
     //
     // --------------------------------------
@@ -91,6 +95,7 @@ public class ItemController {
         DataManager.items.add(i); //Add Item to total Item list
         itemSelect.getItems().add(i);
         itemSelect.getItems().sorted();
+        itemSelect.setValue(i);
         //TODO: Sort Item Based On ##
         //TODO: Update Combo Box with new name if changed after saving!!
     }
@@ -134,15 +139,6 @@ public class ItemController {
     }
 
     /**
-     * Loads the fxml window containing the item information. Will close the existing
-     * open fxml menus before continuing.
-     */
-    @FXML
-    private void showItemPage() {
-        loadNewWindow("Checkout-EWB Version II: Item Page","Items.fxml");
-    }
-
-    /**
      * Loads the Item that has been clicked on in the Item Selector combobox
      * into the form, and populates all of the fields accordingly.
      */
@@ -167,7 +163,8 @@ public class ItemController {
      */
     @FXML
     private void removeItemOwner() {
-        for (int k = 0; k < 5; k++) { //Loop through all loaded Items and see if the
+        if (ownerSelect.getValue().get("firstName").equals("No Owner")) return; //Ensure not removing a non-existant owner
+        for (int k = 0; k < DataManager.guests.size(); k++) { //Loop through all loaded Items and see if the
             Guest g = DataManager.guests.get(k);
             if (g.get("items").contains(itemSelect.getValue().get("itemName"))) {
                 g.removeItem(itemSelect.getValue());
@@ -195,7 +192,7 @@ public class ItemController {
             itemPrice.setDisable(true);
             saveButton.setDisable(true);
             ownerSelect.setDisable(true);
-            ownerSelect.setValue(null);
+            ownerSelect.setValue(new Guest (true,"No Owner"));
             removeOwner.setDisable(true);
             return;
         }
@@ -210,7 +207,7 @@ public class ItemController {
         ownerSelect.setValue(new Guest (true,"No Owner"));
         for (int k = 0; k < DataManager.guests.size(); k++) { //Loop through all loaded Items and see if the
             Guest g = DataManager.guests.get(k);
-            if (g.get("items").contains(i.get("itemName"))) {
+            if (g.getItems().contains(i)) {
                 ownerSelect.setValue(g);
             }
         }
@@ -226,7 +223,9 @@ public class ItemController {
         Item i = itemSelect.getValue();
         i.add("itemName",itemName.getText()); //Puts Each TextField Into Item's HashMap
         i.add("itemPrice",itemPrice.getText()); //Puts Each TextField Into Item's HashMap
-
+        if (!ownerSelect.getValue().get("firstName").equals("No Owner")) { //Ensure owner exists
+            ownerSelect.getValue().addItem(i);
+        }
 
         //This last few lines of code ensure the combobox displays the correct value.
         itemSelect.getItems().remove(i);
@@ -239,28 +238,22 @@ public class ItemController {
      * Loads the FXML page for Guests, and switches the current window to that.
      */
     @FXML
-    private void switchPages() {
-        loadNewWindow("Checkout-EWB Version II: Guest Page","Guest.fxml");
-    }
-
-    /**
-     * Loads a new window with the specified title and filepath
-     *
-     * @param title        Title of Window
-     * @param fxmlFilepath Path to FXML File which is loaded
-     */
-    private void loadNewWindow(String title, String fxmlFilepath) {
+    public void changePages() {
         try {
-            Stage stage = (Stage) itemSelect.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlFilepath));
-            Scene scene = new Scene(root, 600, 450);
-            stage.setTitle(title);
+            Stage stage = (Stage) itemName.getScene().getWindow();
+            stage.setMinHeight(600);
+            stage.setMinWidth(700);
+            Parent root = FXMLLoader.load(getClass().getResource("Guest.fxml"));
+            Scene scene = new Scene(root, 700, 600);
+            stage.setHeight(600);
+            stage.setWidth(700);
+            stage.setTitle("Checkout-EWB Version II: Guest Page");
             stage.setScene(scene);
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error Loading Page: " + title + ". Desired Filepath (" + fxmlFilepath + ") not found.");
+            System.out.println("Error Loading Page: Guest.fxml.");
             System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
         }
     }
