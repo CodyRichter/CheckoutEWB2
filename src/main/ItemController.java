@@ -105,6 +105,7 @@ public class ItemController {
                     public void run() {
                         newItem.setDisable(false);
                     }}, 500);
+        saveData(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**

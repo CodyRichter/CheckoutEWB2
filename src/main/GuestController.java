@@ -119,6 +119,7 @@ public class GuestController {
                     public void run() {
                         newGuest.setDisable(false);
                     }}, 500);
+        saveData(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**
