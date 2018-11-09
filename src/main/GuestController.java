@@ -249,24 +249,23 @@ public class GuestController {
         double change = parseTextFieldToDouble(changeGiven);
         double total = totalDue.getText().isEmpty() ? 0.0 : Double.parseDouble(totalDue.getText());
 
-        double changeDue = paid - total - change; //Amount of change due is total paid - total due - existing change given
-
+        double net = total - paid; //If > 0: Payment Due, If <0: Change Due, If == 0, Exactly Paid
         if (total > 0) { //If there is any payment to process
-            if (changeDue < 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
+            if (net > 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
                 additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                 additionalPaymentInfo.setTextFill(Color.RED);
                 additionalPaymentInfo.setText("*Payment Required: $" + (total-paid)+"*");
             }
-            else if (changeDue > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
+            else if (net > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
                 additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                 additionalPaymentInfo.setTextFill(Color.GREEN);
-                additionalPaymentInfo.setText("*Change Needed: $" + changeDue + "*");
+                additionalPaymentInfo.setText("*Change Needed: $" + net + "*");
             }
-            else if (changeDue > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
+            else if (net > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
                 //TODO: Make it so if a person gives change at some point, then user buys more but change was previously given,
                 //display the correct message.
             }
-            else if (changeDue < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
+            else if (net < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
                 //TODO: Fix conditions in else-if statement to correctly do what is stated in comment
                 additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                 additionalPaymentInfo.setTextFill(Color.DARKRED);
