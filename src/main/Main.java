@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static boolean DEBUG = true;
+    public static GuestController guestController;
+    public static ItemController itemController;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{

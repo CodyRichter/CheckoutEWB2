@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.FXMLAddOn.PaymentContainer;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class GuestController {
      */
     @FXML
     private void initialize() {
+        Main.guestController = this;
         textFields = new HashMap<>();
         textFields.put("firstName", firstName);
         textFields.put("lastName", lastName);
@@ -47,6 +49,17 @@ public class GuestController {
             guestSelect.setValue(DataManager.guests.get(0));
         }
         updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
+
+        itemList.getChildren().add(new PaymentContainer(10,20,30));
+        itemList.getChildren().add(new PaymentContainer(10,20,30));
+        itemList.getChildren().add(new PaymentContainer(10,20,30));
+        itemList.getChildren().add(new PaymentContainer(10,20,30));
+        itemList.getChildren().add(new PaymentContainer(10,20,30));
+
+    }
+
+    public void remove(PaymentContainer p) {
+        itemList.getChildren().remove(p);
     }
 
     @FXML

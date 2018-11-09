@@ -21,6 +21,8 @@ public class ItemController {
     @FXML
     private void initialize() {
 
+        Main.itemController = this;
+
         if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
         }
