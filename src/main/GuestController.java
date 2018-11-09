@@ -231,6 +231,7 @@ public class GuestController {
         totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         totalDue.setText(""+total);
         //TODO: Add in costs for add-on items
+        getChangeNeeded(); //Show how much payment is required to user
     }
 
 
@@ -241,39 +242,35 @@ public class GuestController {
      */
     @FXML
     private void getChangeNeeded() {
-        if (guestSelect.getValue()==null) return;
-        double paid = 0, change = 0, total=0;
+        if (guestSelect.getValue()==null) return; //Ensure that there is a guest selected
 
-        try {
-            if (amountPaid.getText().equals("")) paid=0;
-            else paid = Double.parseDouble(amountPaid.getText());
-        } catch (Exception ignored) { }
+        //Parse the $$ info in the payment fields into doubles for calculations
+        double paid = parseTextFieldToDouble(amountPaid);
+        double change = parseTextFieldToDouble(changeGiven);
+        double total = totalDue.getText().isEmpty() ? 0.0 : Double.parseDouble(totalDue.getText());
 
-        try {
-            if (changeGiven.getText().equals("")) change=0;
-            else change = Double.parseDouble(changeGiven.getText());
-        } catch (Exception ignored) { }
+        double changeDue = paid - total - change; //Amount of change due is total paid - total due - existing change given
 
-        try {
-            if (totalDue.getText().equals("")) total=0;
-            else total = Double.parseDouble(totalDue.getText());
-        } catch (Exception ignored) { }
-
-        double amountChange = paid - total - change;
-        System.out.println("Amount of Change: " + amountChange);
-        if (total >= 0) {
-            if ((paid <= total && change > 0) || (amountChange < 0 && paid >= total)) {
-                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-                additionalPaymentInfo.setTextFill(Color.DARKRED);
-                additionalPaymentInfo.setText("*ERROR IN PAYMENT*");
-            } else if (amountChange > 0) {
-                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-                additionalPaymentInfo.setTextFill(Color.GREEN);
-                additionalPaymentInfo.setText("*Change Needed: $" + amountChange + "*");
-            } else if (paid < total) {
+        if (total > 0) { //If there is any payment to process
+            if (changeDue < 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
                 additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                 additionalPaymentInfo.setTextFill(Color.RED);
                 additionalPaymentInfo.setText("*Payment Required: $" + (total-paid)+"*");
+            }
+            else if (changeDue > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
+                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+                additionalPaymentInfo.setTextFill(Color.GREEN);
+                additionalPaymentInfo.setText("*Change Needed: $" + changeDue + "*");
+            }
+            else if (changeDue > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
+                //TODO: Make it so if a person gives change at some point, then user buys more but change was previously given,
+                //display the correct message.
+            }
+            else if (changeDue < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
+                //TODO: Fix conditions in else-if statement to correctly do what is stated in comment
+                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+                additionalPaymentInfo.setTextFill(Color.DARKRED);
+                additionalPaymentInfo.setText("*Too Much Change Given!*");
             } else additionalPaymentInfo.setText("");
         } else additionalPaymentInfo.setText("");
     }
@@ -282,6 +279,24 @@ public class GuestController {
     // Utility Methods
     // --------------------------------------
     //
+
+    /**
+     * Given a textfield, will parse the contents of it to a double. If the number is can not be parsed
+     * then will return 0. Will also return 0 if textfield is empty.
+     * @param t TextField to parse double from
+     * @return Value of double in textfield, 0 if can't be read, 0 if empty.
+     */
+    private double parseTextFieldToDouble(TextField t) {
+        double d = 0;
+        try {
+            //If the textfield isn't empty, get the value in it
+            if (!t.getText().equals("")) d = Double.parseDouble(amountPaid.getText());
+        } catch (Exception e) {
+            if (Main.DEBUG) e.printStackTrace();
+        }
+        return d;
+    }
+
 
     /**
      * Updates all fields in form to match the data of the current guest.
