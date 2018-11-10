@@ -11,6 +11,7 @@ public class Main extends Application {
     public static boolean DEBUG = true;
     public static GuestController guestController;
     public static ItemController itemController;
+    public static PaymentController paymentController;
 
 
     @Override

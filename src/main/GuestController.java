@@ -50,12 +50,6 @@ public class GuestController {
         }
         updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
 
-        itemList.getChildren().add(new PaymentContainer(10,20,30));
-        itemList.getChildren().add(new PaymentContainer(10,20,30));
-        itemList.getChildren().add(new PaymentContainer(10,20,30));
-        itemList.getChildren().add(new PaymentContainer(10,20,30));
-        itemList.getChildren().add(new PaymentContainer(10,20,30));
-
     }
 
     public void remove(PaymentContainer p) {
@@ -214,78 +208,79 @@ public class GuestController {
     // --------------------------------------
     //
 
-    /**
-     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
-     * inputs the amount of money that the person has paid. This will also alert the user if they haven't given
-     * sufficient change.
-     */
-    @FXML
-    private void updateTotal() {
-        double total = 0;
-        for (Item i : guestSelect.getValue().getItems()) {
-            double val = 0;
-            if (i.get("itemPrice") != null)
-                try {
-                    val = Double.parseDouble(i.get("itemPrice"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Error Loading in Price Of Item: " + i.get("itemName"));
-                }
-            total+=val;
-        }
+    //TODO: Open new window to manage payments.
 
-        try {
-            if (!entryDonation.getText().isEmpty())
-                total += Double.parseDouble(entryDonation.getText());
-            if (!additionalDonation.getText().isEmpty())
-                total += Double.parseDouble(additionalDonation.getText());
-        } catch (Exception ignored) {} //Don't respond to exception from user input
+//    /**
+//     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
+//     * inputs the amount of money that the person has paid. This will also alert the user if they haven't given
+//     * sufficient change.
+//     */
+//    @FXML
+//    private void updateTotal() {
+//        double total = 0;
+//        for (Item i : guestSelect.getValue().getItems()) {
+//            double val = 0;
+//            if (i.get("itemPrice") != null)
+//                try {
+//                    val = Double.parseDouble(i.get("itemPrice"));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    System.out.println("Error Loading in Price Of Item: " + i.get("itemName"));
+//                }
+//            total+=val;
+//        }
+//
+//        try {
+//            if (!entryDonation.getText().isEmpty())
+//                total += Double.parseDouble(entryDonation.getText());
+//            if (!additionalDonation.getText().isEmpty())
+//                total += Double.parseDouble(additionalDonation.getText());
+//        } catch (Exception ignored) {} //Don't respond to exception from user input
+//
+//        totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+//        totalDue.setText(""+total);
+//        //TODO: Add in costs for add-on items
+//        getChangeNeeded(); //Show how much payment is required to user
+//    }
 
-        totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-        totalDue.setText(""+total);
-        //TODO: Add in costs for add-on items
-        getChangeNeeded(); //Show how much payment is required to user
-    }
-
-
-    /**
-     * Will Update The additionalPaymentInfo Label with change due
-     * Has Minor Error Checking Built In To Prevent Errors In Making Change
-     * Dynamically Updates As Inputs Are Put Into Forms
-     */
-    @FXML
-    private void getChangeNeeded() {
-        if (guestSelect.getValue()==null) return; //Ensure that there is a guest selected
-
-        //Parse the $$ info in the payment fields into doubles for calculations
-        double paid = parseTextFieldToDouble(amountPaid);
-        double change = parseTextFieldToDouble(changeGiven);
-        double total = totalDue.getText().isEmpty() ? 0.0 : Double.parseDouble(totalDue.getText());
-
-        double net = total - paid; //If > 0: Payment Due, If <0: Change Due, If == 0, Exactly Paid
-        if (total > 0) { //If there is any payment to process
-            if (net > 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
-                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-                additionalPaymentInfo.setTextFill(Color.RED);
-                additionalPaymentInfo.setText("*Payment Required: $" + (total-paid)+"*");
-            }
-            else if (net > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
-                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-                additionalPaymentInfo.setTextFill(Color.GREEN);
-                additionalPaymentInfo.setText("*Change Needed: $" + net + "*");
-            }
-            else if (net > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
-                //TODO: Make it so if a person gives change at some point, then user buys more but change was previously given,
-                //display the correct message.
-            }
-            else if (net < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
-                //TODO: Fix conditions in else-if statement to correctly do what is stated in comment
-                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-                additionalPaymentInfo.setTextFill(Color.DARKRED);
-                additionalPaymentInfo.setText("*Too Much Change Given!*");
-            } else additionalPaymentInfo.setText("");
-        } else additionalPaymentInfo.setText("");
-    }
+//    /**
+//     * Will Update The additionalPaymentInfo Label with change due
+//     * Has Minor Error Checking Built In To Prevent Errors In Making Change
+//     * Dynamically Updates As Inputs Are Put Into Forms
+//     */
+//    @FXML
+//    private void getChangeNeeded() {
+//        if (guestSelect.getValue()==null) return; //Ensure that there is a guest selected
+//
+//        //Parse the $$ info in the payment fields into doubles for calculations
+//        double paid = parseTextFieldToDouble(amountPaid);
+//        double change = parseTextFieldToDouble(changeGiven);
+//        double total = totalDue.getText().isEmpty() ? 0.0 : Double.parseDouble(totalDue.getText());
+//
+//        double net = total - paid; //If > 0: Payment Due, If <0: Change Due, If == 0, Exactly Paid
+//        if (total > 0) { //If there is any payment to process
+//            if (net > 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
+//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+//                additionalPaymentInfo.setTextFill(Color.RED);
+//                additionalPaymentInfo.setText("*Payment Required: $" + (total-paid)+"*");
+//            }
+//            else if (net > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
+//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+//                additionalPaymentInfo.setTextFill(Color.GREEN);
+//                additionalPaymentInfo.setText("*Change Needed: $" + net + "*");
+//            }
+//            else if (net > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
+//                //TODO: Make it so if a person gives change at some point, then user buys more but change was previously given,
+//                //display the correct message.
+//            }
+//            else if (net < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
+//                //TODO: Fix conditions in else-if statement to correctly do what is stated in comment
+//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+//                additionalPaymentInfo.setTextFill(Color.DARKRED);
+//                additionalPaymentInfo.setText("*Too Much Change Given!*");
+//            } else additionalPaymentInfo.setText("");
+//        } else additionalPaymentInfo.setText("");
+//    }
     //
     // --------------------------------------
     // Utility Methods
@@ -298,11 +293,28 @@ public class GuestController {
      * @param t TextField to parse double from
      * @return Value of double in textfield, 0 if can't be read, 0 if empty.
      */
-    private double parseTextFieldToDouble(TextField t) {
+    public static double parseTextFieldToDouble(TextField t) {
         double d = 0;
         try {
             //If the textfield isn't empty, get the value in it
-            if (!t.getText().equals("")) d = Double.parseDouble(amountPaid.getText());
+            if (!t.getText().equals("")) d = Double.parseDouble(t.getText());
+        } catch (Exception e) {
+            if (Main.DEBUG) e.printStackTrace();
+        }
+        return d;
+    }
+
+    /**
+     * Given a label, will parse the contents of it to a double. If the number is can not be parsed
+     * then will return 0. Will also return 0 if label is empty.
+     * @param l label to parse double from
+     * @return Value of double in label, 0 if can't be read, 0 if empty.
+     */
+    public static double parseLabelToDouble(Label l) {
+        double d = 0;
+        try {
+            //If the label isn't empty, get the value in it
+            if (!l.getText().equals("")) d = Double.parseDouble(l.getText());
         } catch (Exception e) {
             if (Main.DEBUG) e.printStackTrace();
         }
@@ -340,8 +352,8 @@ public class GuestController {
         }
         manageAddOns.setDisable(false);
         saveButton.setDisable(false);
-        updateTotal();
-        getChangeNeeded();
+        //updateTotal(); //Commented out due to reworking payment system
+        //getChangeNeeded(); //Commented out due to reworking payment system
         //TODO: Ensure Guest is selected in GuestSelect Menu
 
         for (Item i : g.getItems()) {

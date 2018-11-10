@@ -12,14 +12,14 @@ import main.Main;
 
 public class PaymentContainer extends HBox {
 
-    private int total = -1;
-    private int paid = -1;
-    private int change = -1;
+    private double total = -1;
+    private double paid = -1;
+    private double change = -1;
 
-    public PaymentContainer(int total, int paid, int change) {
-        super();
-        setSpacing(8);
-        setAlignment(Pos.CENTER_LEFT);
+    public PaymentContainer(double total, double paid, double change) {
+        super(); //Construct
+        setSpacing(8); //Set padding between objects
+        setAlignment(Pos.CENTER_LEFT); //Align contents to center left
         this.total = total;
         this.paid = paid;
         this.change = change;
@@ -32,15 +32,15 @@ public class PaymentContainer extends HBox {
         this.getChildren().add(b);
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public int getPaid() {
+    public double getPaid() {
         return paid;
     }
 
-    public int getChange() {
+    public double getChange() {
         return change;
     }
 
