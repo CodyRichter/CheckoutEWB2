@@ -218,24 +218,10 @@
             <VBox alignment="CENTER" />
          </children>
       </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="6">
+      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="6">
          <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Amount Paid:" />
-                  <TextField fx:id="amountPaid" onKeyReleased="#getChangeNeeded" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" text="Change Given:" />
-                  <TextField fx:id="changeGiven" onKeyReleased="#getChangeNeeded" />
-               </children>
-            </VBox>
+            <Button fx:id="managePayments" mnemonicParsing="false" onAction="#openPaymentWindow" text="Manage Payments" />
+            <VBox alignment="CENTER" />
          </children>
       </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">

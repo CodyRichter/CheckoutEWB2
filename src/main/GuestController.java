@@ -6,9 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 
@@ -36,15 +33,11 @@ public class GuestController {
         textFields.put("emailAddress", emailAddress);
         textFields.put("entryDonation", entryDonation);
         textFields.put("additionalDonation", additionalDonation);
-        textFields.put("amountPaid", amountPaid);
-        textFields.put("changeGiven", changeGiven);
 
         if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
         }
-        if (DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
-            //TODO: Display Alert To User That No Guest Data To Load
-        } else {
+        if (!DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
             guestSelect.setItems(DataManager.guests); //Populate the selector with the loaded guests
             guestSelect.setValue(DataManager.guests.get(0));
         }
@@ -63,10 +56,10 @@ public class GuestController {
     ComboBox<Guest> guestSelect;
 
     @FXML
-    TextField firstName, lastName, phoneNumber, emailAddress, entryDonation, additionalDonation, amountPaid, changeGiven;
+    TextField firstName, lastName, phoneNumber, emailAddress, entryDonation, additionalDonation;
 
     @FXML
-    Button manageAddOns, saveButton, switchButton;
+    Button manageAddOns, saveButton, switchButton, managePayments;
 
     @FXML
     Label totalDue,additionalPaymentInfo;
@@ -208,7 +201,29 @@ public class GuestController {
     // --------------------------------------
     //
 
-    //TODO: Open new window to manage payments.
+    @FXML
+    protected void openPaymentWindow() {
+        //TODO: Open new window to manage payments.
+
+//        try {
+//            Stage stage = (Stage) managePayments.getScene().getWindow();
+//            stage.setMinHeight(150); //TODO: Set Correct Size
+//            stage.setMinWidth(150); //TODO: Set Correct Size
+//            Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml")); //TODO: Set Correct Name
+//            Scene scene = new Scene(root, 0, 0);
+//            stage.setHeight(200); //TODO: Set Correct Size
+//            stage.setWidth(200); //TODO: Set Correct Size
+//            stage.setTitle("Checkout-EWB Version II: Payment Manager");
+//            stage.setScene(scene);
+//            stage.show();
+//            stage.requestFocus();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Error Loading Page: Payment Manager.");
+//            System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
+//        }
+    }
 
 //    /**
 //     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
@@ -288,37 +303,28 @@ public class GuestController {
     //
 
     /**
-     * Given a textfield, will parse the contents of it to a double. If the number is can not be parsed
-     * then will return 0. Will also return 0 if textfield is empty.
-     * @param t TextField to parse double from
-     * @return Value of double in textfield, 0 if can't be read, 0 if empty.
+     * Given a TextField or Label, will parse the contents of it to a double. If the number is can not be parsed
+     * then will return 0. Will also return 0 if input field is empty.
+     * @param o Container holding the field to parse (Eg. TextField, Label)
+     * @return Value of double in container, 0 if can't be read, 0 if empty.
      */
-    public static double parseTextFieldToDouble(TextField t) {
-        double d = 0;
+    public static double parseInputToDouble(Object o) {
+        if (!(o instanceof TextField) && !(o instanceof Label)) return 0;
+
+        Label l = null;
+        TextField t = null;
+
+        if (o instanceof TextField) t = (TextField) o;
+        if (o instanceof Label) l = (Label) o;
+
         try {
             //If the textfield isn't empty, get the value in it
-            if (!t.getText().equals("")) d = Double.parseDouble(t.getText());
+            if (t != null && !t.getText().equals("")) return Double.parseDouble(t.getText());
+            else if (l != null && !l.getText().equals("")) return Double.parseDouble(l.getText());
         } catch (Exception e) {
             if (Main.DEBUG) e.printStackTrace();
         }
-        return d;
-    }
-
-    /**
-     * Given a label, will parse the contents of it to a double. If the number is can not be parsed
-     * then will return 0. Will also return 0 if label is empty.
-     * @param l label to parse double from
-     * @return Value of double in label, 0 if can't be read, 0 if empty.
-     */
-    public static double parseLabelToDouble(Label l) {
-        double d = 0;
-        try {
-            //If the label isn't empty, get the value in it
-            if (!l.getText().equals("")) d = Double.parseDouble(l.getText());
-        } catch (Exception e) {
-            if (Main.DEBUG) e.printStackTrace();
-        }
-        return d;
+        return 0;
     }
 
 

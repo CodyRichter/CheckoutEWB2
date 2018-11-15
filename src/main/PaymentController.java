@@ -13,12 +13,12 @@ public class PaymentController {
     private double totalPaid = 0;
 
     public PaymentController() {
-        Main.paymentController = this;
+
     }
 
     @FXML
     private void initialize() {
-
+        Main.paymentController = this;
     }
 
     @FXML
@@ -32,9 +32,9 @@ public class PaymentController {
 
     @FXML
     private void addPayment() {
-        double paid = GuestController.parseTextFieldToDouble(amountPaid);
-        double change = GuestController.parseTextFieldToDouble(changeGiven);
-        double total = GuestController.parseLabelToDouble(Main.guestController.totalDue);
+        double paid = GuestController.parseInputToDouble(amountPaid);
+        double change = GuestController.parseInputToDouble(changeGiven);
+        double total = GuestController.parseInputToDouble(Main.guestController.totalDue);
 
         PaymentContainer p = new PaymentContainer(total,paid,change);
 
