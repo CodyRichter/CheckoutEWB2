@@ -171,7 +171,7 @@
       </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
-            <Button fx:id="manageAddOns" mnemonicParsing="false" text="Manage Add-On Items" />
+            <Button fx:id="manageAddOns" mnemonicParsing="false" onAction="#openAddOnMenu" text="Manage Add-On Items" />
             <VBox alignment="CENTER" />
          </children>
       </FlowPane>

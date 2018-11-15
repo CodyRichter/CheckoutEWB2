@@ -19,6 +19,10 @@ public class PaymentController {
     @FXML
     private void initialize() {
         Main.paymentController = this;
+
+        //TODO: Find way to bring focus back to GuestController on exit.
+        //amountPaid.getScene().getWindow().setOnCloseRequest(event -> {System.out.println("Exiting!");});
+
     }
 
     @FXML
@@ -39,6 +43,5 @@ public class PaymentController {
         PaymentContainer p = new PaymentContainer(total,paid,change);
 
     }
-
 
 }

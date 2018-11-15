@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 
@@ -205,58 +207,57 @@ public class GuestController {
     protected void openPaymentWindow() {
         //TODO: Open new window to manage payments.
 
-//        try {
-//            Stage stage = (Stage) managePayments.getScene().getWindow();
-//            stage.setMinHeight(150); //TODO: Set Correct Size
-//            stage.setMinWidth(150); //TODO: Set Correct Size
-//            Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml")); //TODO: Set Correct Name
-//            Scene scene = new Scene(root, 0, 0);
-//            stage.setHeight(200); //TODO: Set Correct Size
-//            stage.setWidth(200); //TODO: Set Correct Size
-//            stage.setTitle("Checkout-EWB Version II: Payment Manager");
-//            stage.setScene(scene);
-//            stage.show();
-//            stage.requestFocus();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("Error Loading Page: Payment Manager.");
-//            System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
-//        }
+        try {
+            Stage stage = (Stage) managePayments.getScene().getWindow();
+            stage.setMinHeight(150); //TODO: Set Correct Size
+            stage.setMinWidth(150); //TODO: Set Correct Size
+            Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml")); //TODO: Set Correct Name
+            Scene scene = new Scene(root, 0, 0);
+            stage.setHeight(200); //TODO: Set Correct Size
+            stage.setWidth(200); //TODO: Set Correct Size
+            stage.setTitle("Checkout-EWB Version II: Payment Manager");
+            stage.setScene(scene);
+            stage.show();
+            stage.requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error Loading Page: Payment Manager.");
+            System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
+        }
     }
 
-//    /**
-//     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
-//     * inputs the amount of money that the person has paid. This will also alert the user if they haven't given
-//     * sufficient change.
-//     */
-//    @FXML
-//    private void updateTotal() {
-//        double total = 0;
-//        for (Item i : guestSelect.getValue().getItems()) {
-//            double val = 0;
-//            if (i.get("itemPrice") != null)
-//                try {
-//                    val = Double.parseDouble(i.get("itemPrice"));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    System.out.println("Error Loading in Price Of Item: " + i.get("itemName"));
-//                }
-//            total+=val;
-//        }
-//
-//        try {
-//            if (!entryDonation.getText().isEmpty())
-//                total += Double.parseDouble(entryDonation.getText());
-//            if (!additionalDonation.getText().isEmpty())
-//                total += Double.parseDouble(additionalDonation.getText());
-//        } catch (Exception ignored) {} //Don't respond to exception from user input
-//
-//        totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-//        totalDue.setText(""+total);
-//        //TODO: Add in costs for add-on items
-//        getChangeNeeded(); //Show how much payment is required to user
-//    }
+    /**
+     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
+     * inputs the amount of money that the person has paid. This will also alert the user if they haven't given
+     * sufficient change.
+     */
+    @FXML
+    private void updateTotal() {
+        double total = 0;
+        for (Item i : guestSelect.getValue().getItems()) {
+            double val = 0;
+            if (i.get("itemPrice") != null)
+                try {
+                    val = Double.parseDouble(i.get("itemPrice"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error Loading in Price Of Item: " + i.get("itemName"));
+                }
+            total+=val;
+        }
+
+        try {
+            if (!entryDonation.getText().isEmpty())
+                total += Double.parseDouble(entryDonation.getText());
+            if (!additionalDonation.getText().isEmpty())
+                total += Double.parseDouble(additionalDonation.getText());
+        } catch (Exception ignored) {} //Don't respond to exception from user input
+
+        totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        totalDue.setText(""+total);
+        //TODO: Add in costs for add-on items
+    }
 
 //    /**
 //     * Will Update The additionalPaymentInfo Label with change due
