@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import main.FXMLAddOn.PaymentContainer;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -45,10 +44,6 @@ public class GuestController {
         }
         updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
 
-    }
-
-    public void remove(PaymentContainer p) {
-        itemList.getChildren().remove(p);
     }
 
     @FXML
@@ -209,12 +204,12 @@ public class GuestController {
 
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
-            stage.setMinHeight(150); //TODO: Set Correct Size
-            stage.setMinWidth(150); //TODO: Set Correct Size
-            Parent root = FXMLLoader.load(getClass().getResource("Payment.fxml")); //TODO: Set Correct Name
-            Scene scene = new Scene(root, 0, 0);
-            stage.setHeight(200); //TODO: Set Correct Size
-            stage.setWidth(200); //TODO: Set Correct Size
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
+            Parent root = FXMLLoader.load(getClass().getResource("Total.fxml"));
+            Scene scene = new Scene(root, 600, 400);
+            stage.setHeight(600);
+            stage.setWidth(800);
             stage.setTitle("Checkout-EWB Version II: Payment Manager");
             stage.setScene(scene);
             stage.show();

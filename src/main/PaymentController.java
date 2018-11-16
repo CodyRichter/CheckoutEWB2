@@ -1,11 +1,11 @@
 package main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import main.FXMLAddOn.PaymentContainer;
 
-import java.awt.*;
 
 public class PaymentController {
 
@@ -41,7 +41,11 @@ public class PaymentController {
         double total = GuestController.parseInputToDouble(Main.guestController.totalDue);
 
         PaymentContainer p = new PaymentContainer(total,paid,change);
+        payments.getChildren().add(p);
+    }
 
+    public void remove(PaymentContainer p) {
+        payments.getChildren().remove(p);
     }
 
 }

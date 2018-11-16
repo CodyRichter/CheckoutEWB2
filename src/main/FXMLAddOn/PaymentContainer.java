@@ -1,12 +1,8 @@
 package main.FXMLAddOn;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.HBox;
 import main.Main;
 
@@ -46,6 +42,6 @@ public class PaymentContainer extends HBox {
 
     private void remove() {
         //TODO: Update Total Counters For Change
-        Main.guestController.remove(this);
+        Main.paymentController.remove(this);
     }
 }

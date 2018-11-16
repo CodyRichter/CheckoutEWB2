@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.PaymentController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.PaymentController">
    <children>
       <Label text="Payment Manager">
          <font>
@@ -24,7 +24,7 @@
             <Insets bottom="20.0" left="10.0" right="10.0" />
          </padding>
          <content>
-            <VBox fx:id="payments" />
+            <VBox fx:id="payments" prefHeight="50.0" prefWidth="600.0" />
          </content>
       </ScrollPane>
       <GridPane>
@@ -88,7 +88,7 @@
             </FlowPane>
             <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="addPayment" mnemonicParsing="false" text="Add Payment" />
+                  <Button fx:id="addPayment" mnemonicParsing="false" onAction="#addPayment" text="Add Payment" />
                </children>
             </FlowPane>
          </children>
