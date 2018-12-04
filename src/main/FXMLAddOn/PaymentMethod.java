@@ -8,6 +8,6 @@ public enum PaymentMethod { //Ways that a user can pay
         if (this == PaymentMethod.CASH) return "Cash";
         if (this == PaymentMethod.CHECK) return "Check";
         if (this == PaymentMethod.OTHER) return "Other";
-        return "[INVALID PAYMENT TYPE]";
+        return "[INVALID PAYMENT METHOD]";
     }
 }

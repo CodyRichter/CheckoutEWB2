@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
+import main.FXMLAddOn.PaymentType;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -23,7 +24,6 @@ import java.util.EventListener;
 public class PaymentController {
 
     private Guest selectedGuest = Main.guestController.guestSelect.getValue();
-    private double totalPaid = 0;
 
     public PaymentController() {
 
@@ -52,25 +52,44 @@ public class PaymentController {
                     addPayment();
                 }}});
 
+        description.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    addPayment();
+                }}});
+
+        //Set correct values of Payment Method
         ArrayList<PaymentMethod> paymentMethodList = new ArrayList<>();
         paymentMethodList.add(PaymentMethod.CASH);
         paymentMethodList.add(PaymentMethod.CHECK);
         paymentMethodList.add(PaymentMethod.OTHER);
         paymentMethod.setItems(FXCollections.observableArrayList(paymentMethodList));
         paymentMethod.setValue(PaymentMethod.CASH);
+
+        //Set correct values of Payment Type
+        ArrayList<PaymentType> paymentTypeList = new ArrayList<>();
+        paymentTypeList.add(PaymentType.PAYMENT);
+        paymentTypeList.add(PaymentType.DONATION);
+        paymentType.setItems(FXCollections.observableArrayList(paymentTypeList));
+        paymentType.setValue(PaymentType.PAYMENT);
+
     }
 
     @FXML
     VBox payments; //Container holding all payments for given user.
 
     @FXML
-    Label totalDue; //Label on page containing the total amount of $$ due
+    Label total,totalPaid,totalDue; //[Sum of All Items + Donations,Amount Paid So Far,Amount Remaining To Pay]
 
     @FXML
     TextField amountPaid,changeGiven,description; //Input fields for a new payment.
 
     @FXML
     ChoiceBox<PaymentMethod> paymentMethod; //Payment Method: Cash/Check
+
+    @FXML
+    ChoiceBox<PaymentType> paymentType; //Payment Type: Payment/Donation
 
     /**
      * Adds a new payment to the current guest. This method creates a PaymentContainer,
@@ -89,11 +108,12 @@ public class PaymentController {
             return; //Exit method here to stop adding payment
         }
 
+        //Get values from input fields
         double paid = GuestController.parseInputToDouble(amountPaid);
         double change = GuestController.parseInputToDouble(changeGiven);
         String desc = DataManager.clean(description.getText());
 
-        PaymentContainer p = new PaymentContainer(paid,change,paymentMethod.getValue(),desc);
+        PaymentContainer p = new PaymentContainer(paid,change,paymentMethod.getValue(),paymentType.getValue(),desc);
 
         //Wipe the text in the fields for the
         amountPaid.clear();

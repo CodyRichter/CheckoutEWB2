@@ -35,17 +35,19 @@
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
+                  <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0">
                      <GridPane.margin>
                         <Insets right="5.0" />
                      </GridPane.margin>
                      <children>
-                        <Label text="Total Due:" />
+                        <Label text="Total:" />
+                        <Label fx:id="total" text="[Amount Here]" />
                      </children>
                   </FlowPane>
                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -53,6 +55,17 @@
                         <Insets left="5.0" />
                      </GridPane.margin>
                      <children>
+                        <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Total Paid:" />
+                              <Label fx:id="totalPaid" text="[Amount Here]" />
+                           </children>
+                        </FlowPane>
+                     </children>
+                  </FlowPane>
+                  <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                     <children>
+                        <Label text="Due:" />
                         <Label fx:id="totalDue" text="[Amount Here]" />
                      </children>
                   </FlowPane>
@@ -81,7 +94,10 @@
                         <Label text="Change Given:" />
                      </children>
                   </FlowPane>
-                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" />
+                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                     <children>
+                        <Label text="Description:" />
+                     </children></FlowPane>
                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                      <children>
                         <TextField fx:id="amountPaid" />
@@ -97,9 +113,9 @@
                         <Button fx:id="addPayment" mnemonicParsing="false" onAction="#addPayment" text="Add Payment" />
                      </children>
                   </FlowPane>
-                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <Label text="Description:" />
+                        <TextField fx:id="description" />
                      </children>
                   </FlowPane>
                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -109,12 +125,17 @@
                   </FlowPane>
                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                      <children>
-                        <TextField fx:id="description" />
+                        <ChoiceBox fx:id="paymentType" prefWidth="150.0" />
                      </children>
                   </FlowPane>
                   <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
                         <ChoiceBox fx:id="paymentMethod" prefWidth="150.0" />
+                     </children>
+                  </FlowPane>
+                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="Payment Type:" />
                      </children>
                   </FlowPane>
                </children>
