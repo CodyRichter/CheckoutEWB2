@@ -199,8 +199,6 @@ public class GuestController {
 
         saveForm();
 
-        //TODO: Fix NullPointer when this window is loaded for a guest who has items in their inventory
-
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
             stage.setMinHeight(400);
@@ -272,9 +270,6 @@ public class GuestController {
             manageAddOns.setDisable(true);
             managePayments.setDisable(true);
             saveButton.setDisable(true);
-
-            //TODO: Remove currently loaded guest from GuestSelect Menu.
-            //TODO: Correctly handle items that are loaded and need to be cleared
             return;
         }
 
@@ -288,9 +283,6 @@ public class GuestController {
         manageAddOns.setDisable(false);
         managePayments.setDisable(false);
         saveButton.setDisable(false);
-        //updateTotal(); //Commented out due to reworking payment system
-        //getChangeNeeded(); //Commented out due to reworking payment system
-        //TODO: Ensure Guest is selected in GuestSelect Menu
 
         for (Item i : g.getItems()) {
             Label l = new Label();

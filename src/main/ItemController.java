@@ -11,6 +11,8 @@ import java.net.URI;
 
 public class ItemController {
 
+    private Item selectedItem = null;
+
     public ItemController() {
 
     }
@@ -31,6 +33,7 @@ public class ItemController {
         } else {
             itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
             itemSelect.setValue(DataManager.items.get(0));
+            selectedItem = itemSelect.getValue();
         }
 
         if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
@@ -163,7 +166,8 @@ public class ItemController {
      */
     @FXML
     private void showGuestFromSelector() {
-        updateForm(itemSelect.getValue());
+        selectedItem = itemSelect.getValue();
+        updateForm(selectedItem);
     }
 
 
@@ -172,9 +176,10 @@ public class ItemController {
      */
     @FXML
     private void setItemOwner() {
-        //removeItemOwner(); //Remove existing item owner
         Guest g = ownerSelect.getValue();
+        if (g == null || g.getNumber() == -1) return; //If it is a temporary guest, exit method
         g.addItem(itemSelect.getValue());
+        ownerSelect.setDisable(true);
     }
 
     /**
@@ -183,13 +188,11 @@ public class ItemController {
      */
     @FXML
     private void removeItemOwner() {
-        if (ownerSelect.getValue().get("firstName").equals("No Owner")) return;
-        for (Guest g : DataManager.guests) { //Loop through all guests and see if any guest has the item in their inventory
-            if (g.getItems().contains(itemSelect.getValue())) {
-                g.removeItem(itemSelect.getValue());
-            }
-        }
-        ownerSelect.setValue(new Guest (true,"No Owner"));
+        ownerSelect.getValue().removeItem(selectedItem);
+        ownerSelect.setDisable(false);
+        ownerSelect.setValue(new Guest(true,"No Owner"));
+
+
     }
 
     //
@@ -221,13 +224,14 @@ public class ItemController {
         itemPrice.setText(i.get("itemPrice"));
         itemPrice.setDisable(false);
         saveButton.setDisable(false);
-        ownerSelect.setDisable(false);
         removeOwner.setDisable(false);
+        ownerSelect.setDisable(false);
         ownerSelect.setValue(new Guest (true,"No Owner"));
-        for (int k = 0; k < DataManager.guests.size(); k++) { //Loop through all loaded Items and see if the
-            Guest g = DataManager.guests.get(k);
+        for (Guest g : DataManager.guests) { //Loop through all loaded Items and see if the guest has the item
             if (g.getItems().contains(i)) {
                 ownerSelect.setValue(g);
+                ownerSelect.setDisable(true);
+                break;
             }
         }
     }
@@ -242,9 +246,6 @@ public class ItemController {
         Item i = itemSelect.getValue();
         i.add("itemName",itemName.getText()); //Puts Each TextField Into Item's HashMap
         i.add("itemPrice",itemPrice.getText()); //Puts Each TextField Into Item's HashMap
-        if (!ownerSelect.getValue().get("firstName").equals("No Owner")) { //Ensure owner exists
-            ownerSelect.getValue().addItem(i);
-        }
 
         itemSelect.getItems().sort(Item::compareTo);
     }

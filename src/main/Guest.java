@@ -18,7 +18,7 @@ public class Guest implements Comparable<Guest> {
     private static ArrayList<Integer> usedNumbers;
 
     private HashMap<String,String> map = new HashMap<>();
-    private ArrayList<Item> items = new ArrayList<>(); //TODO: Implement methods to handle adding and removing items from a guest
+    private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<PaymentContainer> payments = new ArrayList<>();
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
@@ -132,7 +132,7 @@ public class Guest implements Comparable<Guest> {
     }
 
     public void removeItem(Item i) {
-        if (!items.contains(i)) return; //Don't removePayment an item the guest doesn't have
+        if (!items.contains(i)) return; //Don't remove an item the guest doesn't have
         items.remove(i);
     }
 
