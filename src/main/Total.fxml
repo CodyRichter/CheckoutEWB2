@@ -93,6 +93,11 @@
             </FlowPane>
          </children>
       </GridPane>
+      <FlowPane alignment="BOTTOM_RIGHT">
+         <children>
+            <Button fx:id="exit" mnemonicParsing="false" text="Return" />
+         </children>
+      </FlowPane>
    </children>
    <opaqueInsets>
       <Insets />

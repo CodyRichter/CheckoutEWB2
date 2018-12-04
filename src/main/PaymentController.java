@@ -10,7 +10,6 @@ import main.FXMLAddOn.PaymentContainer;
 public class PaymentController {
 
     private Guest selectedGuest = Main.guestController.guestSelect.getValue();
-    private double totalPaid = 0;
 
     public PaymentController() {
 
@@ -26,14 +25,19 @@ public class PaymentController {
     }
 
     @FXML
-    VBox payments; //List of all payments
+    VBox payments; //Container holding all payments for given user.
 
     @FXML
     Label totalDue; //Label on page containing the total amount of $$ due
 
     @FXML
-    TextField amountPaid,changeGiven; //User inputs
+    TextField amountPaid,changeGiven; //Input fields for a new payment.
 
+
+    /**
+     * Adds a new payment to the current guest. This method creates a PaymentContainer,
+     * and displays the payment in a list on the page.
+     */
     @FXML
     private void addPayment() {
         double paid = GuestController.parseInputToDouble(amountPaid);
@@ -44,8 +48,23 @@ public class PaymentController {
         payments.getChildren().add(p);
     }
 
+    /**
+     * Removes a specific payment from the Guest's total list of payments.
+     * @param p PaymentContainer to remove from guest.
+     */
     public void remove(PaymentContainer p) {
         payments.getChildren().remove(p);
+    }
+
+
+    /**
+     * Exits the PaymentController and re-opens the GuestController for the current guest.
+     */
+    public void exit() {
+
+        //TODO: Open GuestController
+        //TODO: Ensure controller is for selectedGuest
+
     }
 
 }
