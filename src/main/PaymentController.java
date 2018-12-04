@@ -1,9 +1,13 @@
 package main;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 
 
@@ -60,10 +64,29 @@ public class PaymentController {
     /**
      * Exits the PaymentController and re-opens the GuestController for the current guest.
      */
+    @FXML
     public void exit() {
 
-        //TODO: Open GuestController
-        //TODO: Ensure controller is for selectedGuest
+        //TODO: Set Guest that is loaded in this PaymentController to be Guest that is loaded in GuestController.
+
+        try {
+            Stage stage = (Stage) amountPaid.getScene().getWindow();
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
+            Parent root = FXMLLoader.load(getClass().getResource("Guest.fxml"));
+            Scene scene = new Scene(root, 700, 600);
+            stage.setHeight(600);
+            stage.setWidth(800);
+            stage.setTitle("Checkout-EWB Version II: Guest Page");
+            stage.setScene(scene);
+            stage.show();
+            stage.requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error Loading Page: Guest. (Attempted To Load From PaymentController)");
+            System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
+        }
 
     }
 

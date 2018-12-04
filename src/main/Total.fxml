@@ -95,7 +95,7 @@
       </GridPane>
       <FlowPane alignment="BOTTOM_RIGHT">
          <children>
-            <Button fx:id="exit" mnemonicParsing="false" text="Return" />
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Return" />
          </children>
       </FlowPane>
    </children>
