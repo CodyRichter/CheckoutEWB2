@@ -1,5 +1,7 @@
 package main;
 
+import main.FXMLAddOn.PaymentContainer;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class Guest implements Comparable<Guest> {
 
     private HashMap<String,String> map = new HashMap<>();
     private ArrayList<Item> items = new ArrayList<>(); //TODO: Implement methods to handle adding and removing items from a guest
+    private ArrayList<PaymentContainer> payments = new ArrayList<>();
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
     private boolean temp; //Whether the current guest is for temporary use. (Temp guests have no item #)
@@ -137,6 +140,14 @@ public class Guest implements Comparable<Guest> {
         return items;
     }
 
+    /**
+     * Returns the ArrayList containing all of the guest's payments.
+     * @return ArrayList Containing All of Guest's Payments
+     */
+    public ArrayList<PaymentContainer> getPayments() {
+        return payments;
+    }
+
     @Override
     public String toString() {
         //Ensure We Have Data For All Fields, And Remove Null Entries
@@ -179,4 +190,5 @@ public class Guest implements Comparable<Guest> {
         if (g1.number > g2.number) return 1; //If this is greater than that
         return -1; //If this is less than that
     }
+
 }

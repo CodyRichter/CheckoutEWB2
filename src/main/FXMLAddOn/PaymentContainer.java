@@ -5,31 +5,36 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import main.Main;
+import main.PaymentController;
 
 public class PaymentContainer extends HBox {
 
-    private double total = -1;
+    private String description = "";
     private double paid = -1;
     private double change = -1;
+    private PaymentMethod paymentMethod = PaymentMethod.OTHER;
 
-    public PaymentContainer(double total, double paid, double change) {
+    public PaymentContainer(double paid, double change, PaymentMethod p,String description) {
         super(); //Construct
         setSpacing(8); //Set padding between objects
         setAlignment(Pos.CENTER_LEFT); //Align contents to center left
-        this.total = total;
         this.paid = paid;
         this.change = change;
+        paymentMethod = p;
+        if (description.length() > 50) description = description.substring(0,50); //Prevent Super Long Strings
+        this.description = description;
 
-        Label l = new Label("Total: " + total + ", Paid: " + paid + ", Change: " + change);
+        Label l;
+        if (description.isEmpty()) {
+            l = new Label("Paid: " + paid + ", Change: " + change + ", With: " + p);
+        } else {
+            l = new Label("Paid: " + paid + ", Change: " + change + ", With: " + p + ", For: " + description);
+        }
         Button b = new Button("Delete");
         b.setOnAction(e -> remove()); //Remove From Container When Clicked On
 
         this.getChildren().add(l);
         this.getChildren().add(b);
-    }
-
-    public double getTotal() {
-        return total;
     }
 
     public double getPaid() {
@@ -40,8 +45,15 @@ public class PaymentContainer extends HBox {
         return change;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
     private void remove() {
-        //TODO: Update Total Counters For Change
         Main.paymentController.remove(this);
     }
 }

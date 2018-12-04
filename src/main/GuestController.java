@@ -196,7 +196,6 @@ public class GuestController {
 
     @FXML
     protected void openPaymentWindow() {
-        //TODO: Open new window to manage payments.
 
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
@@ -226,52 +225,22 @@ public class GuestController {
     @FXML
     private void updateTotal() {
 
+        double total = 0;
+
         //TODO: Implement Method
 
-        //TODO: Get total of Auction Items
+        for (Item i : guestSelect.getValue().getItems()) {
+            //Loop through every item in the guest's inventory and parse the itemPrice field to double
+            total += Double.parseDouble(i.get("itemPrice"));
+        }
+
         //TODO: Get total of Add-On Items
-        //TODO: Get Total Net Payment And Set Display of "Payment Needed" Label
+
+
+        totalDue.setText(""+total);
 
     }
 
-//    /**
-//     * Will Update The additionalPaymentInfo Label with change due
-//     * Has Minor Error Checking Built In To Prevent Errors In Making Change
-//     * Dynamically Updates As Inputs Are Put Into Forms
-//     */
-//    @FXML
-//    private void getChangeNeeded() {
-//        if (guestSelect.getValue()==null) return; //Ensure that there is a guest selected
-//
-//        //Parse the $$ info in the payment fields into doubles for calculations
-//        double paid = parseTextFieldToDouble(amountPaid);
-//        double change = parseTextFieldToDouble(changeGiven);
-//        double total = totalDue.getText().isEmpty() ? 0.0 : Double.parseDouble(totalDue.getText());
-//
-//        double net = total - paid; //If > 0: Payment Due, If <0: Change Due, If == 0, Exactly Paid
-//        if (total > 0) { //If there is any payment to process
-//            if (net > 0 && paid < total) { //If negative change due and not paid in full, then we know that the user still needs to pay.
-//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-//                additionalPaymentInfo.setTextFill(Color.RED);
-//                additionalPaymentInfo.setText("*Payment Required: $" + (total-paid)+"*");
-//            }
-//            else if (net > 0 && paid > total) { //If change is due, and there has been more paid than the required total, tell user to give change
-//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-//                additionalPaymentInfo.setTextFill(Color.GREEN);
-//                additionalPaymentInfo.setText("*Change Needed: $" + net + "*");
-//            }
-//            else if (net > 0 && paid < total) { //Special Case: Given Change To User, But Total Due Is Greater Than Amount Paid.
-//                //TODO: Make it so if a person gives change at some point, then user buys more but change was previously given,
-//                //display the correct message.
-//            }
-//            else if (net < 0 && paid > total) { //If user has paid in full, but still gotten change back, we have a problem
-//                //TODO: Fix conditions in else-if statement to correctly do what is stated in comment
-//                additionalPaymentInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-//                additionalPaymentInfo.setTextFill(Color.DARKRED);
-//                additionalPaymentInfo.setText("*Too Much Change Given!*");
-//            } else additionalPaymentInfo.setText("");
-//        } else additionalPaymentInfo.setText("");
-//    }
     //
     // --------------------------------------
     // Utility Methods
@@ -362,9 +331,7 @@ public class GuestController {
             g.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
         }
 
-        //TODO: Add all guest payments to guest, and update total due for guest.
-
-        //TODO: Handle Adding Items To Guest. Should likely be through Item class rather than Guest class.
+        //Note: all payment information is handled from the PaymentController.
 
         guestSelect.getItems().sort(Guest::compareTo);
     }

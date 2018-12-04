@@ -1,19 +1,29 @@
 package main;
 
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
+import main.FXMLAddOn.PaymentMethod;
 
+import java.util.ArrayList;
+import java.util.EventListener;
 
 public class PaymentController {
 
     private Guest selectedGuest = Main.guestController.guestSelect.getValue();
+    private double totalPaid = 0;
 
     public PaymentController() {
 
@@ -23,9 +33,31 @@ public class PaymentController {
     private void initialize() {
         Main.paymentController = this;
 
-        //TODO: Find way to bring focus back to GuestController on exit.
-        //amountPaid.getScene().getWindow().setOnCloseRequest(event -> {System.out.println("Exiting!");});
+        selectedGuest = Main.guestController.guestSelect.getValue(); //Get the guest currently selected in the guest controller.
+        for (PaymentContainer p : selectedGuest.getPayments()) { //Add all current payments
+            payments.getChildren().add(p);
+        }
 
+        changeGiven.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    addPayment();
+                }}});
+
+        amountPaid.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    addPayment();
+                }}});
+
+        ArrayList<PaymentMethod> paymentMethodList = new ArrayList<>();
+        paymentMethodList.add(PaymentMethod.CASH);
+        paymentMethodList.add(PaymentMethod.CHECK);
+        paymentMethodList.add(PaymentMethod.OTHER);
+        paymentMethod.setItems(FXCollections.observableArrayList(paymentMethodList));
+        paymentMethod.setValue(PaymentMethod.CASH);
     }
 
     @FXML
@@ -35,8 +67,10 @@ public class PaymentController {
     Label totalDue; //Label on page containing the total amount of $$ due
 
     @FXML
-    TextField amountPaid,changeGiven; //Input fields for a new payment.
+    TextField amountPaid,changeGiven,description; //Input fields for a new payment.
 
+    @FXML
+    ChoiceBox<PaymentMethod> paymentMethod; //Payment Method: Cash/Check
 
     /**
      * Adds a new payment to the current guest. This method creates a PaymentContainer,
@@ -44,12 +78,31 @@ public class PaymentController {
      */
     @FXML
     private void addPayment() {
+
+        //This if-statement will trigger if there are invalid characters in the field that are not numeric.
+        if (!isValidNumber(amountPaid.getText()) || !isValidNumber(changeGiven.getText())) {
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setTitle("Error");
+            a.setHeaderText("Unable To Add Payment");
+            a.setContentText("The current payment was unable to be added. Please ensure that the amount paid and the amount of change is valid.");
+            a.showAndWait();
+            return; //Exit method here to stop adding payment
+        }
+
         double paid = GuestController.parseInputToDouble(amountPaid);
         double change = GuestController.parseInputToDouble(changeGiven);
-        double total = GuestController.parseInputToDouble(Main.guestController.totalDue);
+        String desc = DataManager.clean(description.getText());
 
-        PaymentContainer p = new PaymentContainer(total,paid,change);
-        payments.getChildren().add(p);
+        PaymentContainer p = new PaymentContainer(paid,change,paymentMethod.getValue(),desc);
+
+        //Wipe the text in the fields for the
+        amountPaid.clear();
+        changeGiven.clear();
+        description.clear();
+        paymentMethod.setValue(PaymentMethod.CASH);
+
+        payments.getChildren().add(p); //Add the payment to display on the form
+        selectedGuest.getPayments().add(p); //Add the payment to the list of all payments for the guest
     }
 
     /**
@@ -58,6 +111,7 @@ public class PaymentController {
      */
     public void remove(PaymentContainer p) {
         payments.getChildren().remove(p);
+        selectedGuest.getPayments().remove(p); //Remove the payment from the list of all the payments for the guest.
     }
 
 
@@ -88,6 +142,23 @@ public class PaymentController {
             System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
         }
 
+    }
+
+    /**
+     * Will check an input string and see whether it can be parsed into a valid number
+     * @param str String to check
+     * @return String can be parsed into a number (double)
+     */
+    private static boolean isValidNumber(String str) {
+        if (str.isEmpty()) return true; //Empty string = 0
+
+        try { //If this works, then true
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException e) { //String can't be parsed, so is false
+            return false;
+        }
+        return true;
     }
 
 }
