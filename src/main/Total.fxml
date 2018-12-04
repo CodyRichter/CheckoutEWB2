@@ -65,7 +65,7 @@
                   </FlowPane>
                   <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                      <children>
-                        <Label text="Due:" />
+                        <Label fx:id="deltaTotal" text="Payment Needed:" />
                         <Label fx:id="totalDue" text="[Amount Here]" />
                      </children>
                   </FlowPane>

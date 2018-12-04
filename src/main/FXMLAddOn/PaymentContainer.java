@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import main.Main;
-import main.PaymentController;
 
 public class PaymentContainer extends HBox {
 
@@ -29,7 +28,7 @@ public class PaymentContainer extends HBox {
         Label l;
 
         if (paymentType == PaymentType.DONATION) { //If this is a donation
-            l = new Label("Donated: " + paid + ", With: " + method);
+            l = new Label("Donated: " + paid + ", Change: " + change + ", With: " + method);
             if (!description.isEmpty()) {
                 l.setText(l.getText().concat(", For: " + description));
             }
@@ -66,6 +65,6 @@ public class PaymentContainer extends HBox {
     }
 
     private void remove() {
-        Main.paymentController.remove(this);
+        Main.paymentController.removePayment(this);
     }
 }

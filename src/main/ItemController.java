@@ -116,7 +116,7 @@ public class ItemController {
      */
     @FXML
     private void removeItem() {
-        if (itemSelect.getValue() == null) return; //If ItemSelect has no items selected, don't try to remove nothing
+        if (itemSelect.getValue() == null) return; //If ItemSelect has no items selected, don't try to removePayment nothing
         itemSelect.getValue().free();
         DataManager.items.remove(itemSelect.getValue()); //Remove Item from master list
         itemSelect.getItems().remove(itemSelect.getValue()); //Remove Item from combo box

@@ -115,7 +115,7 @@ public class Guest implements Comparable<Guest> {
 
     /**
      * Removes a value from the Guest class containing the specified type
-     * @param type Type of data to remove
+     * @param type Type of data to removePayment
      */
     public void remove(String type) {
         if (map.containsKey(type))
@@ -132,7 +132,7 @@ public class Guest implements Comparable<Guest> {
     }
 
     public void removeItem(Item i) {
-        if (!items.contains(i)) return; //Don't remove an item the guest doesn't have
+        if (!items.contains(i)) return; //Don't removePayment an item the guest doesn't have
         items.remove(i);
     }
 

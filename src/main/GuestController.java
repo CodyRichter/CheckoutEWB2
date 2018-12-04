@@ -122,7 +122,7 @@ public class GuestController {
     @FXML
     private void removeGuest() {
         Guest g = guestSelect.getValue();
-        if (g == null) return; //If guestSelect has no items selected, don't try to remove nothing
+        if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
         g.free();
         DataManager.guests.remove(g); //Remove guest from master list
         guestSelect.getItems().remove(g); //Remove guest from combo box
@@ -217,29 +217,6 @@ public class GuestController {
         }
     }
 
-    /**
-     * Updates the indicator for total amount of money that is due. This will dynamically update as the user
-     * inputs the amount of money that the person has paid. This will also alert the user if they haven't given
-     * sufficient change.
-     */
-    @FXML
-    private void updateTotal() {
-
-        double total = 0;
-
-        //TODO: Implement Method
-
-        for (Item i : guestSelect.getValue().getItems()) {
-            //Loop through every item in the guest's inventory and parse the itemPrice field to double
-            total += Double.parseDouble(i.get("itemPrice"));
-        }
-
-        //TODO: Get total of Add-On Items
-
-
-        totalDue.setText(""+total);
-
-    }
 
     //
     // --------------------------------------

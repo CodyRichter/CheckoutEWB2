@@ -95,7 +95,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * Removes a value from the Item class containing the specified type
-     * @param type Type of data to remove
+     * @param type Type of data to removePayment
      */
     public void remove(String type) {
         if (map.containsKey(type))

@@ -13,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
@@ -74,13 +77,19 @@ public class PaymentController {
         paymentType.setItems(FXCollections.observableArrayList(paymentTypeList));
         paymentType.setValue(PaymentType.PAYMENT);
 
+        //Update Counters
+        updateMoneyCounters();
     }
+
+    //
+    // JavaFX Variables
+    //
 
     @FXML
     VBox payments; //Container holding all payments for given user.
 
     @FXML
-    Label total,totalPaid,totalDue; //[Sum of All Items + Donations,Amount Paid So Far,Amount Remaining To Pay]
+    Label total,totalPaid,totalDue,deltaTotal; //[Sum of All Items + Donations,Amount Paid So Far,Amount Remaining To Pay,Label Saying If Change/Payment Needed]
 
     @FXML
     TextField amountPaid,changeGiven,description; //Input fields for a new payment.
@@ -90,6 +99,12 @@ public class PaymentController {
 
     @FXML
     ChoiceBox<PaymentType> paymentType; //Payment Type: Payment/Donation
+
+
+    //
+    // Payment Management Methods
+    //
+
 
     /**
      * Adds a new payment to the current guest. This method creates a PaymentContainer,
@@ -119,21 +134,92 @@ public class PaymentController {
         amountPaid.clear();
         changeGiven.clear();
         description.clear();
+        paymentType.setValue(PaymentType.PAYMENT);
         paymentMethod.setValue(PaymentMethod.CASH);
 
         payments.getChildren().add(p); //Add the payment to display on the form
         selectedGuest.getPayments().add(p); //Add the payment to the list of all payments for the guest
+
+        updateMoneyCounters();
+
     }
 
     /**
      * Removes a specific payment from the Guest's total list of payments.
-     * @param p PaymentContainer to remove from guest.
+     * @param p PaymentContainer to removePayment from guest.
      */
-    public void remove(PaymentContainer p) {
+    public void removePayment(PaymentContainer p) {
         payments.getChildren().remove(p);
         selectedGuest.getPayments().remove(p); //Remove the payment from the list of all the payments for the guest.
+        updateMoneyCounters();
     }
 
+    //
+    // Payment Label Methods
+    //
+
+    /**
+     * Calculates the total amount of money that is due
+     */
+    @FXML
+    private void getTotal() {
+        double totalAsDouble = 0;
+        for (Item i : selectedGuest.getItems()) {
+            totalAsDouble += Double.parseDouble(i.get("itemPrice")); //Gets the price of each item and adds it to the total
+        }
+        for (PaymentContainer p : selectedGuest.getPayments()) {
+            if (p.getPaymentType() == PaymentType.DONATION) {
+                totalAsDouble += p.getPaid()-p.getChange();
+            }
+        }
+        total.setText("$"+totalAsDouble);
+    }
+
+    /**
+     * Calculates the amount of money that has been paid in total so far.
+     */
+    @FXML
+    private void getAmountPaid() {
+        double paidAsDouble = 0;
+        for (PaymentContainer p : selectedGuest.getPayments()) {
+            paidAsDouble += p.getPaid()-p.getChange();
+        }
+        totalPaid.setText("$"+paidAsDouble);
+    }
+
+    /**
+     * Calculates the amount of money that is due back to the guest
+     */
+    @FXML
+    private void getChangeDue() {
+        double totalDouble = Double.parseDouble(total.getText().substring(1,total.getText().length()));
+        double paidDouble = Double.parseDouble(totalPaid.getText().substring(1,totalPaid.getText().length()));
+        double amountDue = Double.parseDouble(total.getText().substring(1,total.getText().length()))-Double.parseDouble(totalPaid.getText().substring(1,totalPaid.getText().length()));
+        deltaTotal.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+
+        if (amountDue > 0) { //Guest Must Pay More Money
+            deltaTotal.setTextFill(Color.RED);
+            deltaTotal.setText("Payment Needed: ");
+            totalDue.setText("$"+amountDue);
+        } else if (amountDue < 0) {//Guest Is Owed Change
+            deltaTotal.setTextFill(Color.BLUE);
+            deltaTotal.setText("Give Change: ");
+            totalDue.setText("$"+Math.abs(amountDue));
+        } else { //Paid In Full, Everything Is Set.
+            deltaTotal.setTextFill(Color.GREEN);
+            deltaTotal.setText("No Action Needed");
+            totalDue.setText("");
+        }
+    }
+
+    /**
+     * Updates the labels for total,change due, and payment due
+     */
+    private void updateMoneyCounters() {
+        getTotal();
+        getAmountPaid();
+        getChangeDue();
+    }
 
     /**
      * Exits the PaymentController and re-opens the GuestController for the current guest.
