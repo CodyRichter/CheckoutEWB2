@@ -6,8 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.net.URI;
@@ -32,8 +30,6 @@ public class GuestController {
         textFields.put("lastName", lastName);
         textFields.put("phoneNumber", phoneNumber);
         textFields.put("emailAddress", emailAddress);
-        textFields.put("entryDonation", entryDonation);
-        textFields.put("additionalDonation", additionalDonation);
 
         if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
@@ -53,7 +49,7 @@ public class GuestController {
     ComboBox<Guest> guestSelect;
 
     @FXML
-    TextField firstName, lastName, phoneNumber, emailAddress, entryDonation, additionalDonation;
+    TextField firstName, lastName, phoneNumber, emailAddress;
 
     @FXML
     Button manageAddOns, saveButton, switchButton, managePayments;
@@ -229,29 +225,13 @@ public class GuestController {
      */
     @FXML
     private void updateTotal() {
-        double total = 0;
-        for (Item i : guestSelect.getValue().getItems()) {
-            double val = 0;
-            if (i.get("itemPrice") != null)
-                try {
-                    val = Double.parseDouble(i.get("itemPrice"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Error Loading in Price Of Item: " + i.get("itemName"));
-                }
-            total+=val;
-        }
 
-        try {
-            if (!entryDonation.getText().isEmpty())
-                total += Double.parseDouble(entryDonation.getText());
-            if (!additionalDonation.getText().isEmpty())
-                total += Double.parseDouble(additionalDonation.getText());
-        } catch (Exception ignored) {} //Don't respond to exception from user input
+        //TODO: Implement Method
 
-        totalDue.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-        totalDue.setText(""+total);
-        //TODO: Add in costs for add-on items
+        //TODO: Get total of Auction Items
+        //TODO: Get total of Add-On Items
+        //TODO: Get Total Net Payment And Set Display of "Payment Needed" Label
+
     }
 
 //    /**
@@ -340,6 +320,7 @@ public class GuestController {
             totalDue.setText("0");
             additionalPaymentInfo.setText("");
             manageAddOns.setDisable(true);
+            managePayments.setDisable(true);
             saveButton.setDisable(true);
 
             //TODO: Remove currently loaded guest from GuestSelect Menu.
@@ -352,7 +333,10 @@ public class GuestController {
             t.setDisable(false);
             t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }
+
+        //If guest is loaded, enable buttons to get to other menus
         manageAddOns.setDisable(false);
+        managePayments.setDisable(false);
         saveButton.setDisable(false);
         //updateTotal(); //Commented out due to reworking payment system
         //getChangeNeeded(); //Commented out due to reworking payment system
@@ -377,7 +361,8 @@ public class GuestController {
         for (String s : textFields.keySet()) {
             g.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
         }
-        g.add("totalDue", totalDue.getText());
+
+        //TODO: Add all guest payments to guest, and update total due for guest.
 
         //TODO: Handle Adding Items To Guest. Should likely be through Item class rather than Guest class.
 
