@@ -172,6 +172,7 @@ public class ItemController {
      */
     @FXML
     private void setItemOwner() {
+        //removeItemOwner(); //Remove existing item owner
         Guest g = ownerSelect.getValue();
         g.addItem(itemSelect.getValue());
     }
@@ -182,10 +183,9 @@ public class ItemController {
      */
     @FXML
     private void removeItemOwner() {
-        if (ownerSelect.getValue().get("firstName").equals("No Owner")) return; //Ensure not removing a non-existant owner
-        for (int k = 0; k < DataManager.guests.size(); k++) { //Loop through all loaded Items and see if the
-            Guest g = DataManager.guests.get(k);
-            if (g.get("items").contains(itemSelect.getValue().get("itemName"))) {
+        if (ownerSelect.getValue().get("firstName").equals("No Owner")) return;
+        for (Guest g : DataManager.guests) { //Loop through all guests and see if any guest has the item in their inventory
+            if (g.getItems().contains(itemSelect.getValue())) {
                 g.removeItem(itemSelect.getValue());
             }
         }
@@ -253,7 +253,7 @@ public class ItemController {
      * Loads the FXML page for Guests, and switches the current window to that.
      */
     @FXML
-    public void changePages() {
+    private void changePages() {
         try {
             Stage stage = (Stage) itemName.getScene().getWindow();
             stage.setMinHeight(600);

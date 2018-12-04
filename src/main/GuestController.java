@@ -197,6 +197,10 @@ public class GuestController {
     @FXML
     protected void openPaymentWindow() {
 
+        saveForm();
+
+        //TODO: Fix NullPointer when this window is loaded for a guest who has items in their inventory
+
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
             stage.setMinHeight(400);
