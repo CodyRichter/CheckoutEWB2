@@ -21,6 +21,8 @@ import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
 import main.FXMLAddOn.PaymentType;
 
+import java.text.DecimalFormat;
+
 public class PaymentController {
 
     private Guest selectedGuest = Main.guestController.guestSelect.getValue();
@@ -168,7 +170,7 @@ public class PaymentController {
         for (AddOnContainer a : selectedGuest.getAddOnItems()) {
             totalAsDouble += a.getCost();
         }
-        total.setText("$"+totalAsDouble);
+        total.setText("$"+new DecimalFormat("#.##").format(totalAsDouble));
     }
 
     /**
@@ -180,7 +182,7 @@ public class PaymentController {
         for (PaymentContainer p : selectedGuest.getPayments()) {
             paidAsDouble += p.getPaid()-p.getChange();
         }
-        totalPaid.setText("$"+paidAsDouble);
+        totalPaid.setText("$"+new DecimalFormat("#.##").format(paidAsDouble));
     }
 
     /**
@@ -196,11 +198,11 @@ public class PaymentController {
         if (amountDue > 0) { //Guest Must Pay More Money
             deltaTotal.setTextFill(Color.RED);
             deltaTotal.setText("Payment Needed: ");
-            totalDue.setText("$"+amountDue);
+            totalDue.setText("$"+new DecimalFormat("#.##").format(Math.abs(amountDue)));
         } else if (amountDue < 0) {//Guest Is Owed Change
             deltaTotal.setTextFill(Color.BLUE);
             deltaTotal.setText("Give Change: ");
-            totalDue.setText("$"+Math.abs(amountDue));
+            totalDue.setText("$"+new DecimalFormat("#.##").format(Math.abs(amountDue)));
         } else { //Paid In Full, Everything Is Set.
             deltaTotal.setTextFill(Color.GREEN);
             deltaTotal.setText("No Action Needed");

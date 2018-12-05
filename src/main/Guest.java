@@ -142,8 +142,24 @@ public class Guest implements Comparable<Guest> {
         return items;
     }
 
+    public ArrayList<String> getItemNumbersAsList() {
+        ArrayList<String> result = new ArrayList<>();
+        for (Item i : items) {
+            result.add(""+i.getNumber());
+        }
+        return result;
+    }
+
     public ArrayList<AddOnContainer> getAddOnItems() {
         return addOnItems;
+    }
+
+    public ArrayList<String> getAddOnItemsAsList() {
+        ArrayList<String> result = new ArrayList<>();
+        for (AddOnContainer a : addOnItems) {
+            result.add(""+a.getItemType()+"_"+a.getCost()+"_"+a.getDescription());
+        }
+        return result;
     }
 
     public void addItem(AddOnContainer i) {

@@ -31,24 +31,39 @@ public class DataManager {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void saveData() {
-        ArrayList<String> guestFileData = new ArrayList<>();
-        ArrayList<String> itemFileData = new ArrayList<>();
+        ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line
+        ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
 
         //
         // Loading Data From Program To Specific ArrayLists
         //
         if (!guests.isEmpty()) {
-            guestFileData.add(arrayListToCSVString(guests.get(0).getHeader()));
+            ArrayList<String> header = new ArrayList<>();
+            header.add("number");
+            header.addAll(guests.get(0).getHeader());
+            header.add("items");
+            header.add("addOnItems");
+            guestFileData.add(arrayListToDelimitedString(header,","));
             for (Guest g : guests) { //Iterate through all lines in the guest array list
-                guestFileData.add(arrayListToCSVString(g.getAll())); //Add all HashMap values from guest to the List
-                //TODO: Save Item Data and Addon Data
+                ArrayList<String> lineToAdd = new ArrayList<>();
+                lineToAdd.add(""+g.getNumber());
+                lineToAdd.addAll(g.getAll());
+                lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(),"|")); //Add All Guest Items
+                lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(),"|")); //All All Guest Add-On Items
+                guestFileData.add(arrayListToDelimitedString(lineToAdd,",")); //Add all HashMap values from guest to the List
             }
         }
 
         if (!items.isEmpty()) {
-            itemFileData.add(arrayListToCSVString(items.get(0).getHeader()));
+            ArrayList<String> header = new ArrayList<>();
+            header.add("number");
+            header.addAll(items.get(0).getHeader());
+            itemFileData.add(arrayListToDelimitedString(header,","));
             for (Item i : items) { //Iterate through all lines in the guest array list
-                itemFileData.add(arrayListToCSVString(i.getAll())); //Add all HashMap values from guest to the List
+                ArrayList<String> lineToAdd = new ArrayList<>();
+                lineToAdd.add(""+i.getNumber());
+                lineToAdd.addAll(i.getAll());
+                itemFileData.add(arrayListToDelimitedString(lineToAdd,",")); //Add all HashMap values from guest to the List
             }
         }
 
@@ -62,6 +77,7 @@ public class DataManager {
             sb.append(s).append("\n");
         }
         guestFileDataAsString = sb.toString();
+
         sb = new StringBuilder();
         for (String s : itemFileData) {
             sb.append(s).append("\n");
@@ -105,12 +121,12 @@ public class DataManager {
      * @param list List to be converted
      * @return String with elements of list delimited by commas
      */
-    private static String arrayListToCSVString(ArrayList<String> list) {
+    private static String arrayListToDelimitedString(ArrayList<String> list,String delimiter) {
         StringBuilder sb = new StringBuilder();
         for (String val : list) {
-            sb.append(clean(val)); //Put in clean string
-            if (list.indexOf(val) != list.size()-1) //Only add commas to elements that are not at the end
-                sb.append(",");
+            sb.append(val); //Put in string
+            if (list.indexOf(val) != list.size()-1) //Only add delimiter to elements that are not at the end
+                sb.append(delimiter);
             }
         return sb.toString();
     }
@@ -138,6 +154,8 @@ public class DataManager {
         result = result.replace('\"',' ');
         result = result.replace('\'',' ');
         result = result.replace(',',' ');
+        result = result.replace('_',' ');
+        result = result.replace('|',' ');
         return result;
     }
 
