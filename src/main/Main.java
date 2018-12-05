@@ -12,6 +12,7 @@ public class Main extends Application {
     public static GuestController guestController;
     public static ItemController itemController;
     public static PaymentController paymentController;
+    public static AddOnController addOnController;
 
 
     @Override

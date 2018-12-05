@@ -185,7 +185,27 @@ public class GuestController {
      */
     @FXML
     private void openAddOnMenu() {
-        //TODO: Implement Method
+
+        saveForm();
+
+        try {
+            Stage stage = (Stage) managePayments.getScene().getWindow();
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
+            Parent root = FXMLLoader.load(getClass().getResource("AddOns.fxml"));
+            Scene scene = new Scene(root, 600, 400);
+            stage.setHeight(600);
+            stage.setWidth(800);
+            stage.setTitle("Checkout-EWB Version II: Add-On Item Manager");
+            stage.setScene(scene);
+            stage.show();
+            stage.requestFocus();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error Loading Page: Add-On Item Manager.");
+            System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
+        }
     }
 
     //

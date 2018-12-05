@@ -1,6 +1,5 @@
 package main;
 
-import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +19,6 @@ import javafx.stage.Stage;
 import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
 import main.FXMLAddOn.PaymentType;
-
-import java.util.ArrayList;
-import java.util.EventListener;
 
 public class PaymentController {
 
@@ -63,18 +59,14 @@ public class PaymentController {
                 }}});
 
         //Set correct values of Payment Method
-        ArrayList<PaymentMethod> paymentMethodList = new ArrayList<>();
-        paymentMethodList.add(PaymentMethod.CASH);
-        paymentMethodList.add(PaymentMethod.CHECK);
-        paymentMethodList.add(PaymentMethod.OTHER);
-        paymentMethod.setItems(FXCollections.observableArrayList(paymentMethodList));
+        paymentMethod.getItems().add(PaymentMethod.CASH);
+        paymentMethod.getItems().add(PaymentMethod.CHECK);
+        paymentMethod.getItems().add(PaymentMethod.OTHER);
         paymentMethod.setValue(PaymentMethod.CASH);
 
         //Set correct values of Payment Type
-        ArrayList<PaymentType> paymentTypeList = new ArrayList<>();
-        paymentTypeList.add(PaymentType.PAYMENT);
-        paymentTypeList.add(PaymentType.DONATION);
-        paymentType.setItems(FXCollections.observableArrayList(paymentTypeList));
+        paymentType.getItems().add(PaymentType.PAYMENT);
+        paymentType.getItems().add(PaymentType.DONATION);
         paymentType.setValue(PaymentType.PAYMENT);
 
         //Update Counters
