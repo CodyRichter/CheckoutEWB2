@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
+<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -56,6 +56,16 @@
             <Insets left="7.0" top="7.0" />
          </GridPane.margin>
       </FlowPane>
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Select Item:" />
+                  <ComboBox fx:id="itemSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
+               </children>
+            </VBox>
+         </children>
+      </FlowPane>
       <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1">
          <children>
             <VBox alignment="TOP_CENTER" spacing="8.0">
@@ -81,16 +91,6 @@
          <padding>
             <Insets top="10.0" />
          </padding>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Select Item:" />
-                  <ComboBox fx:id="itemSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
-               </children>
-            </VBox>
-         </children>
       </FlowPane>
       <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.rowIndex="1">
          <children>

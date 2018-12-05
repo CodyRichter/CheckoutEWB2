@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="300" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuestController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="300" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuestController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -61,6 +61,16 @@
             <Insets left="7.0" top="7.0" />
          </GridPane.margin>
       </FlowPane>
+      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Select Guest:" />
+                  <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
+               </children>
+            </VBox>
+         </children>
+      </FlowPane>
       <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1">
          <children>
             <VBox alignment="TOP_CENTER" spacing="8.0">
@@ -86,16 +96,6 @@
          <padding>
             <Insets top="10.0" />
          </padding>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Select Guest:" />
-                  <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
-               </children>
-            </VBox>
-         </children>
       </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="1">
          <children>
@@ -179,11 +179,6 @@
             <VBox alignment="CENTER" />
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-         <children>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save" />
-         </children>
-      </FlowPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
          <children>
             <Separator prefWidth="200.0" />
@@ -193,6 +188,11 @@
       <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
             <Button fx:id="managePayments" mnemonicParsing="false" onAction="#openPaymentWindow" text="Manage Payments" />
+         </children>
+      </FlowPane>
+      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+         <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save" />
          </children>
       </FlowPane>
       <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="4">
