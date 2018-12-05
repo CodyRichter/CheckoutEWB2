@@ -72,10 +72,18 @@ public class DataManager {
                 //
 
                 if (!line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
+                    ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split("|")));
+                    ArrayList<Integer> itemNumberList = new ArrayList<>();
+                    for (String s:itemNumberListAsString) {
+                        int num = Integer.parseInt(s);
+                        itemNumberList.add(num);
+                    }
 
-
-                    //TODO: Ensure that the item exists and has been loaded in
-
+                    for (Item item : items) { //Loop through all items and add them to guest's inventory if they have the #
+                        if (itemNumberList.contains(item.getNumber())) {
+                            g.addItem(item);
+                        }
+                    }
                 }
 
                 //
