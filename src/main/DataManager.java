@@ -6,7 +6,11 @@ import javafx.collections.ObservableList;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * CheckoutEWB2 Data Manager. Handles all loading/saving of data from program
@@ -22,9 +26,79 @@ public class DataManager {
     private static boolean hasLoaded = false;
 
     public static void loadData() {
+        File guestFile = new File("Guests.csv");
+        File itemFile = new File("Items.csv");
+
+        if (itemFile.exists()) {
+            ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
+            ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).split(",")));
+
+            //TODO: Implement Statement
+
+        }
+
+
+        if (guestFile.exists()) {
+            ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(guestFile).split("\n")));
+            ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).split(",")));
+            int firstHashmapIndex = 1;
+            int firstNonHashmapIndex = header.indexOf("items");
+            for (int i = 1; i < guestFileData.size();i++) { //Starting at 1 to exclude header row from the data loading
+                ArrayList<String> line = new ArrayList<>(Arrays.asList(guestFileData.get(i).split(",")));
+                Guest g = new Guest();
+
+                //
+                // Correctly Parse and Set The Guest's Nummber
+                //
+
+                int number = -1;
+                try {
+                    number = Integer.parseInt(guestFileData.get(0));
+                } catch (Exception e) {
+                    System.out.println("Error Loading Data: Unable To Parse Guest Number.");
+                }
+                g.setNumber(number);
+
+                //
+                // Correctly Enter The Hashmap Fields
+                //
+
+                for (int k = firstHashmapIndex; k < firstNonHashmapIndex; k++) {
+                    g.add(header.get(k),line.get(k));
+                }
+
+                //
+                // Correctly Load In Items
+                //
+
+                if (!line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
+
+
+                    //TODO: Ensure that the item exists and has been loaded in
+
+                }
+
+                //
+                // Correctly Load In Add-On Items
+                //
+
+                if (!line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
+
+                    //TODO: Parse the string into different add on items
+
+                }
+
+                //Finally, add the new guest to the list.
+                DataManager.guests.add(g);
+            }
+
+            //TODO: Load In Payment Information
+
+
+        }
+
         //TODO: Read Data From .csv Files and Populate Lists
         //TODO: Separately put items into Guest's arraylist from the other objects.
-
 
         hasLoaded = true; //Tell program that data has been loaded
     }
@@ -33,6 +107,8 @@ public class DataManager {
     public static void saveData() {
         ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line
         ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
+
+        //TODO: Write Payments to CSV File
 
         //
         // Loading Data From Program To Specific ArrayLists
@@ -138,6 +214,20 @@ public class DataManager {
      */
     public static boolean hasLoadedData() {
         return hasLoaded;
+    }
+
+    private static String readFile(File f) {
+        if (f == null || !f.exists()) return "";
+
+        byte[] encoded = {};
+
+        try {
+            encoded = Files.readAllBytes(Paths.get(f.getAbsolutePath()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error Loading File: " + f.getName());
+        }
+        return new String(encoded, Charset.defaultCharset());
     }
 
     /**
