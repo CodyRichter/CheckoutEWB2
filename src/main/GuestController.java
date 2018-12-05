@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.FXMLAddOn.AddOnContainer;
+import main.FXMLAddOn.AddOnItem;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -70,7 +72,7 @@ public class GuestController {
      * Saves current program data into .csv file
      */
     @FXML
-    private void saveData() {
+    private void saveDataToFile() {
         if (guestSelect.getValue() != null)
             saveForm(); //Saves all fields in form to the guest object
         DataManager.saveData();
@@ -80,7 +82,7 @@ public class GuestController {
      * Loads data into program from previous .csv save file.
      */
     @FXML
-    private void loadData() {
+    private void loadDataFromFile() {
         DataManager.loadData(); //Loads data from file
         //TODO: Use code from init method to update form.
     }
@@ -89,8 +91,8 @@ public class GuestController {
      * Saves program data and exits program after saving.
      */
     @FXML
-    private void saveDataAndExit() {
-        saveData();
+    private void saveDataToFileAndExit() {
+        saveDataToFile();
         exit();
     }
 
@@ -99,7 +101,7 @@ public class GuestController {
      * the current form to be that of the guest.
      */
     @FXML
-    private void newGuest() {
+    private void createNewGuest() {
         Guest g = new Guest();
         DataManager.guests.add(g); //Add guest to total guest list
         guestSelect.getItems().add(g);
@@ -112,7 +114,7 @@ public class GuestController {
                     public void run() {
                         newGuest.setDisable(false);
                     }}, 500);
-        saveData(); //Force save data to ensure headers are loaded into Hashmap when saving
+        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**
@@ -309,7 +311,22 @@ public class GuestController {
             l.setText("$" + i.get("itemPrice") + " : " + i.get("itemName"));
             itemList.getChildren().add(l);
         }
-        if (g.getItems().isEmpty()) itemList.getChildren().clear();
+
+        HashMap<AddOnItem,Integer> addOnsInInventory = new HashMap<>();
+
+        for (AddOnContainer a : g.getAddOnItems()) {
+            //Get the current amount of the item. If it isn't in the map yet, there is now 1.
+            int amount = addOnsInInventory.getOrDefault(a.getItemType(), 0);
+            addOnsInInventory.put(a.getItemType(),amount+1);
+        }
+
+        for (AddOnItem i : addOnsInInventory.keySet()) {
+            Label l = new Label();
+            l.setText("$"+(i.getCost()*addOnsInInventory.get(i))+" : " + i + " (Qty: "+ addOnsInInventory.get(i) +")");
+            itemList.getChildren().add(l);
+        }
+
+        if (g.getItems().isEmpty() && g.getAddOnItems().isEmpty()) itemList.getChildren().clear();
     }
 
     /**

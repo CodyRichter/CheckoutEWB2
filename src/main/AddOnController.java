@@ -20,6 +20,8 @@ import main.FXMLAddOn.AddOnItem;
  */
 public class AddOnController {
 
+    private Guest selectedGuest = null;
+
     public AddOnController() {
     }
 
@@ -27,6 +29,8 @@ public class AddOnController {
     private void initialize() {
 
         Main.addOnController = this;
+
+        selectedGuest = Main.guestController.guestSelect.getValue();
 
         itemType.getItems().add(AddOnItem.SHIRT);
         itemType.getItems().add(AddOnItem.GLASS);
@@ -57,7 +61,11 @@ public class AddOnController {
 
     @FXML
     private void addItem() {
-        //TODO: Implement Method
+        System.out.println("Selected Guest: " + selectedGuest.get("firstName"));
+        AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuest);
+        selectedGuest.addItem(aoc);
+        description.clear();
+        System.out.println("Added Item!: " + aoc.getItemType());
     }
 
     /**

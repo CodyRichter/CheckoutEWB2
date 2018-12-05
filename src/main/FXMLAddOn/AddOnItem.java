@@ -9,7 +9,6 @@ package main.FXMLAddOn;
 public enum  AddOnItem {
     SHIRT,GLASS;
 
-
     @Override
     public String toString() {
         if (this == AddOnItem.SHIRT) return "Shirt";

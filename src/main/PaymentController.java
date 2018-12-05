@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
 import main.FXMLAddOn.PaymentType;
@@ -163,6 +164,9 @@ public class PaymentController {
             if (p.getPaymentType() == PaymentType.DONATION) {
                 totalAsDouble += p.getPaid()-p.getChange();
             }
+        }
+        for (AddOnContainer a : selectedGuest.getAddOnItems()) {
+            totalAsDouble += a.getCost();
         }
         total.setText("$"+totalAsDouble);
     }
