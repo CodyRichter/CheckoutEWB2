@@ -63,7 +63,10 @@ public class AddOnController {
     }
 
 
-
+    /**
+     * Adds an item of the type noted in the selector to the selected guest's inventory
+     * Will be triggered on button blick of "Add Item"
+     */
     @FXML
     private void addItem() {
         AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuest);
@@ -89,8 +92,6 @@ public class AddOnController {
     @FXML
     public void exit() {
 
-        //TODO: Set Guest that is loaded in this PaymentController to be Guest that is loaded in GuestController.
-
         try {
             Stage stage = (Stage) addItem.getScene().getWindow();
             stage.setMinHeight(400);
@@ -104,6 +105,8 @@ public class AddOnController {
             stage.setScene(scene);
             stage.show();
             stage.requestFocus();
+
+            Main.guestController.loadGuestIntoForm(selectedGuest);
 
         } catch (Exception e) {
             e.printStackTrace();

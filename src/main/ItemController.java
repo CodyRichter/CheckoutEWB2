@@ -28,9 +28,7 @@ public class ItemController {
         if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
         }
-        if (DataManager.items.isEmpty()) { //Ensure that the Item list has elements in it
-            //TODO: Display Alert To User That No Item Data To Load
-        } else {
+        if (!DataManager.items.isEmpty()) {
             itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
             itemSelect.setValue(DataManager.items.get(0));
             selectedItem = itemSelect.getValue();
@@ -68,7 +66,7 @@ public class ItemController {
      * Saves current program data into .csv file
      */
     @FXML
-    private void saveData() {
+    private void saveDataToFile() {
         if (itemSelect.getValue() != null)
             saveForm(); //Saves all fields in form to the item object
         DataManager.saveData();
@@ -78,19 +76,34 @@ public class ItemController {
      * Loads data into program from previous .csv save file.
      */
     @FXML
-    private void loadData() {
+    private void loadDataFromFile() {
         DataManager.loadData(); //Loads data from file
-        //TODO: Use code from init method to update form.
+        if (DataManager.items.size() > 0) { //If there are any items loaded, set the page to the first one
+            loadItemIntoForm(DataManager.items.get(0));
+        }
     }
 
     /**
      * Saves program data and exits program after saving.
      */
     @FXML
-    private void saveDataAndExit() {
-        saveData();
+    private void saveDataToFileAndExit() {
+        saveDataToFile();
         exit();
     }
+
+    /**
+     * Sets everything in the current form to the specified item. This method is
+     * used when loading in item data.
+     * @param i Item's data to load.
+     */
+    private void loadItemIntoForm(Item i) {
+        itemSelect.getItems().sorted();
+        itemSelect.setValue(i);
+        updateForm(i);
+        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
+    }
+
 
     /**
      * Creates a new Item object, adds it to the list of all Items, and sets
@@ -110,7 +123,7 @@ public class ItemController {
                     public void run() {
                         newItem.setDisable(false);
                     }}, 500);
-        saveData(); //Force save data to ensure headers are loaded into Hashmap when saving
+        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**

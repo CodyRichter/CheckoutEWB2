@@ -223,8 +223,6 @@ public class PaymentController {
     @FXML
     public void exit() {
 
-        //TODO: Set Guest that is loaded in this PaymentController to be Guest that is loaded in GuestController.
-
         try {
             Stage stage = (Stage) amountPaid.getScene().getWindow();
             stage.setMinHeight(400);
@@ -237,6 +235,8 @@ public class PaymentController {
             stage.setScene(scene);
             stage.show();
             stage.requestFocus();
+
+            Main.guestController.loadGuestIntoForm(selectedGuest);
 
         } catch (Exception e) {
             e.printStackTrace();

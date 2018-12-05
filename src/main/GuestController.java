@@ -57,9 +57,6 @@ public class GuestController {
     Button manageAddOns, saveButton, switchButton, managePayments;
 
     @FXML
-    Label totalDue,additionalPaymentInfo;
-
-    @FXML
     VBox itemList;
 
     //
@@ -84,7 +81,9 @@ public class GuestController {
     @FXML
     private void loadDataFromFile() {
         DataManager.loadData(); //Loads data from file
-        //TODO: Use code from init method to update form.
+        if (DataManager.guests.size() > 0) { //If there are any guests loaded, set the page to the first one
+            loadGuestIntoForm(DataManager.guests.get(0));
+        }
     }
 
     /**
@@ -95,6 +94,20 @@ public class GuestController {
         saveDataToFile();
         exit();
     }
+
+    /**
+     * Sets everything in the current form to the specified guest. This method is
+     * used when reloading the guest selector from another page.
+     * @param g Guest's data to load.
+     */
+    public void loadGuestIntoForm(Guest g) {
+        guestSelect.getItems().sorted();
+        guestSelect.setValue(g);
+        updateForm(g);
+        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
+    }
+
+
 
     /**
      * Creates a new guest object, adds it to the list of all guests, and sets
@@ -287,8 +300,6 @@ public class GuestController {
                 t.setText("");
                 t.setDisable(true);
             }
-            totalDue.setText("0");
-            additionalPaymentInfo.setText("");
             manageAddOns.setDisable(true);
             managePayments.setDisable(true);
             saveButton.setDisable(true);
@@ -306,11 +317,15 @@ public class GuestController {
         managePayments.setDisable(false);
         saveButton.setDisable(false);
 
+        //Load all auction items into inventory
+
         for (Item i : g.getItems()) {
             Label l = new Label();
             l.setText("$" + i.get("itemPrice") + " : " + i.get("itemName"));
             itemList.getChildren().add(l);
         }
+
+        //Load all add-on items into inventory
 
         HashMap<AddOnItem,Integer> addOnsInInventory = new HashMap<>();
 
