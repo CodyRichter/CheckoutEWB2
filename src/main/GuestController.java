@@ -322,7 +322,7 @@ public class GuestController {
 
         for (AddOnItem i : addOnsInInventory.keySet()) {
             Label l = new Label();
-            l.setText("$"+(i.getCost()*addOnsInInventory.get(i))+" : " + i + " (Qty: "+ addOnsInInventory.get(i) +")");
+            l.setText("$"+(i.getCost()*addOnsInInventory.get(i))+" : " + i + "      (Qty: "+ addOnsInInventory.get(i) +")");
             itemList.getChildren().add(l);
         }
 

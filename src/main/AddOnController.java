@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
@@ -36,6 +37,9 @@ public class AddOnController {
         itemType.getItems().add(AddOnItem.GLASS);
         itemType.setValue(AddOnItem.SHIRT);
         updateCost();
+        for (AddOnContainer a : selectedGuest.getAddOnItems()) {
+            itemList.getChildren().add(a);
+        }
     }
 
     @FXML
@@ -50,7 +54,8 @@ public class AddOnController {
     @FXML
     Label itemPrice;
 
-
+    @FXML
+    VBox itemList;
 
     @FXML
     private void updateCost() {
@@ -61,11 +66,10 @@ public class AddOnController {
 
     @FXML
     private void addItem() {
-        System.out.println("Selected Guest: " + selectedGuest.get("firstName"));
         AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuest);
         selectedGuest.addItem(aoc);
         description.clear();
-        System.out.println("Added Item!: " + aoc.getItemType());
+        itemList.getChildren().add(aoc);
     }
 
     /**
@@ -74,8 +78,8 @@ public class AddOnController {
      * @param a Add-On container to remove
      */
     public void removeItem(Guest g, AddOnContainer a) {
-        //TODO: Remove Item From VBox of Items
         g.removeItem(a);
+        itemList.getChildren().remove(a);
     }
 
 
