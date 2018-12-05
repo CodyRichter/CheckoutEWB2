@@ -25,4 +25,18 @@ public enum  AddOnItem {
         if (this == AddOnItem.GLASS) return 7;
         return -1;
     }
+
+    /**
+     * Given a string, returns the correct enumerated type matching the string
+     * @param s String to parse
+     * @return Correct Type that string is describing
+     */
+    public static AddOnItem stringToAddOnItem(String s) {
+
+        if (s.equalsIgnoreCase("shirt")) return AddOnItem.SHIRT;
+        if (s.equalsIgnoreCase("glass")) return AddOnItem.GLASS;
+
+        return AddOnItem.SHIRT; //Default to this type if not able to parse string
+    }
+
 }

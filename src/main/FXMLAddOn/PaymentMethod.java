@@ -10,4 +10,19 @@ public enum PaymentMethod { //Ways that a user can pay
         if (this == PaymentMethod.OTHER) return "Other";
         return "[INVALID PAYMENT METHOD]";
     }
+
+    /**
+     * Given a string, returns the correct enumerated type matching the string
+     * @param s String to parse
+     * @return Correct Type that string is describing
+     */
+    public static PaymentMethod stringToPaymentMethod(String s) {
+
+        if (s.equalsIgnoreCase("cash")) return PaymentMethod.CASH;
+        if (s.equalsIgnoreCase("check")) return PaymentMethod.CHECK;
+        if (s.equalsIgnoreCase("other")) return PaymentMethod.OTHER;
+
+        return PaymentMethod.OTHER; //Default to this type if not able to parse string
+    }
+
 }

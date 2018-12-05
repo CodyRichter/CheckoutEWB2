@@ -53,7 +53,7 @@ public class DataManager {
 
                 int number = -1;
                 try {
-                    number = Integer.parseInt(guestFileData.get(0));
+                    number = Integer.parseInt(line.get(0));
                 } catch (Exception e) {
                     System.out.println("Error Loading Data: Unable To Parse Guest Number.");
                 }
