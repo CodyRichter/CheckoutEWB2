@@ -11,7 +11,7 @@ import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
 import java.net.URI;
-import java.util.HashMap;
+import java.util.*;
 
 public class GuestController {
 
@@ -104,9 +104,7 @@ public class GuestController {
         guestSelect.getItems().sorted();
         guestSelect.setValue(g);
         updateForm(g);
-        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
-
 
 
     /**
@@ -116,18 +114,16 @@ public class GuestController {
     @FXML
     private void createNewGuest() {
         Guest g = new Guest();
+
         DataManager.guests.add(g); //Add guest to total guest list
-        guestSelect.getItems().add(g);
-        guestSelect.getItems().sorted();
+
+        Set<Guest> temp = new HashSet<>(DataManager.guests);
+        DataManager.guests.clear();
+        DataManager.guests.addAll(temp);
+        DataManager.guests.sorted();
+
+        guestSelect.setItems(DataManager.guests);
         guestSelect.setValue(g);
-        newGuest.setDisable(true);
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        newGuest.setDisable(false);
-                    }}, 500);
-        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**
@@ -185,6 +181,8 @@ public class GuestController {
     @FXML
     private void showGuestFromSelector() {
         updateForm(guestSelect.getValue());
+//        System.out.println("Contents of Guest List: ");
+//        System.out.println(Arrays.toString(DataManager.guests.toArray()));
     }
 
     //

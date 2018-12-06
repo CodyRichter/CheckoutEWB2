@@ -4,10 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ItemController {
 
@@ -112,18 +117,16 @@ public class ItemController {
     @FXML
     private void newItem() {
         Item i = new Item();
-        DataManager.items.add(i); //Add Item to total Item list
-        itemSelect.getItems().add(i);
-        itemSelect.getItems().sorted();
+
+        DataManager.items.add(i); //Add guest to total guest list
+
+        Set<Item> temp = new HashSet<>(DataManager.items);
+        DataManager.items.clear();
+        DataManager.items.addAll(temp);
+        DataManager.items.sorted();
+
+        itemSelect.setItems(DataManager.items);
         itemSelect.setValue(i);
-        newItem.setDisable(true);
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        newItem.setDisable(false);
-                    }}, 500);
-        saveDataToFile(); //Force save data to ensure headers are loaded into Hashmap when saving
     }
 
     /**

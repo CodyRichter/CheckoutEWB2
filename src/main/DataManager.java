@@ -55,7 +55,7 @@ public class DataManager {
                 //
 
                 for (int j = 1; j < line.size(); j++) {
-                    i.add(header.get(j),line.get(j));
+                    i.add(header.get(j), line.get(j));
                 }
 
                 DataManager.items.add(i);
@@ -70,7 +70,7 @@ public class DataManager {
             ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).split(",")));
             int firstHashmapIndex = 1;
             int firstNonHashmapIndex = header.indexOf("items");
-            for (int i = 1; i < guestFileData.size();i++) { //Starting at 1 to exclude header row from the data loading
+            for (int i = 1; i < guestFileData.size(); i++) { //Starting at 1 to exclude header row from the data loading
                 ArrayList<String> line = new ArrayList<>(Arrays.asList(guestFileData.get(i).split(",")));
                 Guest g = new Guest();
 
@@ -91,17 +91,18 @@ public class DataManager {
                 //
 
                 for (int k = firstHashmapIndex; k < firstNonHashmapIndex; k++) {
-                    g.add(header.get(k),line.get(k));
+                    if (k < header.size() && k < line.size())
+                        g.add(header.get(k), line.get(k));
                 }
 
                 //
                 // Correctly Load In Items
                 //
 
-                if (!line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
+                if (firstNonHashmapIndex < line.size() && !line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
                     ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split("|")));
                     ArrayList<Integer> itemNumberList = new ArrayList<>();
-                    for (String s:itemNumberListAsString) {
+                    for (String s : itemNumberListAsString) {
                         int num = Integer.parseInt(s);
                         itemNumberList.add(num);
                     }
@@ -154,14 +155,14 @@ public class DataManager {
             header.addAll(guests.get(0).getHeader());
             header.add("items");
             header.add("addOnItems");
-            guestFileData.add(arrayListToDelimitedString(header,","));
+            guestFileData.add(arrayListToDelimitedString(header, ","));
             for (Guest g : guests) { //Iterate through all lines in the guest array list
                 ArrayList<String> lineToAdd = new ArrayList<>();
-                lineToAdd.add(""+g.getNumber());
+                lineToAdd.add("" + g.getNumber());
                 lineToAdd.addAll(g.getAll());
-                lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(),"|")); //Add All Guest Items
-                lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(),"|")); //All All Guest Add-On Items
-                guestFileData.add(arrayListToDelimitedString(lineToAdd,",")); //Add all HashMap values from guest to the List
+                lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(), "|")); //Add All Guest Items
+                lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(), "|")); //All All Guest Add-On Items
+                guestFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
             }
         }
 
@@ -169,12 +170,12 @@ public class DataManager {
             ArrayList<String> header = new ArrayList<>();
             header.add("number");
             header.addAll(items.get(0).getHeader());
-            itemFileData.add(arrayListToDelimitedString(header,","));
+            itemFileData.add(arrayListToDelimitedString(header, ","));
             for (Item i : items) { //Iterate through all lines in the guest array list
                 ArrayList<String> lineToAdd = new ArrayList<>();
-                lineToAdd.add(""+i.getNumber());
+                lineToAdd.add("" + i.getNumber());
                 lineToAdd.addAll(i.getAll());
-                itemFileData.add(arrayListToDelimitedString(lineToAdd,",")); //Add all HashMap values from guest to the List
+                itemFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
             }
         }
 
@@ -211,7 +212,7 @@ public class DataManager {
             System.out.println("Error! Unable To Create New Data CSV File!");
         }
 
-        FileWriter guestWriter=null, itemWriter=null;
+        FileWriter guestWriter = null, itemWriter = null;
         try {
             guestWriter = new FileWriter("Guests.csv");
             itemWriter = new FileWriter("Items.csv");
@@ -229,22 +230,24 @@ public class DataManager {
 
     /**
      * Converts an ArrayList of Strings into a single string delimited by commas
+     *
      * @param list List to be converted
      * @return String with elements of list delimited by commas
      */
-    private static String arrayListToDelimitedString(ArrayList<String> list,String delimiter) {
+    private static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
         StringBuilder sb = new StringBuilder();
         for (String val : list) {
             sb.append(val); //Put in string
-            if (list.indexOf(val) != list.size()-1) //Only add delimiter to elements that are not at the end
+            if (list.indexOf(val) != list.size() - 1) //Only add delimiter to elements that are not at the end
                 sb.append(delimiter);
-            }
+        }
         return sb.toString();
     }
 
     /**
      * Returns whether the program has already loaded data from a data.csv file into the
      * program
+     *
      * @return True if Data Has Been Loaded
      */
     public static boolean hasLoadedData() {
@@ -267,20 +270,21 @@ public class DataManager {
 
     /**
      * Removes all problematic characters for CSV files from a String
+     *
      * @param input String to have special characters removed from
      * @return Clean string safe to be put into CSV file
      */
     public static String clean(String input) {
-        String result = input.replace('\n',' ');
-        result = result.replace('\r',' ');
-        result = result.replace('\n',' ');
-        result = result.replace('\t',' ');
-        result = result.replace('\\',' ');
-        result = result.replace('\"',' ');
-        result = result.replace('\'',' ');
-        result = result.replace(',',' ');
-        result = result.replace('_',' ');
-        result = result.replace('|',' ');
+        String result = input.replace('\n', ' ');
+        result = result.replace('\r', ' ');
+        result = result.replace('\n', ' ');
+        result = result.replace('\t', ' ');
+        result = result.replace('\\', ' ');
+        result = result.replace('\"', ' ');
+        result = result.replace('\'', ' ');
+        result = result.replace(',', ' ');
+        result = result.replace('_', ' ');
+        result = result.replace('|', ' ');
         return result;
     }
 
