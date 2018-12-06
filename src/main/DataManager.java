@@ -2,8 +2,7 @@ package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.AddOnItem;
+import main.FXMLAddOn.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * CheckoutEWB2 Data Manager. Handles all loading/saving of data from program
@@ -163,8 +164,8 @@ public class DataManager {
     public static void saveData() {
         ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line
         ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
+        ArrayList<String> paymentFileData = new ArrayList<>(); //Stores all of the data in the transaction list file, line by line
 
-        //TODO: Write Payments to CSV File
 
         //
         // Loading Data From Program To Specific ArrayLists
@@ -198,6 +199,26 @@ public class DataManager {
                 itemFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
             }
         }
+
+
+        HashMap<Guest, List<PaymentContainer>> transactionList = new HashMap<>();
+        guests.forEach(g -> transactionList.put(g,g.getPayments()));
+
+        for (Guest g : transactionList.keySet()) { //Loop through all guests that are contained in the transaction list
+            for (PaymentContainer p : transactionList.get(g)) { //Loop through all payments for the specified guest
+                String description = p.getDescription();
+                double paid = p.getPaid();
+                double change = p.getChange();
+                PaymentMethod paymentMethod = p.getPaymentMethod();
+                PaymentType paymentType = p.getPaymentType();
+                ArrayList<String> line = new ArrayList<>();
+
+                //TODO: Save values into arraylist
+
+                String lineToAdd = DataManager.arrayListToDelimitedString(line,",");
+            }
+        }
+
 
         //
         // Manipulating Loaded ArrayLists into Strings To Be Written
