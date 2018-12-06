@@ -160,7 +160,9 @@ public class PaymentController {
     private void getTotal() {
         double totalAsDouble = 0;
         for (Item i : selectedGuest.getItems()) {
-            totalAsDouble += Double.parseDouble(i.get("itemPrice")); //Gets the price of each item and adds it to the total
+            try {
+                totalAsDouble += Double.parseDouble(i.get("itemPrice")); //Gets the price of each item and adds it to the total
+            } catch (Exception ignored) {}
         }
         for (PaymentContainer p : selectedGuest.getPayments()) {
             if (p.getPaymentType() == PaymentType.DONATION) {
