@@ -33,11 +33,12 @@ public class DataManager {
 
         if (itemFile.exists()) {
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
-            ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).split(",")));
+            ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).trim().split(",[ ]*")));
 
             for (int k = 1; k < itemFileData.size(); k++) { //Loop through everything but header row
-                ArrayList<String> line = new ArrayList<>(Arrays.asList(itemFileData.get(k).split(",")));
-                //System.out.println(Arrays.toString(line.toArray()));
+                String lineAsString = itemFileData.get(k);
+                ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
+                //System.out.println(line.get(0) + " | " + line.get(1) + " | " + line.get(2));
                 Item i = new Item();
 
                 //
@@ -57,14 +58,10 @@ public class DataManager {
                 // Correctly Enter The Hashmap Fields
                 //
 
-                for (int j = 1; j < line.size(); j++) {
-                    //System.out.println("Field: " + header.get(j) + ", Value: " + line.get(j));
-                    i.add(header.get(j), line.get(j));
-                }
-                //System.out.println("\n");
+                i.add(header.get(1),line.get(1));
+                i.add(header.get(2),line.get(2));
 
                 DataManager.items.add(i);
-
             }
 
         }
@@ -72,7 +69,7 @@ public class DataManager {
 
         if (guestFile.exists()) {
             ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(guestFile).split("\n")));
-            ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).split(",")));
+            ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
             int firstHashmapIndex = 1;
             int firstNonHashmapIndex = header.indexOf("items");
             for (int i = 1; i < guestFileData.size(); i++) { //Starting at 1 to exclude header row from the data loading
@@ -123,10 +120,12 @@ public class DataManager {
                 // Correctly Load In Add-On Items
                 //
 
-                if (firstNonHashmapIndex+1 < line.size() && !line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
+                if (firstNonHashmapIndex+1 < line.size() && firstNonHashmapIndex+1 < header.size() &&!line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
                     ArrayList<String> addOnItemList = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split(";")));
 
+
                     for (String s : addOnItemList) {
+                        if (s.trim().isEmpty()) continue;
                         ArrayList<String> addOnItem = new ArrayList<>(Arrays.asList(s.split("_")));
 
                         AddOnItem itemType = AddOnItem.stringToAddOnItem(addOnItem.get(0)); //Get Item Type
