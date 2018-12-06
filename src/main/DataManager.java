@@ -2,6 +2,8 @@ package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.FXMLAddOn.AddOnContainer;
+import main.FXMLAddOn.AddOnItem;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -100,7 +102,7 @@ public class DataManager {
                 //
 
                 if (firstNonHashmapIndex < line.size() && !line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
-                    ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split("|")));
+                    ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split("\\|")));
                     ArrayList<Integer> itemNumberList = new ArrayList<>();
                     for (String s : itemNumberListAsString) {
                         int num = Integer.parseInt(s);
@@ -118,11 +120,28 @@ public class DataManager {
                 // Correctly Load In Add-On Items
                 //
 
-//                if (firstHashmapIndex+1 < line.size() && !line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
-//
-//                    //TODO: Parse the string into different add on items
-//
-//                }
+                if (firstNonHashmapIndex+1 < line.size() && !line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
+                    //TODO: Fix splitting string on pipe character
+                    ArrayList<String> addOnItemList = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split("\\|")));
+                    System.out.println("Number of Items: " + addOnItemList.size());
+                    System.out.println(Arrays.toString(addOnItemList.toArray()));
+                    for (String s : addOnItemList) {
+                        ArrayList<String> addOnItem = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split("_")));
+                        AddOnItem itemType = AddOnItem.stringToAddOnItem(addOnItem.get(0)); //Get Item Type
+                        double cost;
+                        try {
+                            cost = Double.parseDouble(addOnItem.get(1));
+                        } catch (Exception e) {
+                            cost = itemType.getCost();
+                        }
+
+                        String description = addOnItem.get(2);
+
+                        AddOnContainer aoc = new AddOnContainer(itemType,cost,description,g);
+                        g.addItem(aoc);
+                    }
+
+                }
 
                 //Finally, add the new guest to the list.
                 DataManager.guests.add(g);
