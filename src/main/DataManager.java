@@ -33,7 +33,34 @@ public class DataManager {
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
             ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).split(",")));
 
-            //TODO: Implement Statement
+            for (int k = 1; k < itemFileData.size(); k++) { //Loop through everything but header row
+                ArrayList<String> line = new ArrayList<>(Arrays.asList(itemFileData.get(k).split(",")));
+                Item i = new Item();
+
+                //
+                // Correctly Parse and Set The Item's Number
+                //
+
+                int number = -1;
+                try {
+                    number = Integer.parseInt(line.get(0));
+                } catch (Exception e) {
+                    System.out.println("Error Loading Data: Unable To Parse Item Number.");
+                }
+                i.setNumber(number);
+
+
+                //
+                // Correctly Enter The Hashmap Fields
+                //
+
+                for (int j = 1; j < line.size(); j++) {
+                    i.add(header.get(j),line.get(j));
+                }
+
+                DataManager.items.add(i);
+
+            }
 
         }
 
@@ -48,7 +75,7 @@ public class DataManager {
                 Guest g = new Guest();
 
                 //
-                // Correctly Parse and Set The Guest's Nummber
+                // Correctly Parse and Set The Guest's Number
                 //
 
                 int number = -1;
@@ -90,11 +117,11 @@ public class DataManager {
                 // Correctly Load In Add-On Items
                 //
 
-                if (!line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
-
-                    //TODO: Parse the string into different add on items
-
-                }
+//                if (firstHashmapIndex+1 < line.size() && !line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
+//
+//                    //TODO: Parse the string into different add on items
+//
+//                }
 
                 //Finally, add the new guest to the list.
                 DataManager.guests.add(g);
