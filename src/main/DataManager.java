@@ -37,6 +37,7 @@ public class DataManager {
 
             for (int k = 1; k < itemFileData.size(); k++) { //Loop through everything but header row
                 ArrayList<String> line = new ArrayList<>(Arrays.asList(itemFileData.get(k).split(",")));
+                //System.out.println(Arrays.toString(line.toArray()));
                 Item i = new Item();
 
                 //
@@ -57,8 +58,10 @@ public class DataManager {
                 //
 
                 for (int j = 1; j < line.size(); j++) {
+                    //System.out.println("Field: " + header.get(j) + ", Value: " + line.get(j));
                     i.add(header.get(j), line.get(j));
                 }
+                //System.out.println("\n");
 
                 DataManager.items.add(i);
 
@@ -102,7 +105,7 @@ public class DataManager {
                 //
 
                 if (firstNonHashmapIndex < line.size() && !line.get(firstNonHashmapIndex).equals("")) { //If there is item data to load
-                    ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split("\\|")));
+                    ArrayList<String> itemNumberListAsString = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex).split(";")));
                     ArrayList<Integer> itemNumberList = new ArrayList<>();
                     for (String s : itemNumberListAsString) {
                         int num = Integer.parseInt(s);
@@ -121,12 +124,11 @@ public class DataManager {
                 //
 
                 if (firstNonHashmapIndex+1 < line.size() && !line.get(firstNonHashmapIndex+1).equals("")) { //If there is add on item data to load
-                    //TODO: Fix splitting string on pipe character
-                    ArrayList<String> addOnItemList = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split("\\|")));
-                    System.out.println("Number of Items: " + addOnItemList.size());
-                    System.out.println(Arrays.toString(addOnItemList.toArray()));
+                    ArrayList<String> addOnItemList = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split(";")));
+
                     for (String s : addOnItemList) {
-                        ArrayList<String> addOnItem = new ArrayList<>(Arrays.asList(line.get(firstNonHashmapIndex+1).split("_")));
+                        ArrayList<String> addOnItem = new ArrayList<>(Arrays.asList(s.split("_")));
+
                         AddOnItem itemType = AddOnItem.stringToAddOnItem(addOnItem.get(0)); //Get Item Type
                         double cost;
                         try {
@@ -179,8 +181,8 @@ public class DataManager {
                 ArrayList<String> lineToAdd = new ArrayList<>();
                 lineToAdd.add("" + g.getNumber());
                 lineToAdd.addAll(g.getAll());
-                lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(), "|")); //Add All Guest Items
-                lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(), "|")); //All All Guest Add-On Items
+                lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(), ";")); //Add All Guest Items
+                lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(), ";")); //All All Guest Add-On Items
                 guestFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
             }
         }
@@ -304,6 +306,7 @@ public class DataManager {
         result = result.replace(',', ' ');
         result = result.replace('_', ' ');
         result = result.replace('|', ' ');
+        result = result.replace(';', ' ');
         return result;
     }
 
