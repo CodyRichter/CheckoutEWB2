@@ -204,6 +204,8 @@ public class DataManager {
         HashMap<Guest, List<PaymentContainer>> transactionList = new HashMap<>();
         guests.forEach(g -> transactionList.put(g,g.getPayments()));
 
+        //TODO: Load Header
+
         for (Guest g : transactionList.keySet()) { //Loop through all guests that are contained in the transaction list
             for (PaymentContainer p : transactionList.get(g)) { //Loop through all payments for the specified guest
                 String description = p.getDescription();
@@ -213,7 +215,11 @@ public class DataManager {
                 PaymentType paymentType = p.getPaymentType();
                 ArrayList<String> line = new ArrayList<>();
 
-                //TODO: Save values into arraylist
+                line.add(""+g.getNumber()); //Number
+                line.add(""+paid); //Amount Paid
+                line.add(""+change); //Change
+                line.add(""+paymentMethod); //Payment Method
+                line.add(""+paymentType); //Payment Type
 
                 String lineToAdd = DataManager.arrayListToDelimitedString(line,",");
             }
