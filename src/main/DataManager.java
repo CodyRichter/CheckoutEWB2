@@ -204,10 +204,12 @@ public class DataManager {
         HashMap<Guest, List<PaymentContainer>> transactionList = new HashMap<>();
         guests.forEach(g -> transactionList.put(g,g.getPayments()));
 
-        //TODO: Load Header
+        String header = "number,amountPaid,changeGiven,paymentMethod,paymentType,description";
+        paymentFileData.add(header);
 
         for (Guest g : transactionList.keySet()) { //Loop through all guests that are contained in the transaction list
             for (PaymentContainer p : transactionList.get(g)) { //Loop through all payments for the specified guest
+                System.out.println("Payment Found!");
                 String description = p.getDescription();
                 double paid = p.getPaid();
                 double change = p.getChange();
@@ -220,8 +222,10 @@ public class DataManager {
                 line.add(""+change); //Change
                 line.add(""+paymentMethod); //Payment Method
                 line.add(""+paymentType); //Payment Type
+                line.add(description);
 
                 String lineToAdd = DataManager.arrayListToDelimitedString(line,",");
+                paymentFileData.add(lineToAdd);
             }
         }
 
@@ -231,6 +235,8 @@ public class DataManager {
         //
         String guestFileDataAsString;
         String itemFileDataAsString;
+        String paymentFileDataAsString;
+
         StringBuilder sb = new StringBuilder();
         for (String s : guestFileData) {
             sb.append(s).append("\n");
@@ -243,32 +249,44 @@ public class DataManager {
         }
         itemFileDataAsString = sb.toString();
 
+        sb = new StringBuilder();
+        for (String s : paymentFileData) {
+            sb.append(s).append("\n");
+        }
+        paymentFileDataAsString = sb.toString();
+
         //
         // Writing Data To File
         //
         File guestFile = new File("Guests.csv");
         File itemFile = new File("Items.csv");
+        File paymentFile = new File("Transactions.csv");
 
         try { //Ensure Files Are Created
             if (!guestFile.exists())  //Ensure file for guests exists
                 guestFile.createNewFile();
             if (!itemFile.exists())   //Ensure file for items exists
                 itemFile.createNewFile();
+            if (!itemFile.exists())   //Ensure file for payments exists
+                paymentFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error! Unable To Create New Data CSV File!");
         }
 
-        FileWriter guestWriter = null, itemWriter = null;
+        FileWriter guestWriter, itemWriter, paymentWriter;
         try {
             guestWriter = new FileWriter("Guests.csv");
             itemWriter = new FileWriter("Items.csv");
+            paymentWriter = new FileWriter("Transactions.csv");
 
             guestWriter.write(guestFileDataAsString);
             itemWriter.write(itemFileDataAsString);
+            paymentWriter.write(paymentFileDataAsString);
 
             guestWriter.close();
             itemWriter.close();
+            paymentWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error While Writing To CSV Files!");
