@@ -215,8 +215,9 @@ public class DataManager {
 
                     // Description
                     // Index: 5
-
-                    String description = line.get(5);
+                    String description = "";
+                    if (5 < line.size())
+                        description = line.get(5);
 
                     PaymentContainer p = new PaymentContainer(paid,change,method,type,description);
                     owner.getPayments().add(p);
