@@ -31,6 +31,7 @@ public class DataManager {
     public static void loadData() {
         File guestFile = new File("Guests.csv");
         File itemFile = new File("Items.csv");
+        File paymentFile = new File("Transactions.csv");
 
         if (itemFile.exists()) {
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
@@ -149,13 +150,82 @@ public class DataManager {
                 DataManager.guests.add(g);
             }
 
-            //TODO: Load In Payment Information
+
+
+
+            if (paymentFile.exists()) {
+                ArrayList<String> paymentFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(paymentFile).split("\n")));
+
+                for (int k = 1; k < paymentFileData.size(); k++) { //Loop through everything but header row
+                    String lineAsString = paymentFileData.get(k);
+                    ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
+
+                    //
+                    // Correctly Parse and Set The Payment's Associated Guest
+                    //
+
+                    Guest owner = null;
+
+                    int number = -1;
+                    try {
+                        number = Integer.parseInt(line.get(0));
+                    } catch (Exception e) {
+                        System.out.println("Error Loading Data: Unable To Parse Guest Number From Payment");
+                    }
+
+                    for (Guest g : guests) {
+                        if (g.getNumber() == number) {
+                            owner = g;
+                            break;
+                        }
+                    }
+
+                    if (owner == null) continue; //If we didn't find a valid owner for this transaction, we can discard it.
+
+
+                    // Amount Paid
+                    // Index: 1
+
+                    double paid = 0;
+                    try {
+                        paid = Double.parseDouble(line.get(1));
+                    } catch (Exception e) {
+                        System.out.println("Error Loading Data: Unable To Parse Amount Paid From Payment");
+                    }
+
+                    // Change Given
+                    // Index: 2
+
+                    double change = 0;
+                    try {
+                        change = Double.parseDouble(line.get(2));
+                    } catch (Exception e) {
+                        System.out.println("Error Loading Data: Unable To Parse Change Given From Payment");
+                    }
+
+                    // Payment Method
+                    // Index: 3
+
+                    PaymentMethod method = PaymentMethod.stringToPaymentMethod(line.get(3));
+
+                    // Payment Type
+                    // Index: 4
+
+                    PaymentType type = PaymentType.stringToPaymentType(line.get(4));
+
+                    // Description
+                    // Index: 5
+
+                    String description = line.get(5);
+
+                    PaymentContainer p = new PaymentContainer(paid,change,method,type,description);
+                    owner.getPayments().add(p);
+                }
+
+            }
 
 
         }
-
-        //TODO: Read Data From .csv Files and Populate Lists
-        //TODO: Separately put items into Guest's arraylist from the other objects.
 
         hasLoaded = true; //Tell program that data has been loaded
     }
