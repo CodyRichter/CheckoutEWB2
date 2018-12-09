@@ -34,6 +34,9 @@ public class DataManager {
         File paymentFile = new File("Transactions.csv");
 
         if (itemFile.exists()) {
+
+            //TODO: Remove all newline/special characters from loaded data.
+
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
             ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).trim().split(",[ ]*")));
 
@@ -70,6 +73,9 @@ public class DataManager {
 
 
         if (guestFile.exists()) {
+
+            //TODO: Remove all newline/special characters from loaded data.
+
             ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(guestFile).split("\n")));
             ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
             int firstHashmapIndex = 1;
@@ -154,6 +160,9 @@ public class DataManager {
 
 
             if (paymentFile.exists()) {
+
+                //TODO: Remove all newline/special characters from loaded data.
+
                 ArrayList<String> paymentFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(paymentFile).split("\n")));
 
                 for (int k = 1; k < paymentFileData.size(); k++) { //Loop through everything but header row
