@@ -124,24 +124,69 @@ public class Guest implements Comparable<Guest> {
             map.remove(type);
     }
 
+    /**
+     * Check if a Guest's inventory contains a specific key
+     * @param type Key to check in Guest's inventory
+     * @return boolean on whether the specific key is contained
+     */
     public boolean contains(String type) {
         return map.containsKey(type);
     }
 
+    /**
+     * Add an item to the guest's inventory.
+     * Duplicate items will not be added twice
+     * @param i Item to add
+     */
     public void addItem(Item i) {
         if (items.contains(i)) return; //Don't add an item that already is in inventory multiple times
         items.add(i);
     }
 
+    /**
+     * Add an add-on-item to the guest's inventory.
+     * Duplicate items will not be added twice
+     * @param i Item to add
+     */
+    public void addItem(AddOnContainer i) {
+        if (addOnItems.contains(i)) return; //Don't add an item that already is in inventory multiple times
+        addOnItems.add(i);
+    }
+
+    /**
+     * Remove a specific item from the guest's inventory
+     * If the item does not exist, this method will return silently
+     * @param i Item to remove from inventory
+     */
     public void removeItem(Item i) {
         if (!items.contains(i)) return; //Don't remove an item the guest doesn't have
         items.remove(i);
     }
 
+    /**
+     * Remove a specific add-on-item from the guest's inventory
+     * If the item does not exist, this method will return silently
+     * @param i Add-On-Item to remove from inventory
+     */
+    public void removeItem(AddOnContainer i) {
+        if (!addOnItems.contains(i)) return; //Don't remove an item the guest doesn't have
+        addOnItems.remove(i);
+    }
+
+    /**
+     * Return a list of all items in the guest's inventory
+     * @return ArrayList of Items owned by guest
+     */
     public ArrayList<Item> getItems() {
         return items;
     }
 
+    /**
+     * Returns an ArrayList containing all of the items in the guest's inventory.
+     * NOTE: The Data Type of the ArrayList is String, but it can be easily parsed
+     * into Integer should the need arise.
+     * @return List of Item ID Numbers for items owned by the guest
+     */
     public ArrayList<String> getItemNumbersAsList() {
         ArrayList<String> result = new ArrayList<>();
         for (Item i : items) {
@@ -150,10 +195,20 @@ public class Guest implements Comparable<Guest> {
         return result;
     }
 
+    /**
+     * Returns a list of AddOnContainers which hold all of the Add On Items
+     * owned by the guest
+     * @return List of Add On Items owned by guest
+     */
     public ArrayList<AddOnContainer> getAddOnItems() {
         return addOnItems;
     }
 
+    /**
+     * Returns a nicely formatted version of the add-on-items in the guest's inventory
+     * in an ArrayList of Strings. This is suitable to display to the user in a GUI.
+     * @return ArrayList of nicely formatted Strings containing information on all of the add on items owned by the guest
+     */
     public ArrayList<String> getAddOnItemsAsList() {
         ArrayList<String> result = new ArrayList<>();
         for (AddOnContainer a : addOnItems) {
@@ -161,18 +216,6 @@ public class Guest implements Comparable<Guest> {
         }
         return result;
     }
-
-    public void addItem(AddOnContainer i) {
-        if (addOnItems.contains(i)) return; //Don't add an item that already is in inventory multiple times
-        addOnItems.add(i);
-    }
-
-    public void removeItem(AddOnContainer i) {
-        if (!addOnItems.contains(i)) return; //Don't remove an item the guest doesn't have
-        addOnItems.remove(i);
-    }
-
-
 
     /**
      * Returns the ArrayList containing all of the guest's payments.

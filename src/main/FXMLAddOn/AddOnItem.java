@@ -9,6 +9,11 @@ package main.FXMLAddOn;
 public enum  AddOnItem {
     SHIRT,GLASS;
 
+    /**
+     * Returns a string with the name of the item type. If for some reason the item
+     * isn't valid, it will return "[INVALID ITEM TYPE]"
+     * @return String containing add-on-item name
+     */
     @Override
     public String toString() {
         if (this == AddOnItem.SHIRT) return "Shirt";
@@ -18,7 +23,7 @@ public enum  AddOnItem {
 
     /**
      * Returns the cost of the given add-on item.
-     * @return Double of price of item
+     * @return Double with value of price of item
      */
     public double getCost() {
         if (this == AddOnItem.SHIRT) return 10;

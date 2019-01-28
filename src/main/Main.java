@@ -15,6 +15,7 @@ public class Main extends Application {
     public static AddOnController addOnController;
 
 
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Guest.fxml"));
@@ -25,7 +26,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
+    /**
+     * Main Method to Run in order to launch program
+     */
     public static void main(String[] args) {
         launch(args);
     }

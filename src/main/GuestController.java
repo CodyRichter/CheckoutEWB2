@@ -181,8 +181,6 @@ public class GuestController {
     @FXML
     private void showGuestFromSelector() {
         updateForm(guestSelect.getValue());
-//        System.out.println("Contents of Guest List: ");
-//        System.out.println(Arrays.toString(DataManager.guests.toArray()));
     }
 
     //
@@ -227,6 +225,10 @@ public class GuestController {
     // --------------------------------------
     //
 
+    /**
+     * Opens a new FXML window for the user to enter/manage their payments. Note that calling this method
+     * will save the current data entered in the form before changing the windows.
+     */
     @FXML
     protected void openPaymentWindow() {
 
@@ -361,7 +363,8 @@ public class GuestController {
 
 
     /**
-     * Loads the FXML page for Items, and switches the current window to that.
+     * Loads the FXML page for Items, and switches the current window to that. Note that
+     * calling this method DOES NOT save the current data in the form before changing windows
      */
     @FXML
     public void changePages() {

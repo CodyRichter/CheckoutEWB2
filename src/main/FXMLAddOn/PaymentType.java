@@ -3,6 +3,11 @@ package main.FXMLAddOn;
 public enum PaymentType { //Ways that a user can pay
     PAYMENT,DONATION;
 
+    /**
+     * Returns string containing payment type.
+     * If unable to parse, return "[INVALID PAYMENT TYPE]"
+     * @return String containing the payment type
+     */
     @Override
     public String toString() {
         if (this == PaymentType.PAYMENT) return "Payment";

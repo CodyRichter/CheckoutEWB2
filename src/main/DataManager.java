@@ -28,6 +28,13 @@ public class DataManager {
     public static ObservableList<Item> items = FXCollections.observableArrayList();
     private static boolean hasLoaded = false;
 
+    /**
+     * Loads all saved program data from CSV files if the files exist. If the files do exist, the contents
+     * will be parsed and loaded into the program. The file names that will be loaded are:
+     * - Guests.csv
+     * - Items.csv
+     * - Transactions.csv
+     */
     public static void loadData() {
         File guestFile = new File("Guests.csv");
         File itemFile = new File("Items.csv");
@@ -240,7 +247,13 @@ public class DataManager {
         hasLoaded = true; //Tell program that data has been loaded
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    /**
+     * Saves all ldata currently in the program to CSV files for later use. The contents of any existing files in the same
+     * directory will be overwritten in order to handle the new data. The file names that will be saved to are:
+     * - Guests.csv
+     * - Items.csv
+     * - Transactions.csv
+     */
     public static void saveData() {
         ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line
         ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
@@ -399,6 +412,11 @@ public class DataManager {
         return hasLoaded;
     }
 
+    /**
+     * Reads the contents of a file to a single string
+     * @param f File to read contents of
+     * @return String containing all of the file contents
+     */
     private static String readFile(File f) {
         if (f == null || !f.exists()) return "";
 

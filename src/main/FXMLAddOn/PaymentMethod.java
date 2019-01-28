@@ -3,6 +3,11 @@ package main.FXMLAddOn;
 public enum PaymentMethod { //Ways that a user can pay
     CASH,CHECK,OTHER;
 
+    /**
+     * Returns a nicely formatted string containing the name of the Payment Method.
+     * If unable to parse, return "[INVALID PAYMENT METHOD]"
+     * @return String with payment method
+     */
     @Override
     public String toString() {
         if (this == PaymentMethod.CASH) return "Cash";

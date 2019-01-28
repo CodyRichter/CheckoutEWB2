@@ -102,6 +102,11 @@ public class Item implements Comparable<Item> {
             map.remove(type);
     }
 
+    /**
+     * Override of default toString() method. Will return a nicely formatted
+     * String containing information on the item
+     * @return String with item information
+     */
     @Override
     public String toString() {
         //Ensure We Have Data For All Fields, And Remove Null Entries
