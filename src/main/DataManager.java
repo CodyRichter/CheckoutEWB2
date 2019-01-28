@@ -42,14 +42,20 @@ public class DataManager {
 
         if (itemFile.exists()) {
 
-            //TODO: Remove all newline/special characters from loaded data.
-
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(itemFile).split("\n")));
             ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).trim().split(",[ ]*")));
 
             for (int k = 1; k < itemFileData.size(); k++) { //Loop through everything but header row
                 String lineAsString = itemFileData.get(k);
                 ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
+
+                for (int n = 0; n < line.size(); n++) { //Remove all special characters from loaded data
+                    String[] toReplace = {"\n","\t","\r"};
+                    for (String s : toReplace) {
+                        line.set(n, line.get(n).replaceAll(s, ""));
+                    }
+                }
+
                 //System.out.println(line.get(0) + " | " + line.get(1) + " | " + line.get(2));
                 Item i = new Item();
 
@@ -81,14 +87,20 @@ public class DataManager {
 
         if (guestFile.exists()) {
 
-            //TODO: Remove all newline/special characters from loaded data.
-
             ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(guestFile).split("\n")));
             ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
             int firstHashmapIndex = 1;
             int firstNonHashmapIndex = header.indexOf("items");
             for (int i = 1; i < guestFileData.size(); i++) { //Starting at 1 to exclude header row from the data loading
                 ArrayList<String> line = new ArrayList<>(Arrays.asList(guestFileData.get(i).split(",")));
+
+                for (int n = 0; n < line.size(); n++) { //Remove all special characters from loaded data
+                    String[] toReplace = {"\n","\t","\r"};
+                    for (String s : toReplace) {
+                        line.set(n, line.get(n).replaceAll(s, ""));
+                    }
+                }
+
                 Guest g = new Guest();
 
                 //
@@ -168,13 +180,17 @@ public class DataManager {
 
             if (paymentFile.exists()) {
 
-                //TODO: Remove all newline/special characters from loaded data.
-
                 ArrayList<String> paymentFileData = new ArrayList<>(Arrays.asList(DataManager.readFile(paymentFile).split("\n")));
 
                 for (int k = 1; k < paymentFileData.size(); k++) { //Loop through everything but header row
                     String lineAsString = paymentFileData.get(k);
                     ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
+                    for (int n = 0; n < line.size(); n++) { //Remove all special characters from loaded data
+                        String[] toReplace = {"\n","\t","\r"};
+                        for (String s : toReplace) {
+                            line.set(n, line.get(n).replaceAll(s, ""));
+                        }
+                    }
 
                     //
                     // Correctly Parse and Set The Payment's Associated Guest
