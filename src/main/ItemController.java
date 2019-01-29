@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class ItemController {
 
-    private Item selectedItem = null;
+    protected Item selectedItem = null;
 
     public ItemController() {
 
@@ -26,7 +26,7 @@ public class ItemController {
      * Will run when the page is loaded. Sets up formatting for general use later in program
      */
     @FXML
-    private void initialize() {
+    protected void initialize() {
 
         Main.itemController = this;
 
@@ -71,7 +71,7 @@ public class ItemController {
      * Saves current program data into .csv file
      */
     @FXML
-    private void saveDataToFile() {
+    protected void saveDataToFile() {
         if (itemSelect.getValue() != null)
             saveForm(); //Saves all fields in form to the item object
         DataManager.saveData();
@@ -81,7 +81,7 @@ public class ItemController {
      * Loads data into program from previous .csv save file.
      */
     @FXML
-    private void loadDataFromFile() {
+    protected void loadDataFromFile() {
         DataManager.loadData(); //Loads data from file
         if (DataManager.items.size() > 0) { //If there are any items loaded, set the page to the first one
             loadItemIntoForm(DataManager.items.get(0));
@@ -92,7 +92,7 @@ public class ItemController {
      * Saves program data and exits program after saving.
      */
     @FXML
-    private void saveDataToFileAndExit() {
+    protected void saveDataToFileAndExit() {
         saveDataToFile();
         exit();
     }
@@ -102,7 +102,7 @@ public class ItemController {
      * used when loading in item data.
      * @param i Item's data to load.
      */
-    private void loadItemIntoForm(Item i) {
+    protected void loadItemIntoForm(Item i) {
         itemSelect.getItems().sorted();
         itemSelect.setValue(i);
         updateForm(i);
@@ -115,7 +115,7 @@ public class ItemController {
      * the current form to be that of the Item.
      */
     @FXML
-    private void newItem() {
+    protected void newItem() {
         Item i = new Item();
 
         DataManager.items.add(i); //Add guest to total guest list
@@ -134,7 +134,7 @@ public class ItemController {
      * the currently loaded Item in the form, the form will be cleared and a blank page will be loaded.
      */
     @FXML
-    private void removeItem() {
+    protected void removeItem() {
         if (itemSelect.getValue() == null) return; //If ItemSelect has no items selected, don't try to removePayment nothing
         itemSelect.getValue().free();
         DataManager.items.remove(itemSelect.getValue()); //Remove Item from master list
@@ -158,7 +158,7 @@ public class ItemController {
      * time of exiting.
      */
     @FXML
-    private void exit() {
+    protected void exit() {
         System.exit(0);
     }
 
@@ -167,7 +167,7 @@ public class ItemController {
      * the readme.md page to load.
      */
     @FXML
-    private void showDocumentation() {
+    protected void showDocumentation() {
         try {
             java.awt.Desktop.getDesktop().browse(new URI("https://github.com/Senarii/CheckoutEWB/blob/master/readme.md"));
         } catch (Exception e) {
@@ -181,7 +181,7 @@ public class ItemController {
      * into the form, and populates all of the fields accordingly.
      */
     @FXML
-    private void showGuestFromSelector() {
+    protected void showGuestFromSelector() {
         selectedItem = itemSelect.getValue();
         updateForm(selectedItem);
     }
@@ -191,7 +191,7 @@ public class ItemController {
      * Sets the owner of the current item to the guest that is selected in the ownerSelect combobox.
      */
     @FXML
-    private void setItemOwner() {
+    protected void setItemOwner() {
         Guest g = ownerSelect.getValue();
         if (g == null || g.getNumber() == -1) return; //If it is a temporary guest, exit method
         g.addItem(itemSelect.getValue());
@@ -203,7 +203,7 @@ public class ItemController {
      * to have no owner.
      */
     @FXML
-    private void removeItemOwner() {
+    protected void removeItemOwner() {
         ownerSelect.getValue().removeItem(selectedItem);
         ownerSelect.setDisable(false);
         ownerSelect.setValue(new Guest(true,"No Owner"));
@@ -222,7 +222,7 @@ public class ItemController {
      * If the value passed to this method is null, the form will be wiped.
      * @param i Item's data to load. (null to clear form)
      */
-    private void updateForm(Item i) {
+    protected void updateForm(Item i) {
         if (i == null) { //If the item that is being loaded is null, clear the form and reset it to default state
             itemName.setText("");
             itemName.setDisable(true);
@@ -258,7 +258,7 @@ public class ItemController {
      * from lastSave->present.
      */
     @FXML
-    private void saveForm() {
+    protected void saveForm() {
         Item i = itemSelect.getValue();
         i.add("itemName",itemName.getText()); //Puts Each TextField Into Item's HashMap
         i.add("itemPrice",itemPrice.getText()); //Puts Each TextField Into Item's HashMap
@@ -270,7 +270,7 @@ public class ItemController {
      * Loads the FXML page for Guests, and switches the current window to that.
      */
     @FXML
-    private void changePages() {
+    protected void changePages() {
         try {
             Stage stage = (Stage) itemName.getScene().getWindow();
             stage.setMinHeight(600);

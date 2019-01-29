@@ -15,7 +15,7 @@ import java.util.*;
 
 public class GuestController {
 
-    private HashMap<String, TextField> textFields; //Hashmap containing all textfields in program
+    protected HashMap<String, TextField> textFields; //Hashmap containing all textfields in program
 
     public GuestController() {
 
@@ -25,7 +25,7 @@ public class GuestController {
      * Will run when the page is loaded. Sets up formatting for general use later in program
      */
     @FXML
-    private void initialize() {
+    protected void initialize() {
         Main.guestController = this;
         textFields = new HashMap<>();
         textFields.put("firstName", firstName);
@@ -69,7 +69,7 @@ public class GuestController {
      * Saves current program data into .csv file
      */
     @FXML
-    private void saveDataToFile() {
+    protected void saveDataToFile() {
         if (guestSelect.getValue() != null)
             saveForm(); //Saves all fields in form to the guest object
         DataManager.saveData();
@@ -79,7 +79,7 @@ public class GuestController {
      * Loads data into program from previous .csv save file.
      */
     @FXML
-    private void loadDataFromFile() {
+    protected void loadDataFromFile() {
         DataManager.loadData(); //Loads data from file
         if (DataManager.guests.size() > 0) { //If there are any guests loaded, set the page to the first one
             loadGuestIntoForm(DataManager.guests.get(0));
@@ -90,7 +90,7 @@ public class GuestController {
      * Saves program data and exits program after saving.
      */
     @FXML
-    private void saveDataToFileAndExit() {
+    protected void saveDataToFileAndExit() {
         saveDataToFile();
         exit();
     }
@@ -112,7 +112,7 @@ public class GuestController {
      * the current form to be that of the guest.
      */
     @FXML
-    private void createNewGuest() {
+    protected void createNewGuest() {
         Guest g = new Guest();
 
         DataManager.guests.add(g); //Add guest to total guest list
@@ -131,7 +131,7 @@ public class GuestController {
      * the currently loaded guest in the form, the form will be cleared and a blank page will be loaded.
      */
     @FXML
-    private void removeGuest() {
+    protected void removeGuest() {
         Guest g = guestSelect.getValue();
         if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
         g.free();
@@ -156,7 +156,7 @@ public class GuestController {
      * time of exiting.
      */
     @FXML
-    private void exit() {
+    protected void exit() {
         System.exit(0);
     }
 
@@ -165,7 +165,7 @@ public class GuestController {
      * the readme.md page to load.
      */
     @FXML
-    private void showDocumentation() {
+    protected void showDocumentation() {
         try {
             java.awt.Desktop.getDesktop().browse(new URI("https://github.com/Senarii/CheckoutEWB/blob/master/readme.md"));
         } catch (Exception e) {
@@ -179,7 +179,7 @@ public class GuestController {
      * into the form, and populates all of the fields accordingly.
      */
     @FXML
-    private void showGuestFromSelector() {
+    protected void showGuestFromSelector() {
         updateForm(guestSelect.getValue());
     }
 
@@ -195,7 +195,7 @@ public class GuestController {
      * entries that may not be classified elsewhere.
      */
     @FXML
-    private void openAddOnMenu() {
+    protected void openAddOnMenu() {
 
         saveForm();
 
@@ -293,7 +293,7 @@ public class GuestController {
      *
      * @param g Guest's data to load. (null to clear form)
      */
-    private void updateForm(Guest g) {
+    protected void updateForm(Guest g) {
         itemList.getChildren().clear();
         if (g == null) { //If the guest that is being loaded is null, clear the form and reset it to default state
             for (TextField t : textFields.values()) { //Iterate through all textFields and wipe them
@@ -350,7 +350,7 @@ public class GuestController {
      * from lastSave->present.
      */
     @FXML
-    private void saveForm() {
+    protected void saveForm() {
         Guest g = guestSelect.getValue();
         for (String s : textFields.keySet()) {
             g.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap

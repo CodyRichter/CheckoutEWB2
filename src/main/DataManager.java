@@ -26,7 +26,7 @@ public class DataManager {
 
     public static ObservableList<Guest> guests = FXCollections.observableArrayList();
     public static ObservableList<Item> items = FXCollections.observableArrayList();
-    private static boolean hasLoaded = false;
+    protected static boolean hasLoaded = false;
 
     /**
      * Loads all saved program data from CSV files if the files exist. If the files do exist, the contents
@@ -408,7 +408,7 @@ public class DataManager {
      * @param list List to be converted
      * @return String with elements of list delimited by commas
      */
-    private static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
+    protected static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
         StringBuilder sb = new StringBuilder();
         for (String val : list) {
             sb.append(val); //Put in string
@@ -433,7 +433,7 @@ public class DataManager {
      * @param f File to read contents of
      * @return String containing all of the file contents
      */
-    private static String readFile(File f) {
+    protected static String readFile(File f) {
         if (f == null || !f.exists()) return "";
 
         byte[] encoded = {};
