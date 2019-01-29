@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
-import static main.Main.guestController;
 import static org.junit.Assert.assertTrue;
 import static org.loadui.testfx.GuiTest.find;
 
@@ -34,6 +33,7 @@ public class LargeScaleTest extends ApplicationTest {
 
     @Before
     public void setUp () throws Exception {
+
     }
 
     @After
@@ -52,11 +52,23 @@ public class LargeScaleTest extends ApplicationTest {
 
     @Test
     public void testEnglishInput () {
-        guestController.createNewGuest();
+        createNewGuest();
         TextField t = (TextField) find("#firstName");
-
         clickOn("#firstName");
         write("Cody");
-        assertTrue(t.getText().equals("Cody"));
+        assertTrue(!t.isDisabled());
+        assertTrue(t.getText().equalsIgnoreCase("cody"));
+    }
+
+
+
+    private void createNewGuest() {
+        clickOn("#menu");
+        type(KeyCode.RIGHT);
+        type(KeyCode.RIGHT);
+        type(KeyCode.ENTER);
+        type(KeyCode.DOWN);
+        type(KeyCode.ENTER);
+
     }
 }
