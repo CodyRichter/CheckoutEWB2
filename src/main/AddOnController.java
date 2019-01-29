@@ -21,13 +21,13 @@ import main.FXMLAddOn.AddOnItem;
  */
 public class AddOnController {
 
-    private Guest selectedGuest = null;
+    public Guest selectedGuest = null;
 
     public AddOnController() {
     }
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         Main.addOnController = this;
 
@@ -58,7 +58,7 @@ public class AddOnController {
     VBox itemList;
 
     @FXML
-    private void updateCost() {
+    public void updateCost() {
         itemPrice.setText("$"+itemType.getValue().getCost());
     }
 
@@ -68,7 +68,7 @@ public class AddOnController {
      * Will be triggered on button blick of "Add Item"
      */
     @FXML
-    private void addItem() {
+    public void addItem() {
         AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuest);
         selectedGuest.addItem(aoc);
         description.clear();

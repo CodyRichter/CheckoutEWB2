@@ -24,14 +24,14 @@ import java.text.DecimalFormat;
 
 public class PaymentController {
 
-    protected Guest selectedGuest = Main.guestController.guestSelect.getValue();
+    public Guest selectedGuest = Main.guestController.guestSelect.getValue();
 
     public PaymentController() {
 
     }
 
     @FXML
-    protected void initialize() {
+    public void initialize() {
         Main.paymentController = this;
 
         selectedGuest = Main.guestController.guestSelect.getValue(); //Get the guest currently selected in the guest controller.
@@ -99,7 +99,7 @@ public class PaymentController {
      * and displays the payment in a list on the page.
      */
     @FXML
-    protected void addPayment() {
+    public void addPayment() {
 
         //This if-statement will trigger if there are invalid characters in the field that are not numeric.
         if (!isValidNumber(amountPaid.getText()) || !isValidNumber(changeGiven.getText())) {
@@ -150,7 +150,7 @@ public class PaymentController {
      * Calculates the total amount of money that is due
      */
     @FXML
-    protected void getTotal() {
+    public void getTotal() {
         double totalAsDouble = 0;
         for (Item i : selectedGuest.getItems()) {
             try {
@@ -172,7 +172,7 @@ public class PaymentController {
      * Calculates the amount of money that has been paid in total so far.
      */
     @FXML
-    protected void getAmountPaid() {
+    public void getAmountPaid() {
         double paidAsDouble = 0;
         for (PaymentContainer p : selectedGuest.getPayments()) {
             paidAsDouble += p.getPaid()-p.getChange();
@@ -184,7 +184,7 @@ public class PaymentController {
      * Calculates the amount of money that is due back to the guest
      */
     @FXML
-    protected void getChangeDue() {
+    public void getChangeDue() {
         double totalDouble = Double.parseDouble(total.getText().substring(1,total.getText().length()));
         double paidDouble = Double.parseDouble(totalPaid.getText().substring(1,totalPaid.getText().length()));
         double amountDue = Double.parseDouble(total.getText().substring(1,total.getText().length()))-Double.parseDouble(totalPaid.getText().substring(1,totalPaid.getText().length()));
@@ -208,7 +208,7 @@ public class PaymentController {
     /**
      * Updates the labels for total,change due, and payment due
      */
-    protected void updateMoneyCounters() {
+    public void updateMoneyCounters() {
         getTotal();
         getAmountPaid();
         getChangeDue();
@@ -248,7 +248,7 @@ public class PaymentController {
      * @param str String to check
      * @return String can be parsed into a number (double)
      */
-    protected static boolean isValidNumber(String str) {
+    public static boolean isValidNumber(String str) {
         if (str.isEmpty()) return true; //Empty string = 0
 
         try { //If this works, then true
