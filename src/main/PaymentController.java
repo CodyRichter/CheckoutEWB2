@@ -1,6 +1,5 @@
 package main;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,26 +39,20 @@ public class PaymentController {
             payments.getChildren().add(p);
         }
 
-        changeGiven.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    addPayment();
-                }}});
+        changeGiven.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                addPayment();
+            }});
 
-        amountPaid.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    addPayment();
-                }}});
+        amountPaid.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                addPayment();
+            }});
 
-        description.addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    addPayment();
-                }}});
+        description.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                addPayment();
+            }});
 
         //Set correct values of Payment Method
         paymentMethod.getItems().add(PaymentMethod.CASH);
