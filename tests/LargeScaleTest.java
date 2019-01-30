@@ -1,74 +1,22 @@
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
 import main.Main;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit.ApplicationTest;
 
 import static org.junit.Assert.assertTrue;
-import static org.loadui.testfx.GuiTest.find;
 
 /**
- * CheckoutEWB2 - PACKAGE_NAME
+ * CheckoutEWB2: LargeScaleTest
  *
- * @author LargeScaleTest
+ * @author Cody R
  * @version 1.0
  */
-public class LargeScaleTest extends ApplicationTest {
-
-    @Override
-    public void start (Stage stage) throws Exception {
-        Parent mainNode = FXMLLoader.load(Main.class.getResource("Guest.fxml"));
-        stage.setScene(new Scene(mainNode));
-        stage.show();
-        stage.toFront();
-    }
-
-    @Before
-    public void setUp () throws Exception {
-
-    }
-
-    @After
-    public void tearDown () throws Exception {
-        FxToolkit.hideStage();
-        release(new KeyCode[]{});
-        release(new MouseButton[]{});
-    }
+public class LargeScaleTest {
 
 
-    //
-    // ------------------------------
-    // Tests Begin Here
-    // ------------------------------
-    //
 
     @Test
-    public void testEnglishInput () {
-        createNewGuest();
-        TextField t = (TextField) find("#firstName");
-        clickOn("#firstName");
-        write("Cody");
-        assertTrue(!t.isDisabled());
-        assertTrue(t.getText().equalsIgnoreCase("cody"));
+    public void testDisableNoLoadedData() {
+        assertTrue(Main.guestController != null);
     }
 
-
-
-    private void createNewGuest() {
-        clickOn("#menu");
-        type(KeyCode.RIGHT);
-        type(KeyCode.RIGHT);
-        type(KeyCode.ENTER);
-        type(KeyCode.DOWN);
-        type(KeyCode.ENTER);
-
-    }
 }
