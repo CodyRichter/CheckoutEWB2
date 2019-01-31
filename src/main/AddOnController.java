@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
+import java.util.Arrays;
+
 /**
  * CheckoutEWB2 - main
  *
@@ -33,9 +35,12 @@ public class AddOnController {
 
         selectedGuest = Main.guestController.guestSelect.getValue();
 
-        itemType.getItems().add(AddOnItem.SHIRT);
-        itemType.getItems().add(AddOnItem.GLASS);
-        itemType.setValue(AddOnItem.SHIRT);
+        itemType.getItems().addAll(Arrays.asList(AddOnItem.class.getEnumConstants())); //Add All Enums in AddOnItem to The List
+        if (itemType.getItems().size() > 0) { //Set Value in Drop-Down
+            itemType.setValue(itemType.getItems().get(0));
+        } else { //If Nothing To Load, Disable Drop-Down
+            itemType.setDisable(true);
+        }
         updateCost();
         for (AddOnContainer a : selectedGuest.getAddOnItems()) {
             itemList.getChildren().add(a);
