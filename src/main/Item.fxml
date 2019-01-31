@@ -15,126 +15,102 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <FlowPane columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0">
-         <children>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem fx:id="save" mnemonicParsing="false" onAction="#saveDataToFile" text="Save Data" />
-                        <MenuItem fx:id="load" mnemonicParsing="false" onAction="#loadDataFromFile" text="Load Data" />
-                        <MenuItem fx:id="saveAndExit" mnemonicParsing="false" onAction="#saveDataToFileAndExit" text="Save and Exit" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showDocumentation" text="Documentation" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Action">
-                  <items>
-                    <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#newItem" text="New Item" />
-                        <MenuItem fx:id="removeItem" mnemonicParsing="false" onAction="#removeItem" text="Delete Item" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-         <GridPane.margin>
-            <Insets left="7.0" top="7.0" />
-         </GridPane.margin>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2">
-         <children>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Select Item:" />
-                  <ComboBox fx:id="itemSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1">
-         <children>
-            <VBox alignment="TOP_CENTER" spacing="8.0">
-               <children>
-                  <Label text="Checkout-EWB Ver.II">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label text="Item Management">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="switchButton" mnemonicParsing="false" onAction="#changePages" text="Switch To Guest Page">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.rowIndex="1">
-         <children>
-            <VBox alignment="CENTER" spacing="3.0">
-               <children>
-                  <Label alignment="CENTER" text="Item Name:" />
-                  <TextField fx:id="itemName" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <children>
-            <VBox alignment="CENTER" spacing="3.0">
-               <children>
-                  <Label alignment="CENTER" text="Price:" />
-                  <TextField fx:id="itemPrice" />
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <children>
-            <VBox alignment="CENTER" spacing="3.0">
-               <children>
-                  <Label alignment="CENTER" text="Item Owner:" />
-                  <ComboBox fx:id="ownerSelect" onAction="#setItemOwner" prefWidth="150.0" />
-                  <Button fx:id="removeOwner" mnemonicParsing="false" onAction="#removeItemOwner" text="Remove Owner">
-                     <padding>
-                        <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
-                     </padding>
-                  </Button>
-               </children>
-            </VBox>
-         </children>
-      </FlowPane>
-      <FlowPane alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <children>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save">
-               <FlowPane.margin>
-                  <Insets bottom="20.0" right="20.0" />
-               </FlowPane.margin>
+<GridPane prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.ItemController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <FlowPane columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0">
+        <GridPane.margin>
+            <Insets left="7.0" top="7.0"/>
+        </GridPane.margin>
+        <MenuBar>
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem fx:id="save" mnemonicParsing="false" onAction="#saveDataToFile" text="Save Data"/>
+                <MenuItem fx:id="load" mnemonicParsing="false" onAction="#loadDataFromFile"
+                          text="Load Data"/>
+                <MenuItem fx:id="saveAndExit" mnemonicParsing="false" onAction="#saveDataToFileAndExit"
+                          text="Save and Exit"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" onAction="#showDocumentation" text="Documentation"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Action">
+                <MenuItem fx:id="newItem" mnemonicParsing="false" onAction="#newItem" text="New Item"/>
+                <MenuItem fx:id="removeItem" mnemonicParsing="false" onAction="#removeItem"
+                          text="Delete Item"/>
+            </Menu>
+        </MenuBar>
+    </FlowPane>
+    <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0"
+              GridPane.columnIndex="2">
+        <VBox alignment="CENTER">
+            <Label text="Select Item:"/>
+            <ComboBox fx:id="itemSelect" onAction="#showGuestFromSelector" prefWidth="150.0"/>
+        </VBox>
+    </FlowPane>
+    <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="30.0" prefWidth="200.0"
+              GridPane.columnIndex="1">
+        <padding>
+            <Insets top="10.0"/>
+        </padding>
+        <VBox alignment="TOP_CENTER" spacing="8.0">
+            <Label text="Checkout-EWB Ver.II">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Label>
+            <Label text="Item Management">
+                <font>
+                    <Font name="System Italic" size="12.0"/>
+                </font>
+            </Label>
+            <Button fx:id="switchButton" mnemonicParsing="false" onAction="#changePages"
+                    text="Switch To Guest Page">
+                <font>
+                    <Font size="10.0"/>
+                </font>
             </Button>
-         </children>
-      </FlowPane>
-   </children>
+        </VBox>
+    </FlowPane>
+    <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.rowIndex="1">
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label alignment="CENTER" text="Item Name:"/>
+            <TextField fx:id="itemName"/>
+        </VBox>
+    </FlowPane>
+    <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="1"
+              GridPane.rowIndex="1">
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label alignment="CENTER" text="Price:"/>
+            <TextField fx:id="itemPrice"/>
+        </VBox>
+    </FlowPane>
+    <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefWidth="200.0" GridPane.columnIndex="2"
+              GridPane.rowIndex="1">
+        <VBox alignment="CENTER" spacing="3.0">
+            <Label alignment="CENTER" text="Item Owner:"/>
+            <ComboBox fx:id="ownerSelect" onAction="#setItemOwner" prefWidth="150.0"/>
+            <Button fx:id="removeOwner" mnemonicParsing="false" onAction="#removeItemOwner" text="Remove Owner">
+                <padding>
+                    <Insets bottom="5.0" left="3.0" right="3.0" top="5.0"/>
+                </padding>
+            </Button>
+        </VBox>
+    </FlowPane>
+    <FlowPane alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+              GridPane.rowIndex="2">
+        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save">
+            <FlowPane.margin>
+                <Insets bottom="20.0" right="20.0"/>
+            </FlowPane.margin>
+        </Button>
+    </FlowPane>
 </GridPane>
