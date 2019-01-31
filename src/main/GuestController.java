@@ -33,7 +33,7 @@ public class GuestController {
         textFields.put("phoneNumber", phoneNumber);
         textFields.put("emailAddress", emailAddress);
 
-        if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
+        if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
         }
         if (!DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it

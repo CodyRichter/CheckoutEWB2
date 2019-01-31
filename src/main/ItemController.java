@@ -30,7 +30,7 @@ public class ItemController {
 
         Main.itemController = this;
 
-        if (!DataManager.hasLoadedData()) { //If Data from .csv file hasn't been loaded, load the data into the form
+        if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
         }
         if (!DataManager.items.isEmpty()) {

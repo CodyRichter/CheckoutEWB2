@@ -273,7 +273,7 @@ public class DataManager {
     public static void saveData() {
         ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line
         ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
-        ArrayList<String> paymentFileData = new ArrayList<>(); //Stores all of the data in the transaction list file, line by line
+        ArrayList<String> transactionFileData = new ArrayList<>(); //Stores all of the data in the transaction list file, line by line
 
 
         //
@@ -314,7 +314,7 @@ public class DataManager {
         guests.forEach(g -> transactionList.put(g,g.getPayments()));
 
         String header = "number,amountPaid,changeGiven,paymentMethod,paymentType,description";
-        paymentFileData.add(header);
+        transactionFileData.add(header);
 
         for (Guest g : transactionList.keySet()) { //Loop through all guests that are contained in the transaction list
             for (PaymentContainer p : transactionList.get(g)) { //Loop through all payments for the specified guest
@@ -333,7 +333,7 @@ public class DataManager {
                 line.add(description);
 
                 String lineToAdd = DataManager.arrayListToDelimitedString(line,",");
-                paymentFileData.add(lineToAdd);
+                transactionFileData.add(lineToAdd);
             }
         }
 
@@ -348,7 +348,7 @@ public class DataManager {
         StringBuilder sb = new StringBuilder();
         for (String s : guestFileData) {
             sb.append(s);
-            if (!guestFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+            if (!guestFileData.get(guestFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
                 sb.append("\n");
             }
         }
@@ -364,13 +364,12 @@ public class DataManager {
         itemFileDataAsString = sb.toString();
 
         sb = new StringBuilder();
-        for (String s : paymentFileData) {
+        for (String s : transactionFileData) {
             sb.append(s);
-            if (!paymentFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+            if (!transactionFileData.get(transactionFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
                 sb.append("\n");
             }
         }
-        //TODO: Figure out newline @ end of Transaction CSV
         paymentFileDataAsString = sb.toString();
 
         //
@@ -378,15 +377,18 @@ public class DataManager {
         //
         File guestFile = new File("Guests.csv");
         File itemFile = new File("Items.csv");
-        File paymentFile = new File("Transactions.csv");
+        File transactionFile = new File("Transactions.csv");
 
         try { //Ensure Files Are Created
             if (!guestFile.exists())  //Ensure file for guests exists
+                //noinspection ResultOfMethodCallIgnored
                 guestFile.createNewFile();
             if (!itemFile.exists())   //Ensure file for items exists
+                //noinspection ResultOfMethodCallIgnored
                 itemFile.createNewFile();
             if (!itemFile.exists())   //Ensure file for payments exists
-                paymentFile.createNewFile();
+                //noinspection ResultOfMethodCallIgnored
+                transactionFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error! Unable To Create New Data CSV File!");
@@ -417,7 +419,7 @@ public class DataManager {
      * @param list List to be converted
      * @return String with elements of list delimited by commas
      */
-    protected static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
+    private static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
         StringBuilder sb = new StringBuilder();
         for (String val : list) {
             sb.append(val); //Put in string
@@ -431,10 +433,10 @@ public class DataManager {
      * Returns whether the program has already loaded data from a data.csv file into the
      * program
      *
-     * @return True if Data Has Been Loaded
+     * @return True if Data Needs to Be Loaded
      */
-    public static boolean hasLoadedData() {
-        return hasLoaded;
+    public static boolean needToLoadData() {
+        return !hasLoaded;
     }
 
     /**
@@ -442,7 +444,7 @@ public class DataManager {
      * @param f File to read contents of
      * @return String containing all of the file contents
      */
-    protected static String readFile(File f) {
+    private static String readFile(File f) {
         if (f == null || !f.exists()) return "";
 
         byte[] encoded = {};
