@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -212,6 +209,19 @@ public class PaymentController {
      */
     @FXML
     public void exit() {
+
+        //Ensure that all data in the form is saved before exiting
+        if (!amountPaid.getText().isEmpty() || !changeGiven.getText().isEmpty() || !description.getText().isEmpty()) {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+            a.setTitle("Warning! Payment Not Saved");
+            a.setHeaderText("Unsaved Payment Data");
+            a.setContentText("You have unsaved payment information in the payment form. If you leave now, that unsaved payment information will be lost." +
+                    "Are you sure that you want to exit the form?");
+            a.showAndWait();
+            if (a.getResult() != ButtonType.OK) {
+                return;
+            }
+        }
 
         try {
             Stage stage = (Stage) amountPaid.getScene().getWindow();
