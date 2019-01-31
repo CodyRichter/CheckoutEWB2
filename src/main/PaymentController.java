@@ -21,6 +21,8 @@ import main.FXMLAddOn.PaymentMethod;
 import main.FXMLAddOn.PaymentType;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PaymentController {
 
@@ -39,21 +41,12 @@ public class PaymentController {
             payments.getChildren().add(p);
         }
 
-        changeGiven.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+        //Add Some Keybinds for Convenience on Payment Submission
+        ArrayList<Parent> itemsForEnter = new ArrayList<>(Arrays.asList(description, amountPaid, changeGiven, paymentMethod, paymentType));
+        itemsForEnter.forEach(a -> a.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 addPayment();
-            }});
-
-        amountPaid.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                addPayment();
-            }});
-
-        description.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                addPayment();
-            }});
-
+            }}));
         //Set correct values of Payment Method
         paymentMethod.getItems().add(PaymentMethod.CASH);
         paymentMethod.getItems().add(PaymentMethod.CHECK);

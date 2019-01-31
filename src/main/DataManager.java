@@ -318,7 +318,6 @@ public class DataManager {
 
         for (Guest g : transactionList.keySet()) { //Loop through all guests that are contained in the transaction list
             for (PaymentContainer p : transactionList.get(g)) { //Loop through all payments for the specified guest
-                System.out.println("Payment Found!");
                 String description = p.getDescription();
                 double paid = p.getPaid();
                 double change = p.getChange();
@@ -348,20 +347,30 @@ public class DataManager {
 
         StringBuilder sb = new StringBuilder();
         for (String s : guestFileData) {
-            sb.append(s).append("\n");
+            sb.append(s);
+            if (!guestFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+                sb.append("\n");
+            }
         }
         guestFileDataAsString = sb.toString();
 
         sb = new StringBuilder();
         for (String s : itemFileData) {
-            sb.append(s).append("\n");
+            sb.append(s);
+            if (!itemFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+                sb.append("\n");
+            }
         }
         itemFileDataAsString = sb.toString();
 
         sb = new StringBuilder();
         for (String s : paymentFileData) {
-            sb.append(s).append("\n");
+            sb.append(s);
+            if (!paymentFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+                sb.append("\n");
+            }
         }
+        //TODO: Figure out newline @ end of Transaction CSV
         paymentFileDataAsString = sb.toString();
 
         //
