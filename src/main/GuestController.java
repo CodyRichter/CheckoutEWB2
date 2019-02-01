@@ -1,23 +1,27 @@
 package main;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
+import java.lang.reflect.Array;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class GuestController {
 
     public HashMap<String, TextField> textFields; //Hashmap containing all textfields in program
+    private StringBuilder searchWordTyped = new StringBuilder();
 
     public GuestController() {
 
@@ -34,6 +38,44 @@ public class GuestController {
         textFields.put("lastName", lastName);
         textFields.put("phoneNumber", phoneNumber);
         textFields.put("emailAddress", emailAddress);
+
+        currSearch.setVisible(false);
+        //
+        // Allows User to Search Through Guests
+        //
+        guestSelect.setOnKeyPressed((KeyEvent e) -> {
+            if (guestSelect.isDisabled()) return; //Ensure Box is Functional\
+            if (e.getCode() == KeyCode.ESCAPE) { //If ESC is Pressed, Clear Search Results and Reset Items in Box
+                updateGuestSelector(DataManager.guests,DataManager.guests.get(0));
+                searchWordTyped = new StringBuilder(); //Clear Word
+                currSearch.setVisible(false);
+
+            } else if (e.getCode() == KeyCode.BACK_SPACE) { //If Press Backspace, Delete Last Character
+                if (searchWordTyped.length() == 0) return; //Ensure Not Deleting Nothing
+                searchWordTyped.deleteCharAt(searchWordTyped.length()-1);
+
+            } else if (e.getCode().isLetterKey() || e.getCode().isDigitKey() || e.getCode() == KeyCode.COMMA || e.getCode() == KeyCode.SPACE){ //If Char is valid for searching
+                searchWordTyped.append(e.getCode().getName().toLowerCase());
+
+            } else { //Otherwise end here
+                return;
+            }
+
+            //Run the search on the characters inputted so far
+            ObservableList<Guest> matchingList = FXCollections.observableArrayList();
+            String goal = searchWordTyped.toString();
+
+            //Show User Current Search
+            currSearch.setVisible(true);
+            currSearch.setText(goal);
+
+            for (Guest g : DataManager.guests) {
+                if (g.toString().toLowerCase().contains(goal.toLowerCase())) {
+                    matchingList.add(g);
+                }
+            }
+            updateGuestSelector(matchingList,matchingList.size() > 0 ? matchingList.get(0) : null);
+        });
 
         if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
@@ -61,6 +103,8 @@ public class GuestController {
     @FXML
     public VBox itemList;
 
+    @FXML
+    public Label currSearch;
     //
     // --------------------------------------
     // Menu Bar Interactions
@@ -119,7 +163,7 @@ public class GuestController {
 
         DataManager.guests.add(g); //Add guest to total guest list
 
-        updateGuestSelector(g);
+        updateGuestSelector(DataManager.guests,g);
     }
 
     /**
@@ -132,11 +176,13 @@ public class GuestController {
         if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
         g.free();
         DataManager.guests.remove(g); //Remove guest from master list
-        guestSelect.getItems().remove(g); //Remove guest from combo box
-        if (!DataManager.guests.isEmpty()) //Try to update next value to display
-            guestSelect.setValue(DataManager.guests.get(0));
-        else guestSelect.getItems().clear();
-        updateForm(guestSelect.getValue()); //Update fields in form
+        if (DataManager.guests.size() > 0) {
+            updateGuestSelector(DataManager.guests, DataManager.guests.get(0));
+            updateForm(guestSelect.getValue()); //Update fields in form
+        } else { //Wipe & Disable Form
+            guestSelect.setDisable(true);
+            updateForm(null);
+        }
         removeGuest.setDisable(true);
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
@@ -199,7 +245,7 @@ public class GuestController {
         } catch (Exception ignored) {}
         if (d.getResult() != null && !d.getResult().isEmpty()) { //Inform User of Result of Operation
             Alert a = new Alert((success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR));
-            if (success) updateGuestSelector(guestSelect.getValue());
+            if (success) updateGuestSelector(DataManager.guests, guestSelect.getValue());
             a.setTitle("Guest Number Change");
             a.setHeaderText(success ? ("Number Change Success") : ("Number Change Failure."));
             a.setContentText(success ? ("The Guest's number has been successfully changed!") : ("Unable to change Guest's Number to "+d.getResult()+"! Ensure that the new number is correctly formatted as an integer and that the number isn't already in use."));
@@ -369,16 +415,30 @@ public class GuestController {
 
     /**
      * Updates the Guest selector with the new contents of the list.
+     * @param c Collection to Update Selector With
      * @param selectedGuest Guest to display information for
      */
-    private void updateGuestSelector(Guest selectedGuest) {
-        Set<Guest> temp = new HashSet<>(DataManager.guests);
-        DataManager.guests.clear();
-        DataManager.guests.addAll(temp);
-        DataManager.guests.sorted();
-        guestSelect.setItems(DataManager.guests);
+    private void updateGuestSelector(ObservableList c, Guest selectedGuest) {
+        if (selectedGuest == null) return;
+        Set<Guest> temp = new HashSet<>(c);
+        c.clear();
+        c.addAll(temp);
+        c.sorted();
+        guestSelect.setItems(c);
         guestSelect.getItems().sort(Guest::compareTo);
         guestSelect.setValue(selectedGuest);
+        guestSelect.setVisibleRowCount(c.size() < 10 ? c.size() : 10);
+        guestSelect.setDisable(false);
+    }
+
+    /**
+     * Clears the current search being done for a specific guest.
+     */
+    @FXML
+    private void clearSearch() {
+        searchWordTyped = new StringBuilder();
+        updateGuestSelector(DataManager.guests,DataManager.guests.get(0));
+        currSearch.setVisible(false);
     }
 
     /**
