@@ -3,9 +3,7 @@ package main;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.PaymentContainer;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Guest data storage file: Contains all data that is saved/loaded into the
@@ -16,7 +14,7 @@ import java.util.HashMap;
  */
 public class Guest implements Comparable<Guest> {
 
-    private static ArrayList<Integer> usedNumbers;
+    private static Set<Integer> usedNumbers;
 
     private HashMap<String,String> map = new HashMap<>();
     private ArrayList<Item> items = new ArrayList<>();
@@ -28,7 +26,7 @@ public class Guest implements Comparable<Guest> {
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
-        if (usedNumbers == null) usedNumbers = new ArrayList<>();
+        if (usedNumbers == null) usedNumbers = new HashSet<>();
         for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
@@ -57,6 +55,7 @@ public class Guest implements Comparable<Guest> {
         if (temp || usedNumbers.contains(num)) {
             return false; //Return false if the guest's desired number is already in use or if guest is temp
         }
+        usedNumbers.remove(this.number); //Mark the current number as unused
         this.number = num;
         usedNumbers.add(num); //Add the new number to the list of current numbers.
         return true;

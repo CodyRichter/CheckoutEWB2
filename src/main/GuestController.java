@@ -119,13 +119,7 @@ public class GuestController {
 
         DataManager.guests.add(g); //Add guest to total guest list
 
-        Set<Guest> temp = new HashSet<>(DataManager.guests);
-        DataManager.guests.clear();
-        DataManager.guests.addAll(temp);
-        DataManager.guests.sorted();
-
-        guestSelect.setItems(DataManager.guests);
-        guestSelect.setValue(g);
+        updateGuestSelector(g);
     }
 
     /**
@@ -190,26 +184,27 @@ public class GuestController {
      */
     @FXML
     public void changeNumber() {
-        boolean success = true;
+        boolean success = false;
         if (guestSelect.getValue() == null) return; //Ensure there is a selected Guest
         TextInputDialog d = new TextInputDialog();
         d.setTitle("Change Number");
         d.setContentText("Enter a New Number For Guest. (Current Number: "+guestSelect.getValue().getNumber()+")");
         d.showAndWait();
-        int newNumber = -1;
+        int newNumber;
         try {
-            newNumber = Integer.parseInt(d.getEditor().getText());
-        } catch (Exception e) {
-            success = false;
+            newNumber = Integer.parseInt(d.getResult());
+            if (newNumber >= 0 && guestSelect.getValue().setNumber(newNumber)) {
+                success = true;
+            }
+        } catch (Exception ignored) {}
+        if (d.getResult() != null && !d.getResult().isEmpty()) { //Inform User of Result of Operation
+            Alert a = new Alert((success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR));
+            if (success) updateGuestSelector(guestSelect.getValue());
+            a.setTitle("Guest Number Change");
+            a.setHeaderText(success ? ("Number Change Success") : ("Number Change Failure."));
+            a.setContentText(success ? ("The Guest's number has been successfully changed!") : ("Unable to change Guest's Number to "+d.getResult()+"! Ensure that the new number is correctly formatted as an integer and that the number isn't already in use."));
+            a.showAndWait();
         }
-
-        //TODO: Change Guest's Number
-
-        Alert a = new Alert((success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR));
-        a.setTitle("Guest Number Change");
-        a.setHeaderText(success ? ("Number Change Success") : ("Number Change Failure."));
-        a.setContentText(success ? ("The Guest's number has been successfully changed!") : ("Unable to change Guest's Number! Ensure that the new number is correctly formatted as an integer and that the number isn't already in use."));
-        a.showAndWait();
     }
     //
     // --------------------------------------
@@ -373,6 +368,20 @@ public class GuestController {
     }
 
     /**
+     * Updates the Guest selector with the new contents of the list.
+     * @param selectedGuest Guest to display information for
+     */
+    private void updateGuestSelector(Guest selectedGuest) {
+        Set<Guest> temp = new HashSet<>(DataManager.guests);
+        DataManager.guests.clear();
+        DataManager.guests.addAll(temp);
+        DataManager.guests.sorted();
+        guestSelect.setItems(DataManager.guests);
+        guestSelect.getItems().sort(Guest::compareTo);
+        guestSelect.setValue(selectedGuest);
+    }
+
+    /**
      * Saves all values currently loaded into the form to the Guest's data class file.
      * This method must run before exiting/loading new window, or all changes made will be lost
      * from lastSave->present.
@@ -388,7 +397,6 @@ public class GuestController {
 
         guestSelect.getItems().sort(Guest::compareTo);
     }
-
 
     /**
      * Loads the FXML page for Items, and switches the current window to that. Note that
