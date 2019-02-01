@@ -11,7 +11,9 @@ import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GuestController {
 
@@ -183,6 +185,32 @@ public class GuestController {
         updateForm(guestSelect.getValue());
     }
 
+    /**
+     * Allow for the changing of the ID number of the currently selected Guest
+     */
+    @FXML
+    public void changeNumber() {
+        boolean success = true;
+        if (guestSelect.getValue() == null) return; //Ensure there is a selected Guest
+        TextInputDialog d = new TextInputDialog();
+        d.setTitle("Change Number");
+        d.setContentText("Enter a New Number For Guest. (Current Number: "+guestSelect.getValue().getNumber()+")");
+        d.showAndWait();
+        int newNumber = -1;
+        try {
+            newNumber = Integer.parseInt(d.getEditor().getText());
+        } catch (Exception e) {
+            success = false;
+        }
+
+        //TODO: Change Guest's Number
+
+        Alert a = new Alert((success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR));
+        a.setTitle("Guest Number Change");
+        a.setHeaderText(success ? ("Number Change Success") : ("Number Change Failure."));
+        a.setContentText(success ? ("The Guest's number has been successfully changed!") : ("Unable to change Guest's Number! Ensure that the new number is correctly formatted as an integer and that the number isn't already in use."));
+        a.showAndWait();
+    }
     //
     // --------------------------------------
     // Item Management
