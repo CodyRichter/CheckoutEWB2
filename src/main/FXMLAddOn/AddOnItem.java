@@ -1,5 +1,8 @@
 package main.FXMLAddOn;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * CheckoutEWB2 - main.FXMLAddOn
  *
@@ -7,7 +10,20 @@ package main.FXMLAddOn;
  * @version 1.0
  */
 public enum  AddOnItem {
-    SHIRT,GLASS;
+
+    //All Add-On Items Are In The Enums Below. Simply Add a new Enum to Create a new Add-On Item
+    SHIRT,GLASS,TWO_GLASS;
+
+    /**
+     * All Item Information Can Be Added Here.
+     * To Add a new Add-On Item, create the Enum above and then add a new entry to the ArrayList
+     * Below with the information on the item type, display name, and price
+     */
+    private static ArrayList<ItemAccessContainer> itemData = new ArrayList<>(Arrays.asList(
+            new ItemAccessContainer(AddOnItem.SHIRT,"Shirt",10),
+            new ItemAccessContainer(AddOnItem.GLASS,"Glass",7),
+            new ItemAccessContainer(AddOnItem.TWO_GLASS,"2x Glass (Combo Deal)",12)));
+
 
     /**
      * Returns a string with the name of the item type. If for some reason the item
@@ -16,8 +32,9 @@ public enum  AddOnItem {
      */
     @Override
     public String toString() {
-        if (this == AddOnItem.SHIRT) return "Shirt";
-        if (this == AddOnItem.GLASS) return "Glass";
+        for (ItemAccessContainer i : itemData) {
+            if (this == i.item) return i.name;
+        }
         return "[INVALID ITEM TYPE]";
     }
 
@@ -26,8 +43,9 @@ public enum  AddOnItem {
      * @return Double with value of price of item
      */
     public double getCost() {
-        if (this == AddOnItem.SHIRT) return 10;
-        if (this == AddOnItem.GLASS) return 7;
+        for (ItemAccessContainer i : itemData) {
+            if (this == i.item) return i.price;
+        }
         return -1;
     }
 
@@ -37,12 +55,25 @@ public enum  AddOnItem {
      * @return Correct Type that string is describing
      */
     public static AddOnItem stringToAddOnItem(String s) {
-
-        if (s.equalsIgnoreCase("shirt")) return AddOnItem.SHIRT;
-        if (s.equalsIgnoreCase("glass")) return AddOnItem.GLASS;
+        for (ItemAccessContainer i : itemData) {
+            if (i.name.equalsIgnoreCase(s)) return i.item;
+        }
 
         return AddOnItem.SHIRT; //Default to this type if not able to parse string
     }
 
 
+}
+
+class ItemAccessContainer {
+
+    public AddOnItem item;
+    public String name;
+    public double price;
+
+    ItemAccessContainer(AddOnItem item, String name, double price) {
+        this.item = item;
+        this.name = name;
+        this.price = price;
+    }
 }
