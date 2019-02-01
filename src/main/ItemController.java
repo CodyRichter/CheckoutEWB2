@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URI;
@@ -29,6 +26,8 @@ public class ItemController {
     public void initialize() {
 
         Main.itemController = this;
+
+        header.setText("Checkout-EWB Ver."+Main.VERSION);
 
         if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
             DataManager.loadData();
@@ -61,6 +60,8 @@ public class ItemController {
     @FXML
     public Button saveButton,removeOwner,switchButton;
 
+    @FXML
+    public Label header;
     //
     // --------------------------------------
     // Menu Bar Interactions
@@ -279,7 +280,7 @@ public class ItemController {
             Scene scene = new Scene(root, 700, 600);
             stage.setHeight(600);
             stage.setWidth(700);
-            stage.setTitle("Checkout-EWB Version II: Guest Page");
+            stage.setTitle("Checkout-EWB Version "+Main.VERSION+": Guest Page");
             stage.setScene(scene);
             stage.show();
 

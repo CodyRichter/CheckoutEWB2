@@ -39,6 +39,8 @@ public class GuestController {
         textFields.put("phoneNumber", phoneNumber);
         textFields.put("emailAddress", emailAddress);
 
+        header.setText("Checkout-EWB Ver."+Main.VERSION);
+
         currSearch.setVisible(false);
         //
         // Allows User to Search Through Guests
@@ -104,7 +106,7 @@ public class GuestController {
     public VBox itemList;
 
     @FXML
-    public Label currSearch;
+    public Label currSearch,header;
     //
     // --------------------------------------
     // Menu Bar Interactions
@@ -276,7 +278,7 @@ public class GuestController {
             Scene scene = new Scene(root, 600, 400);
             stage.setHeight(600);
             stage.setWidth(800);
-            stage.setTitle("Checkout-EWB Version II: Add-On Item Manager");
+            stage.setTitle("Checkout-EWB Version "+Main.VERSION+": Add-On Item Manager");
             stage.setScene(scene);
             stage.show();
             stage.requestFocus();
@@ -311,7 +313,7 @@ public class GuestController {
             Scene scene = new Scene(root, 600, 400);
             stage.setHeight(600);
             stage.setWidth(800);
-            stage.setTitle("Checkout-EWB Version II: Payment Manager");
+            stage.setTitle("Checkout-EWB Version "+Main.VERSION+": Payment Manager");
             stage.setScene(scene);
             stage.show();
             stage.requestFocus();
@@ -472,7 +474,7 @@ public class GuestController {
             Scene scene = new Scene(root, 700, 300);
             stage.setHeight(300);
             stage.setWidth(700);
-            stage.setTitle("Checkout-EWB Version II: Item Page");
+            stage.setTitle("Checkout-EWB Version "+Main.VERSION+": Item Page");
             stage.setScene(scene);
             stage.show();
 

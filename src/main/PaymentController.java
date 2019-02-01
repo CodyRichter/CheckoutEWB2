@@ -231,7 +231,7 @@ public class PaymentController {
             Scene scene = new Scene(root, 700, 600);
             stage.setHeight(600);
             stage.setWidth(800);
-            stage.setTitle("Checkout-EWB Version II: Guest Page");
+            stage.setTitle("Checkout-EWB Version "+Main.VERSION+": Guest Page");
             stage.setScene(scene);
             stage.show();
             stage.requestFocus();

@@ -14,12 +14,12 @@ public class Main extends Application {
     public static PaymentController paymentController;
     public static AddOnController addOnController;
 
-
+    public final static double VERSION = 2.1;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("Guest.fxml"));
-        primaryStage.setTitle("Checkout-EWB Version II: Guest Page");
+        primaryStage.setTitle("Checkout-EWB Version "+Main.VERSION+": Guest Page");
         primaryStage.setMinHeight(600);
         primaryStage.setMinWidth(700);
         primaryStage.setScene(new Scene(root, 700, 600));
