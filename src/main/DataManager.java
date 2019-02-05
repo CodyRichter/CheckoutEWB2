@@ -28,6 +28,11 @@ public class DataManager {
     public static ObservableList<Item> items = FXCollections.observableArrayList();
     protected static boolean hasLoaded = false;
 
+
+    //TODO: Don't Save Data To File if It Is The Same as When Loaded
+    private static ObservableList<Guest> lastLoadedGuests = FXCollections.observableArrayList();
+    private static ObservableList<Item> lastLoadedItems = FXCollections.observableArrayList();
+
     /**
      * Loads all saved program data from CSV files if the files exist. If the files do exist, the contents
      * will be parsed and loaded into the program. The file names that will be loaded are:
@@ -259,6 +264,9 @@ public class DataManager {
 
 
         }
+
+        lastLoadedGuests = FXCollections.observableArrayList(guests);
+        lastLoadedItems = FXCollections.observableArrayList(items);
 
         hasLoaded = true; //Tell program that data has been loaded
     }
