@@ -26,7 +26,7 @@ public class DataManager {
 
     public static ObservableList<Guest> guests = FXCollections.observableArrayList();
     public static ObservableList<Item> items = FXCollections.observableArrayList();
-    protected static boolean hasLoaded = false;
+    private static boolean hasLoaded = false;
 
 
     //TODO: Don't Save Data To File if It Is The Same as When Loaded
@@ -159,16 +159,23 @@ public class DataManager {
                     for (String s : addOnItemList) {
                         if (s.trim().isEmpty()) continue;
                         ArrayList<String> addOnItem = new ArrayList<>(Arrays.asList(s.split("_")));
-
+                        if (addOnItem.isEmpty()) continue; //Don't operate on a badly loaded list
                         AddOnItem itemType = AddOnItem.stringToAddOnItem(addOnItem.get(0)); //Get Item Type
                         double cost;
+                        String description = "";
                         try {
-                            cost = Double.parseDouble(addOnItem.get(1));
+                            if (addOnItem.size() >= 2) {
+                                cost = Double.parseDouble(addOnItem.get(1));
+                            } else { //Don't load in information with payment data
+                                continue;
+                            }
                         } catch (Exception e) {
                             cost = itemType.getCost();
                         }
 
-                        String description = addOnItem.get(2);
+                        if (addOnItem.size() >= 3) {
+                            description = addOnItem.get(2);
+                        }
 
                         AddOnContainer aoc = new AddOnContainer(itemType,cost,description,g);
                         g.addItem(aoc);
