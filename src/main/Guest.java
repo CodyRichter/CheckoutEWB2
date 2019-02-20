@@ -14,6 +14,13 @@ import java.util.*;
  */
 public class Guest implements Comparable<Guest> {
 
+    //TODO: Add mailing address as field
+
+    //TODO: Add warning to deleting user
+
+    //TODO: Find nullpointer on deleting guest(?)
+
+
     private static Set<Integer> usedNumbers;
 
     private HashMap<String,String> map = new HashMap<>();
