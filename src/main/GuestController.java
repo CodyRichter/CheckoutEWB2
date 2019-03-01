@@ -180,6 +180,14 @@ public class GuestController {
     public void removeGuest() {
         Guest g = guestSelect.getValue();
         if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
+
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setTitle("Remove Guest");
+        a.setHeaderText("Confirm Deleting of Guest: " + g.getNumber());
+        a.setContentText("Are you sure that you want to delete this guest? All information will be lost forever. (A long time)");
+        a.showAndWait();
+        if (a.getResult() != ButtonType.OK) return;
+
         g.free();
         DataManager.guests.remove(g); //Remove guest from master list
         if (DataManager.guests.size() > 0) {
