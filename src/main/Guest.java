@@ -15,10 +15,10 @@ import java.util.*;
 public class Guest implements Comparable<Guest> {
 
     private static Set<Integer> usedNumbers;
+    private ArrayList<AddOnContainer> addOnItems = new ArrayList<>();
 
     private HashMap<String,String> map = new HashMap<>();
     private ArrayList<Item> items = new ArrayList<>();
-    private ArrayList<AddOnContainer> addOnItems = new ArrayList<>();
     private ArrayList<PaymentContainer> payments = new ArrayList<>();
 
     private int number = -1; //Identifying number for a Guest. Must be specific.
