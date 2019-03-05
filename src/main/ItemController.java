@@ -29,18 +29,28 @@ public class ItemController {
 
         header.setText("Checkout-EWB Ver."+Main.VERSION);
 
-        if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
-            DataManager.loadData();
-        }
-        if (!DataManager.items.isEmpty()) {
-            itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
-            itemSelect.setValue(DataManager.items.get(0));
-            selectedItem = itemSelect.getValue();
-        }
+        if (Main.NETWORK_DATA_MANAGEMENT) {
 
-        if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
-            ownerSelect.setItems(DataManager.guests); //Populate the selector with the loaded Items
-            ownerSelect.getItems().sort(Guest::compareTo);
+            if (ConcurrentDataManager.needToLoadData()) { //If Data Hasn't Been Loaded Yet
+                ConcurrentDataManager.loadAllData(); //Load in all Data From Network
+            }
+
+            //TODO: Set Current Value in Form To a Valid Item That Isn't Selected at Any Network Location.
+
+        } else {
+            if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
+                DataManager.loadData();
+            }
+            if (!DataManager.items.isEmpty()) {
+                itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
+                itemSelect.setValue(DataManager.items.get(0));
+                selectedItem = itemSelect.getValue();
+            }
+
+            if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
+                ownerSelect.setItems(DataManager.guests); //Populate the selector with the loaded Items
+                ownerSelect.getItems().sort(Guest::compareTo);
+            }
         }
         updateForm(itemSelect.getValue()); //If this value is null, it will load a blank form.
     }

@@ -14,9 +14,10 @@ import javafx.stage.Stage;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
-import java.lang.reflect.Array;
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GuestController {
 
@@ -80,15 +81,25 @@ public class GuestController {
             updateGuestSelector(matchingList,matchingList.size() > 0 ? matchingList.get(0) : null);
         });
 
-        if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
-            DataManager.loadData();
-        }
-        if (!DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
-            guestSelect.setItems(DataManager.guests); //Populate the selector with the loaded guests
-            guestSelect.setValue(DataManager.guests.get(0));
-        }
-        updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
+        //Using Network Data Management
+        if (Main.NETWORK_DATA_MANAGEMENT) {
 
+            if (ConcurrentDataManager.needToLoadData()) { //If Data Hasn't Been Loaded Yet
+                ConcurrentDataManager.loadAllData(); //Load in all Data From Network
+            }
+            //TODO: Set Current Value in Form To a Valid Guest That Isn't Selected at Any Network Location.
+
+        } else { //Using Local Data Management
+
+            if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
+                DataManager.loadData();
+            }
+            if (!DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
+                guestSelect.setItems(DataManager.guests); //Populate the selector with the loaded guests
+                guestSelect.setValue(DataManager.guests.get(0));
+            }
+            updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
+        }
     }
 
     @FXML

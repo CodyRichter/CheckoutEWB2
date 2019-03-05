@@ -15,6 +15,8 @@ public class Main extends Application {
     public static AddOnController addOnController;
 
     public final static double VERSION = 2.1;
+    public final static boolean NETWORK_DATA_MANAGEMENT = false;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{

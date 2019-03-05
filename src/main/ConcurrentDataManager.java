@@ -19,6 +19,9 @@ public class ConcurrentDataManager {
     //Note: Order Matters. Place Folder Names as {Guest Directory, Item Directory, Transaction Directory}
     private static final String[] folders = {"Guests","Items","Transactions"};
 
+
+    private static boolean allDataLoaded = false;
+
     //
     // -------------------------------
     //          Loading Data
@@ -29,13 +32,13 @@ public class ConcurrentDataManager {
      * Loads all data into the program, from Guests, Items, and Transactions
      */
     public static void loadAllData() {
-
+        if (allDataLoaded) return;
         //TODO: Load All Items Into Program
 
         //TODO: Load All Guests Into Program
 
         //TODO: Load All Transactions Into Program
-
+        allDataLoaded = true;
     }
 
     /**
@@ -129,6 +132,15 @@ public class ConcurrentDataManager {
     //          Utility Methods
     // -----------------------------------
     //
+
+    /**
+     * Checks Whether All Data Has Been Loaded Into Program Yet. If Data Needs To Be Loaded, Return true
+     * @return Whether Data Needs to be loaded still
+     */
+    public static boolean needToLoadData() {
+        return !allDataLoaded;
+    }
+
 
     /**
      * Ensures that the network location chosen has the correct folders
