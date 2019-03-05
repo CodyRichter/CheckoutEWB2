@@ -20,7 +20,7 @@ import java.util.*;
 
 public class GuestController {
 
-    public HashMap<String, TextField> textFields; //Hashmap containing all textfields in program
+    public HashMap<String, TextInputControl> textFields; //Hashmap containing all textfields in program
     private StringBuilder searchWordTyped = new StringBuilder();
 
     public GuestController() {
@@ -38,6 +38,7 @@ public class GuestController {
         textFields.put("lastName", lastName);
         textFields.put("phoneNumber", phoneNumber);
         textFields.put("emailAddress", emailAddress);
+        textFields.put("address", address);
 
         header.setText("Checkout-EWB Ver."+Main.VERSION);
 
@@ -98,6 +99,9 @@ public class GuestController {
 
     @FXML
     public TextField firstName, lastName, phoneNumber, emailAddress;
+
+    @FXML
+    public TextArea address;
 
     @FXML
     public Button manageAddOns, saveButton, switchButton, managePayments;
@@ -176,6 +180,14 @@ public class GuestController {
     public void removeGuest() {
         Guest g = guestSelect.getValue();
         if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
+
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setTitle("Remove Guest");
+        a.setHeaderText("Confirm Deleting of Guest: " + g.getNumber());
+        a.setContentText("Are you sure that you want to delete this guest? All information will be lost forever. (A long time)");
+        a.showAndWait();
+        if (a.getResult() != ButtonType.OK) return;
+
         g.free();
         DataManager.guests.remove(g); //Remove guest from master list
         if (DataManager.guests.size() > 0) {
@@ -367,7 +379,7 @@ public class GuestController {
     public void updateForm(Guest g) {
         itemList.getChildren().clear();
         if (g == null) { //If the guest that is being loaded is null, clear the form and reset it to default state
-            for (TextField t : textFields.values()) { //Iterate through all textFields and wipe them
+            for (TextInputControl t : textFields.values()) { //Iterate through all textFields and wipe them
                 t.setText("");
                 t.setDisable(true);
             }
@@ -378,7 +390,7 @@ public class GuestController {
         }
 
         for (String s : textFields.keySet()) {
-            TextField t = textFields.get(s); //Load desired TextField from HashMap
+            TextInputControl t = textFields.get(s); //Load desired TextField from HashMap
             t.setDisable(false);
             t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }

@@ -304,7 +304,7 @@ public class DataManager {
             for (Guest g : guests) { //Iterate through all lines in the guest array list
                 ArrayList<String> lineToAdd = new ArrayList<>();
                 lineToAdd.add("" + g.getNumber());
-                lineToAdd.addAll(g.getAll());
+                lineToAdd.addAll(cleanAll(g.getAll())); //Note: must clean all to remove problematic characters
                 lineToAdd.add(arrayListToDelimitedString(g.getItemNumbersAsList(), ";")); //Add All Guest Items
                 lineToAdd.add(arrayListToDelimitedString(g.getAddOnItemsAsList(), ";")); //All All Guest Add-On Items
                 guestFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
@@ -492,6 +492,18 @@ public class DataManager {
         result = result.replace('|', ' ');
         result = result.replace(';', ' ');
         return result;
+    }
+
+    /**
+     * Removes all problematic characters from an arraylist of strings
+     * Order is preserved
+     * @param s ArrayList of String to clean
+     * @return Clean Arraylist
+     */
+    public static ArrayList<String> cleanAll(ArrayList<String> s) {
+        ArrayList<String> cleanList = new ArrayList<>();
+        s.forEach(x -> cleanList.add(clean(x)));
+        return cleanList;
     }
 
 }

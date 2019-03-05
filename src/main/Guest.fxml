@@ -9,6 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="300" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuestController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500" minWidth="300" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.GuestController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -91,30 +92,38 @@
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="1">
         <VBox alignment="CENTER">
-            <Label alignment="CENTER" text="First Name:" />
-            <TextField fx:id="firstName" />
+            <TextField fx:id="firstName" promptText="First Name">
+            <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin></TextField>
         </VBox>
+         <TextField fx:id="lastName" promptText="Last Name" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-        <VBox alignment="CENTER">
-            <Label alignment="CENTER" text="Last Name:" />
-            <TextField fx:id="lastName" />
-        </VBox>
+         <TextField fx:id="phoneNumber" promptText="Phone Number">
+         <FlowPane.margin>
+            <Insets bottom="10.0" />
+         </FlowPane.margin>
+      </TextField>
+         <TextField fx:id="emailAddress" promptText="Email Address" />
+        <VBox alignment="CENTER" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-        <VBox alignment="CENTER">
-            <Label alignment="CENTER" text="Phone Number:" />
-            <TextField fx:id="phoneNumber" />
-        </VBox>
+      <TextArea fx:id="address" prefHeight="60.0" prefWidth="170.0" promptText="Address" wrapText="true">
+         <font>
+            <Font name="Tahoma" size="12.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </TextArea>
+        <VBox alignment="CENTER" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="2">
         <Separator prefWidth="200.0" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-        <VBox alignment="CENTER">
-            <Label alignment="CENTER" text="Email Address:" />
-            <TextField fx:id="emailAddress" />
-        </VBox>
+        <VBox alignment="CENTER" />
         <VBox alignment="CENTER" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
