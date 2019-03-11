@@ -38,27 +38,21 @@ public class ConcurrentDataManager {
         //TODO: Load All Guests Into Program
 
         //TODO: Load All Transactions Into Program
+
         allDataLoaded = true;
     }
 
     /**
      * Loads in the updated data for a specific Guest or Item from File. Any Existing Information In This
      * Entry Will Be Overwritten.
-     * @param g Guest to update
+     * @param s File Number
      */
-    public static void loadData(Guest g) {
-        setupNetworkLocation(); //Ensure Network Location is Correctly Set Up Before Accessing Fields
+    public static Guest loadGuestData(String s) {
+        Guest g = null;
 
-    }
+        //TODO: Load Guest File Data into g
 
-    /**
-     * Loads in the updated data for a specific Guest or Item from File. Any Existing Information In This
-     * Entry Will Be Overwritten.
-     * @param i Item to update
-     */
-    public static void loadData(Item i) {
-        setupNetworkLocation(); //Ensure Network Location is Correctly Set Up Before Accessing Fields
-
+        return g;
     }
 
     //
@@ -156,3 +150,4 @@ public class ConcurrentDataManager {
         }
     }
 }
+
