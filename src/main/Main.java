@@ -14,8 +14,7 @@ public class Main extends Application {
     public static PaymentController paymentController;
     public static AddOnController addOnController;
 
-    public final static double VERSION = 2.1;
-    public final static boolean NETWORK_DATA_MANAGEMENT = false;
+    public final static double VERSION = 2.5;
 
 
     @Override
