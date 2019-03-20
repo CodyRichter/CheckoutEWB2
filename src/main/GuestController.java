@@ -468,8 +468,8 @@ public class GuestController {
         c.clear();
         //temp.forEach(value -> c.add(value));
         c.addAll(temp);
-        guestSelect.getItems().sort(GuestFile::compareTo);
         guestSelect.setItems(c);
+        guestSelect.getItems().sort(GuestFile::compareTo);
         guestSelect.setValue(g);
     }
 
