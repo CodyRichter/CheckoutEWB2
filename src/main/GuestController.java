@@ -1,6 +1,5 @@
 package main;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,13 +11,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.ConcurrentManagement.DataType;
 import main.ConcurrentManagement.GuestFile;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("Duplicates")
 public class GuestController {
@@ -209,6 +209,7 @@ public class GuestController {
         ConcurrentDataManager.guests.add(newGuestFile);
         updateGuestSelector(ConcurrentDataManager.guests,newGuestFile);
         guestSelect.setValue(newGuestFile);
+        guestSelect.setDisable(false);
     }
 
     /**
@@ -233,6 +234,7 @@ public class GuestController {
         if (ConcurrentDataManager.guests.size() > 0) {
             updateGuestSelector(ConcurrentDataManager.guests, ConcurrentDataManager.guests.get(0));
             updateForm(ConcurrentDataManager.guests.get(0)); //Update fields in form
+            guestSelect.setDisable(false);
         } else { //Wipe & Disable Form
             updateForm(null);
             guestSelect.setDisable(true);

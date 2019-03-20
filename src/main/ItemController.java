@@ -303,6 +303,7 @@ public class ItemController {
      */
     @FXML
     public void changePages() {
+        saveForm();
         try {
             Stage stage = (Stage) itemName.getScene().getWindow();
             stage.setMinHeight(600);

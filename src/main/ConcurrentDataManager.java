@@ -2,13 +2,8 @@ package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 import main.ConcurrentManagement.GuestFile;
 import main.ConcurrentManagement.TransactionFile;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.AddOnItem;
-import main.FXMLAddOn.PaymentContainer;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -108,9 +103,12 @@ public class ConcurrentDataManager {
                 //
                 // Correctly Enter The Hashmap Fields
                 //
-
-                i.add(header.get(1),line.get(1));
-                i.add(header.get(2),line.get(2));
+                if (header.size() >= 2 && line.size() >= 2) {
+                    i.add(header.get(1), line.get(1));
+                }
+                if (header.size() >= 3 && line.size() >= 3) {
+                    i.add(header.get(2), line.get(2));
+                }
 
                 items.add(i);
             }
