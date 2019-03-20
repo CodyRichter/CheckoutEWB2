@@ -1,5 +1,6 @@
 package main;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,18 +12,21 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.DataType;
+import main.ConcurrentManagement.GuestFile;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+@SuppressWarnings("Duplicates")
 public class GuestController {
 
-    public HashMap<String, TextInputControl> textFields; //Hashmap containing all textfields in program
+    private HashMap<String, TextInputControl> textFields; //Hashmap containing all textfields in program
     private StringBuilder searchWordTyped = new StringBuilder();
+    public static GuestFile selectedGuest = null;
+    public static Guest selectedGuestLoaded = null;
 
     public GuestController() {
 
@@ -43,6 +47,7 @@ public class GuestController {
 
         header.setText("Checkout-EWB Ver."+Main.VERSION);
 
+
         currSearch.setVisible(false);
         //
         // Allows User to Search Through Guests
@@ -50,7 +55,7 @@ public class GuestController {
         guestSelect.setOnKeyPressed((KeyEvent e) -> {
             if (guestSelect.isDisabled()) return; //Ensure Box is Functional\
             if (e.getCode() == KeyCode.ESCAPE) { //If ESC is Pressed, Clear Search Results and Reset Items in Box
-                updateGuestSelector(DataManager.guests,DataManager.guests.get(0));
+                updateGuestSelector(ConcurrentDataManager.guests,ConcurrentDataManager.guests.get(0));
                 searchWordTyped = new StringBuilder(); //Clear Word
                 currSearch.setVisible(false);
 
@@ -66,14 +71,14 @@ public class GuestController {
             }
 
             //Run the search on the characters inputted so far
-            ObservableList<Guest> matchingList = FXCollections.observableArrayList();
+            ObservableList<GuestFile> matchingList = FXCollections.observableArrayList();
             String goal = searchWordTyped.toString();
 
             //Show User Current Search
             currSearch.setVisible(true);
             currSearch.setText(goal);
 
-            for (Guest g : DataManager.guests) {
+            for (GuestFile g : ConcurrentDataManager.guests) {
                 if (g.toString().toLowerCase().contains(goal.toLowerCase())) {
                     matchingList.add(g);
                 }
@@ -81,47 +86,43 @@ public class GuestController {
             updateGuestSelector(matchingList,matchingList.size() > 0 ? matchingList.get(0) : null);
         });
 
+
         //Using Network Data Management
-        if (Main.NETWORK_DATA_MANAGEMENT) {
+        ConcurrentDataManager.loadAllData(); //Load in all Data From Network
 
-            if (ConcurrentDataManager.needToLoadData()) { //If Data Hasn't Been Loaded Yet
-                ConcurrentDataManager.loadAllData(); //Load in all Data From Network
-            }
-            //TODO: Set Current Value in Form To a Valid Guest That Isn't Selected at Any Network Location.
 
-        } else { //Using Local Data Management
-
-            if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
-                DataManager.loadData();
-            }
-            if (!DataManager.guests.isEmpty()) { //Ensure that the guest list has elements in it
-                guestSelect.setItems(DataManager.guests); //Populate the selector with the loaded guests
-                guestSelect.setValue(DataManager.guests.get(0));
-            }
-            updateForm(guestSelect.getValue()); //If this value is null, it will load a blank form.
+        guestSelect.setItems(ConcurrentDataManager.guests);
+        if (!guestSelect.getItems().isEmpty()) {
+            updateForm(guestSelect.getItems().get(0));
+            guestSelect.setValue(guestSelect.getItems().get(0));
+        } else {
+            updateForm(null);
+            guestSelect.setDisable(true);
         }
+        updateGuestSelector(ConcurrentDataManager.guests,guestSelect.getValue());
     }
 
-    @FXML
-    public MenuItem save, load, saveAndExit, newGuest, removeGuest;
 
     @FXML
-    public ComboBox<Guest> guestSelect;
+    private MenuItem save, saveAndExit, newGuest, removeGuest;
 
     @FXML
-    public TextField firstName, lastName, phoneNumber, emailAddress;
+    private ComboBox<GuestFile> guestSelect;
 
     @FXML
-    public TextArea address;
+    private TextField firstName, lastName, phoneNumber, emailAddress;
 
     @FXML
-    public Button manageAddOns, saveButton, switchButton, managePayments;
+    private TextArea address;
 
     @FXML
-    public VBox itemList;
+    private Button manageAddOns, saveButton, switchButton, managePayments;
 
     @FXML
-    public Label currSearch,header;
+    private VBox itemList;
+
+    @FXML
+    private Label currSearch,header;
     //
     // --------------------------------------
     // Menu Bar Interactions
@@ -132,29 +133,26 @@ public class GuestController {
      * Saves current program data into .csv file
      */
     @FXML
-    public void saveDataToFile() {
-        if (guestSelect.getValue() != null)
-            saveForm(); //Saves all fields in form to the guest object
-        DataManager.saveData();
-    }
-
-    /**
-     * Loads data into program from previous .csv save file.
-     */
-    @FXML
-    public void loadDataFromFile() {
-        DataManager.loadData(); //Loads data from file
-        if (DataManager.guests.size() > 0) { //If there are any guests loaded, set the page to the first one
-            loadGuestIntoForm(DataManager.guests.get(0));
+    void saveGuestData() {
+        GuestFile gf = guestSelect.getValue();
+        if (gf == null) return;
+        for (String s : textFields.keySet()) {
+            selectedGuestLoaded.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
         }
+
+        GuestFile newGuestFile = gf.save(selectedGuestLoaded);
+        updateGuestSelector(ConcurrentDataManager.guests,newGuestFile); //Update selector to reflect on any changes that might be made when saving guest (e.g.: name change)
+        updateForm(newGuestFile);
     }
 
     /**
      * Saves program data and exits program after saving.
      */
     @FXML
-    public void saveDataToFileAndExit() {
-        saveDataToFile();
+    public void saveGuestDataAndExit() {
+        if (guestSelect.getValue() == null) exit();
+        guestSelect.getValue().unlock();
+        saveGuestData();
         exit();
     }
 
@@ -163,7 +161,7 @@ public class GuestController {
      * used when reloading the guest selector from another page.
      * @param g Guest's data to load.
      */
-    public void loadGuestIntoForm(Guest g) {
+    void loadGuestIntoForm(GuestFile g) {
         guestSelect.getItems().sorted();
         guestSelect.setValue(g);
         updateForm(g);
@@ -176,11 +174,41 @@ public class GuestController {
      */
     @FXML
     public void createNewGuest() {
-        Guest g = new Guest();
 
-        DataManager.guests.add(g); //Add guest to total guest list
+        double gNum = -1;
 
-        updateGuestSelector(DataManager.guests,g);
+        TextInputDialog d = new TextInputDialog();
+        d.setTitle("Create New Guest");
+        d.setContentText("Please enter the desired Guest number. Leave blank to automatically assign.");
+        d.showAndWait();
+        if (d.getResult() == null || d.getResult().isEmpty()) {
+            while (!GuestFile.isNumberAvailable(gNum)) {
+                gNum++;
+            }
+        } else {
+            boolean success = true;
+            try {
+                gNum = Double.parseDouble(d.getResult());
+            } catch (Exception ignored) {
+                success = false;
+            }
+            if (!success || gNum < 0 || !GuestFile.isNumberAvailable(gNum)) {
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setTitle("Error");
+                a.setHeaderText("Unable To Create Guest");
+                a.setContentText("The number you have chosen is not valid. Please ensure that it is formatted correctly and that it isn't already taken.");
+                a.showAndWait();
+                return;
+            }
+        }
+
+        Guest g = new Guest(true);
+        g.setNumber(gNum);
+        GuestFile newGuestFile = new GuestFile(g);
+        saveGuestData();
+        ConcurrentDataManager.guests.add(newGuestFile);
+        updateGuestSelector(ConcurrentDataManager.guests,newGuestFile);
+        guestSelect.setValue(newGuestFile);
     }
 
     /**
@@ -189,9 +217,10 @@ public class GuestController {
      */
     @FXML
     public void removeGuest() {
-        Guest g = guestSelect.getValue();
+        Guest g = selectedGuestLoaded;
         if (g == null) return; //If guestSelect has no items selected, don't try to removePayment nothing
 
+        //Confirm that you really want to delete this Guest
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
         a.setTitle("Remove Guest");
         a.setHeaderText("Confirm Deleting of Guest: " + g.getNumber());
@@ -199,22 +228,15 @@ public class GuestController {
         a.showAndWait();
         if (a.getResult() != ButtonType.OK) return;
 
-        g.free();
-        DataManager.guests.remove(g); //Remove guest from master list
-        if (DataManager.guests.size() > 0) {
-            updateGuestSelector(DataManager.guests, DataManager.guests.get(0));
-            updateForm(guestSelect.getValue()); //Update fields in form
+        ConcurrentDataManager.removeGuestFile(guestSelect.getValue());
+
+        if (ConcurrentDataManager.guests.size() > 0) {
+            updateGuestSelector(ConcurrentDataManager.guests, ConcurrentDataManager.guests.get(0));
+            updateForm(ConcurrentDataManager.guests.get(0)); //Update fields in form
         } else { //Wipe & Disable Form
-            guestSelect.setDisable(true);
             updateForm(null);
+            guestSelect.setDisable(true);
         }
-        removeGuest.setDisable(true);
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        removeGuest.setDisable(false);
-                    }}, 500);
     }
 
     /**
@@ -223,7 +245,7 @@ public class GuestController {
      * time of exiting.
      */
     @FXML
-    public void exit() {
+    private void exit() {
         System.exit(0);
     }
 
@@ -247,36 +269,25 @@ public class GuestController {
      */
     @FXML
     public void showGuestFromSelector() {
-        updateForm(guestSelect.getValue());
+
+        if (guestSelect.getValue() != null && guestSelect.getValue().isLocked()) { //Don't Load Guest if Open From Another Location
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("[Error] Unable To Open Guest File");
+            a.setHeaderText("Unable To Load Guest");
+            a.setContentText("The current Guest is currently open from another location. Please change guests at that computer in order to modify the data in this instance.");
+            a.showAndWait();
+            guestSelect.setValue(selectedGuest);
+            return;
+        }
+//        ObservableList<GuestFile> g = ConcurrentDataManager.guests;
+//        g.sort(GuestFile::compareTo);
+//        Platform.runLater(() -> guestSelect.setItems(g));
+
+        GuestFile currGuest = guestSelect.getValue();
+        updateForm(currGuest);
+        //updateGuestSelector(ConcurrentDataManager.guests,currGuest);
     }
 
-    /**
-     * Allow for the changing of the ID number of the currently selected Guest
-     */
-    @FXML
-    public void changeNumber() {
-        boolean success = false;
-        if (guestSelect.getValue() == null) return; //Ensure there is a selected Guest
-        TextInputDialog d = new TextInputDialog();
-        d.setTitle("Change Number");
-        d.setContentText("Enter a New Number For Guest. (Current Number: "+guestSelect.getValue().getNumber()+")");
-        d.showAndWait();
-        int newNumber;
-        try {
-            newNumber = Integer.parseInt(d.getResult());
-            if (newNumber >= 0 && guestSelect.getValue().setNumber(newNumber)) {
-                success = true;
-            }
-        } catch (Exception ignored) {}
-        if (d.getResult() != null && !d.getResult().isEmpty()) { //Inform User of Result of Operation
-            Alert a = new Alert((success ? Alert.AlertType.CONFIRMATION : Alert.AlertType.ERROR));
-            if (success) updateGuestSelector(DataManager.guests, guestSelect.getValue());
-            a.setTitle("Guest Number Change");
-            a.setHeaderText(success ? ("Number Change Success") : ("Number Change Failure."));
-            a.setContentText(success ? ("The Guest's number has been successfully changed!") : ("Unable to change Guest's Number to "+d.getResult()+"! Ensure that the new number is correctly formatted as an integer and that the number isn't already in use."));
-            a.showAndWait();
-        }
-    }
     //
     // --------------------------------------
     // Item Management
@@ -290,8 +301,8 @@ public class GuestController {
      */
     @FXML
     public void openAddOnMenu() {
-
-        saveForm();
+        guestSelect.getValue().unlock();
+        saveGuestData();
 
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
@@ -325,8 +336,8 @@ public class GuestController {
      */
     @FXML
     public void openPaymentWindow() {
-
-        saveForm();
+        guestSelect.getValue().unlock();
+        saveGuestData();
 
         try {
             Stage stage = (Stage) managePayments.getScene().getWindow();
@@ -385,11 +396,13 @@ public class GuestController {
      * Updates all fields in form to match the data of the current guest.
      * If the value passed to this method is null, the form will be wiped.
      *
-     * @param g Guest's data to load. (null to clear form)
+     * @param gf Guest's data to load from file. (null to clear form)
      */
-    public void updateForm(Guest g) {
-        itemList.getChildren().clear();
-        if (g == null) { //If the guest that is being loaded is null, clear the form and reset it to default state
+    private void updateForm(GuestFile gf) {
+        if (selectedGuest != null) {
+            selectedGuest.unlock();
+        }
+        if (gf == null) { //If the guest that is being loaded is null, clear the form and reset it to default state
             for (TextInputControl t : textFields.values()) { //Iterate through all textFields and wipe them
                 t.setText("");
                 t.setDisable(true);
@@ -397,13 +410,19 @@ public class GuestController {
             manageAddOns.setDisable(true);
             managePayments.setDisable(true);
             saveButton.setDisable(true);
+            selectedGuest = null;
+            selectedGuestLoaded = null;
             return;
         }
+        selectedGuest = gf;
+        selectedGuestLoaded = gf.load();
+        selectedGuest.lock();
+        itemList.getChildren().clear();
 
         for (String s : textFields.keySet()) {
             TextInputControl t = textFields.get(s); //Load desired TextField from HashMap
             t.setDisable(false);
-            t.setText(g.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
+            t.setText(selectedGuestLoaded.get(s)); //Set Value of TextField to Guest's Value For That Field. NullPointer will be caught in Guest Class if exists.
         }
 
         //If guest is loaded, enable buttons to get to other menus
@@ -413,7 +432,7 @@ public class GuestController {
 
         //Load all auction items into inventory
 
-        for (Item i : g.getItems()) {
+        for (Item i : selectedGuestLoaded.getItems()) {
             Label l = new Label();
             l.setText("$" + i.get("itemPrice") + " : " + i.get("itemName"));
             itemList.getChildren().add(l);
@@ -423,7 +442,7 @@ public class GuestController {
 
         HashMap<AddOnItem,Integer> addOnsInInventory = new HashMap<>();
 
-        for (AddOnContainer a : g.getAddOnItems()) {
+        for (AddOnContainer a : selectedGuestLoaded.getAddOnItems()) {
             //Get the current amount of the item. If it isn't in the map yet, there is now 1.
             int amount = addOnsInInventory.getOrDefault(a.getItemType(), 0);
             addOnsInInventory.put(a.getItemType(),amount+1);
@@ -435,25 +454,23 @@ public class GuestController {
             itemList.getChildren().add(l);
         }
 
-        if (g.getItems().isEmpty() && g.getAddOnItems().isEmpty()) itemList.getChildren().clear();
+        if (selectedGuestLoaded.getItems().isEmpty() && selectedGuestLoaded.getAddOnItems().isEmpty()) itemList.getChildren().clear();
     }
 
     /**
      * Updates the Guest selector with the new contents of the list.
      * @param c Collection to Update Selector With
-     * @param selectedGuest Guest to display information for
+     * @param g GuestFile to display information for
      */
-    private void updateGuestSelector(ObservableList c, Guest selectedGuest) {
-        if (selectedGuest == null) return;
-        Set<Guest> temp = new HashSet<>(c);
+    private void updateGuestSelector(ObservableList<GuestFile> c, GuestFile g) {
+        if (g == null || c.size() == 0) return;
+        Set<GuestFile> temp = new HashSet<>(c);
         c.clear();
+        //temp.forEach(value -> c.add(value));
         c.addAll(temp);
-        c.sorted();
+        guestSelect.getItems().sort(GuestFile::compareTo);
         guestSelect.setItems(c);
-        guestSelect.getItems().sort(Guest::compareTo);
-        guestSelect.setValue(selectedGuest);
-        guestSelect.setVisibleRowCount(c.size() < 10 ? c.size() : 10);
-        guestSelect.setDisable(false);
+        guestSelect.setValue(g);
     }
 
     /**
@@ -462,26 +479,10 @@ public class GuestController {
     @FXML
     private void clearSearch() {
         searchWordTyped = new StringBuilder();
-        updateGuestSelector(DataManager.guests,DataManager.guests.get(0));
+        updateGuestSelector(ConcurrentDataManager.guests,ConcurrentDataManager.guests.get(0));
         currSearch.setVisible(false);
     }
 
-    /**
-     * Saves all values currently loaded into the form to the Guest's data class file.
-     * This method must run before exiting/loading new window, or all changes made will be lost
-     * from lastSave->present.
-     */
-    @FXML
-    public void saveForm() {
-        Guest g = guestSelect.getValue();
-        for (String s : textFields.keySet()) {
-            g.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
-        }
-
-        //Note: all payment information is handled from the PaymentController.
-
-        guestSelect.getItems().sort(Guest::compareTo);
-    }
 
     /**
      * Loads the FXML page for Items, and switches the current window to that. Note that
@@ -489,6 +490,11 @@ public class GuestController {
      */
     @FXML
     public void changePages() {
+        if (guestSelect.getValue() != null) {
+            guestSelect.getValue().unlock();
+            saveGuestData();
+        }
+
         try {
             Stage stage = (Stage) firstName.getScene().getWindow();
             stage.setMinHeight(300);
@@ -507,4 +513,10 @@ public class GuestController {
             System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
         }
     }
+
+    //
+    // ---------------------------
+    //
+    // ---------------------------
+    //
 }

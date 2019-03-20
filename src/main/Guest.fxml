@@ -39,9 +39,8 @@
         </GridPane.margin>
         <MenuBar fx:id="menu">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem fx:id="save" mnemonicParsing="false" onAction="#saveDataToFile" text="Save Data" />
-                <MenuItem fx:id="load" mnemonicParsing="false" onAction="#loadDataFromFile" text="Load Data" />
-                <MenuItem fx:id="saveAndExit" mnemonicParsing="false" onAction="#saveDataToFileAndExit" text="Save and Exit" />
+                <MenuItem fx:id="save" mnemonicParsing="false" onAction="#saveGuestData" text="Save Data" />
+                <MenuItem fx:id="saveAndExit" mnemonicParsing="false" onAction="#saveGuestDataAndExit" text="Save and Exit" />
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#showDocumentation" text="Documentation" />
@@ -60,12 +59,9 @@
                <Font name="System Bold" size="10.0" />
             </font>
          </Label>
-         <HBox alignment="CENTER" spacing="4.0">
-            <children>
-               <Label onMouseReleased="#changeNumber" text="#" />
-                  <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0" />
-            </children>
-         </HBox>
+            <HBox alignment="CENTER" spacing="4.0">
+                <ComboBox fx:id="guestSelect" onAction="#showGuestFromSelector" prefWidth="150.0"/>
+            </HBox>
         </VBox>
     </FlowPane>
     <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -91,22 +87,20 @@
         </VBox>
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.rowIndex="1">
-        <VBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="10.0">
             <TextField fx:id="firstName" promptText="First Name">
             <VBox.margin>
-               <Insets bottom="10.0" />
+               <Insets />
             </VBox.margin></TextField>
+            <TextField fx:id="lastName" promptText="Last Name" />
         </VBox>
-         <TextField fx:id="lastName" promptText="Last Name" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <TextField fx:id="phoneNumber" promptText="Phone Number">
-         <FlowPane.margin>
-            <Insets bottom="10.0" />
-         </FlowPane.margin>
-      </TextField>
-         <TextField fx:id="emailAddress" promptText="Email Address" />
-        <VBox alignment="CENTER" />
+        <VBox alignment="CENTER" spacing="10.0">
+         <children>
+               <TextField fx:id="phoneNumber" promptText="Phone Number" />
+               <TextField fx:id="emailAddress" promptText="Email Address" />
+         </children></VBox>
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
       <TextArea fx:id="address" prefHeight="60.0" prefWidth="170.0" promptText="Address" wrapText="true">
@@ -160,6 +154,6 @@
         <Button fx:id="managePayments" mnemonicParsing="false" onAction="#openPaymentWindow" text="Manage Payments" />
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="50.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveForm" text="Save" />
+        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveGuestData" text="Save" />
     </FlowPane>
 </GridPane>

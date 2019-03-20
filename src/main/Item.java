@@ -33,9 +33,6 @@ public class Item implements Comparable<Item> {
      * @return Successful set of item's number
      */
     public boolean setNumber(int num) {
-        if (usedNumbers.contains(num)) {
-            return false; //Return false if the item's desired number is already in use.
-        }
         this.number = num;
         usedNumbers.add(num); //Add the new number to the list of current numbers.
         return true;
@@ -143,4 +140,13 @@ public class Item implements Comparable<Item> {
         if (i1.number > i2.number) return 1; //If this is greater than that
         return -1; //If this is less than that
     }
+
+    public static boolean isNumberAvailable(int number) {
+        if (number < 0) return false;
+        for (Item i : ConcurrentDataManager.items) {
+            if (number == i.number) return false;
+        }
+        return true;
+    }
+
 }

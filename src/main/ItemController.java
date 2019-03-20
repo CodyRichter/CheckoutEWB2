@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.GuestFile;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -29,29 +30,17 @@ public class ItemController {
 
         header.setText("Checkout-EWB Ver."+Main.VERSION);
 
-        if (Main.NETWORK_DATA_MANAGEMENT) {
-
-            if (ConcurrentDataManager.needToLoadData()) { //If Data Hasn't Been Loaded Yet
-                ConcurrentDataManager.loadAllData(); //Load in all Data From Network
-            }
-
-            //TODO: Set Current Value in Form To a Valid Item That Isn't Selected at Any Network Location.
-
-        } else {
-            if (DataManager.needToLoadData()) { //If Data from .csv file hasn't been loaded, load the data into the form
-                DataManager.loadData();
-            }
-            if (!DataManager.items.isEmpty()) {
-                itemSelect.setItems(DataManager.items); //Populate the selector with the loaded Items
-                itemSelect.setValue(DataManager.items.get(0));
+            if (!ConcurrentDataManager.items.isEmpty()) {
+                itemSelect.setItems(ConcurrentDataManager.items); //Populate the selector with the loaded Items
+                itemSelect.setValue(ConcurrentDataManager.items.get(0));
                 selectedItem = itemSelect.getValue();
             }
 
-            if (!DataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
-                ownerSelect.setItems(DataManager.guests); //Populate the selector with the loaded Items
-                ownerSelect.getItems().sort(Guest::compareTo);
+            if (!ConcurrentDataManager.guests.isEmpty()) { //Ensure that the Item list has elements in it
+                ownerSelect.setItems(ConcurrentDataManager.guests); //Populate the selector with the loaded Items
+                ownerSelect.getItems().sort(GuestFile::compareTo);
             }
-        }
+
         updateForm(itemSelect.getValue()); //If this value is null, it will load a blank form.
     }
 
@@ -62,7 +51,7 @@ public class ItemController {
     public ComboBox<Item> itemSelect;
 
     @FXML
-    public ComboBox<Guest> ownerSelect;
+    public ComboBox<GuestFile> ownerSelect;
 
     @FXML
     public TextField itemName,itemPrice;
@@ -83,9 +72,7 @@ public class ItemController {
      */
     @FXML
     public void saveDataToFile() {
-        if (itemSelect.getValue() != null)
-            saveForm(); //Saves all fields in form to the item object
-        DataManager.saveData();
+        ConcurrentDataManager.saveItemData();
     }
 
     /**
@@ -93,9 +80,9 @@ public class ItemController {
      */
     @FXML
     public void loadDataFromFile() {
-        DataManager.loadData(); //Loads data from file
-        if (DataManager.items.size() > 0) { //If there are any items loaded, set the page to the first one
-            loadItemIntoForm(DataManager.items.get(0));
+        ConcurrentDataManager.loadItemData(); //Loads data from file
+        if (ConcurrentDataManager.items.size() > 0) { //If there are any items loaded, set the page to the first one
+            loadItemIntoForm(ConcurrentDataManager.items.get(0));
         }
     }
 
@@ -127,16 +114,44 @@ public class ItemController {
      */
     @FXML
     public void newItem() {
+
+        int iNum = -1;
+
+        TextInputDialog d = new TextInputDialog();
+        d.setTitle("Create New Item");
+        d.setContentText("Please enter the desired Item number. Leave blank to automatically assign.");
+        d.showAndWait();
+        if (d.getResult() == null || d.getResult().isEmpty()) {
+            while (!Item.isNumberAvailable(iNum)) {
+                iNum++;
+            }
+        } else {
+            boolean success = true;
+            try {
+                iNum = Integer.parseInt(d.getResult());
+            } catch (Exception ignored) {
+                success = false;
+            }
+            if (!success || iNum < 0 || !GuestFile.isNumberAvailable(iNum)) {
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setTitle("Error");
+                a.setHeaderText("Unable To Create Item");
+                a.setContentText("The number you have chosen is not valid. Please ensure that it is formatted correctly and that it isn't already taken.");
+                a.showAndWait();
+                return;
+            }
+        }
         Item i = new Item();
+        i.setNumber(iNum);
 
-        DataManager.items.add(i); //Add guest to total guest list
+        ConcurrentDataManager.items.add(i); //Add guest to total guest list
 
-        Set<Item> temp = new HashSet<>(DataManager.items);
-        DataManager.items.clear();
-        DataManager.items.addAll(temp);
-        DataManager.items.sorted();
+        Set<Item> temp = new HashSet<>(ConcurrentDataManager.items);
+        ConcurrentDataManager.items.clear();
+        ConcurrentDataManager.items.addAll(temp);
+        ConcurrentDataManager.items.sorted();
 
-        itemSelect.setItems(DataManager.items);
+        itemSelect.setItems(ConcurrentDataManager.items);
         itemSelect.setValue(i);
     }
 
@@ -148,10 +163,10 @@ public class ItemController {
     public void removeItem() {
         if (itemSelect.getValue() == null) return; //If ItemSelect has no items selected, don't try to removePayment nothing
         itemSelect.getValue().free();
-        DataManager.items.remove(itemSelect.getValue()); //Remove Item from master list
+        ConcurrentDataManager.items.remove(itemSelect.getValue()); //Remove Item from master list
         itemSelect.getItems().remove(itemSelect.getValue()); //Remove Item from combo box
-        if (!DataManager.items.isEmpty()) //Try to update next value to display
-            itemSelect.setValue(DataManager.items.get(0));
+        if (!ConcurrentDataManager.items.isEmpty()) //Try to update next value to display
+            itemSelect.setValue(ConcurrentDataManager.items.get(0));
         else itemSelect.getItems().clear();
         updateForm(itemSelect.getValue()); //Update fields in form
         removeItem.setDisable(true);
@@ -203,10 +218,13 @@ public class ItemController {
      */
     @FXML
     public void setItemOwner() {
-        Guest g = ownerSelect.getValue();
-        if (g == null || g.getNumber() == -1) return; //If it is a temporary guest, exit method
+        GuestFile gf = ownerSelect.getValue();
+        if (gf == null) return;
+        Guest g = gf.load();
+        if (g == null || gf == GuestFile.noOwner) return; //If guest does not exist for owner, exit method
         g.addItem(itemSelect.getValue());
         ownerSelect.setDisable(true);
+        gf.save(g); //Save the updated Guest file with the new item in inventory
     }
 
     /**
@@ -215,11 +233,12 @@ public class ItemController {
      */
     @FXML
     public void removeItemOwner() {
-        ownerSelect.getValue().removeItem(selectedItem);
+        GuestFile gf = ownerSelect.getValue();
+        Guest owner = gf.load();
+        owner.removeItem(selectedItem);
+        gf = gf.save(owner);
         ownerSelect.setDisable(false);
-        ownerSelect.setValue(new Guest(true,"No Owner"));
-
-
+        ownerSelect.setValue(GuestFile.noOwner);
     }
 
     //
@@ -241,7 +260,7 @@ public class ItemController {
             itemPrice.setDisable(true);
             saveButton.setDisable(true);
             ownerSelect.setDisable(true);
-            ownerSelect.setValue(new Guest (true,"No Owner"));
+            ownerSelect.setValue(GuestFile.noOwner);
             removeOwner.setDisable(true);
             return;
         }
@@ -253,10 +272,11 @@ public class ItemController {
         saveButton.setDisable(false);
         removeOwner.setDisable(false);
         ownerSelect.setDisable(false);
-        ownerSelect.setValue(new Guest (true,"No Owner"));
-        for (Guest g : DataManager.guests) { //Loop through all loaded Items and see if the guest has the item
+        ownerSelect.setValue(GuestFile.noOwner);
+        for (GuestFile gf : ConcurrentDataManager.guests) { //Loop through all loaded Items and see if the guest has the item
+            Guest g = gf.load();
             if (g.getItems().contains(i)) {
-                ownerSelect.setValue(g);
+                ownerSelect.setValue(gf);
                 ownerSelect.setDisable(true);
                 break;
             }
@@ -275,6 +295,7 @@ public class ItemController {
         i.add("itemPrice",itemPrice.getText()); //Puts Each TextField Into Item's HashMap
 
         itemSelect.getItems().sort(Item::compareTo);
+        saveDataToFile(); //Save all changes to file as well
     }
 
     /**
@@ -295,9 +316,9 @@ public class ItemController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Error Loading Page: Guest.fxml.");
             System.out.println("Program Will Continue To Run To Allow Data Saving. Restart As Soon As Possible.");
+            e.printStackTrace();
         }
     }
 

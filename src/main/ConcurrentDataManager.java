@@ -1,9 +1,24 @@
 package main;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
+import main.ConcurrentManagement.GuestFile;
+import main.ConcurrentManagement.TransactionFile;
+import main.FXMLAddOn.AddOnContainer;
+import main.FXMLAddOn.AddOnItem;
 import main.FXMLAddOn.PaymentContainer;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Unlike the traditional data manager, this is intended to be used over the network with multiple instances of the program
@@ -15,12 +30,14 @@ import java.io.IOException;
 public class ConcurrentDataManager {
 
     //Location where common files are stored on network
-    private static final String networkLocation = "//SENARII/Users/Cody/Documents/CheckoutEWB";
+    public static final String networkLocation = System.getProperty("user.home") + "/Desktop/CheckoutEWB";
     //Note: Order Matters. Place Folder Names as {Guest Directory, Item Directory, Transaction Directory}
-    private static final String[] folders = {"Guests","Items","Transactions"};
+    public static final String[] folders = {"Guests", "Transactions"};
 
+    public static ObservableList<Item> items = FXCollections.observableArrayList();
+    public static ObservableList<GuestFile> guests = FXCollections.observableArrayList();
+    public static ObservableList<TransactionFile> transactions = FXCollections.observableArrayList();
 
-    private static boolean allDataLoaded = false;
 
     //
     // -------------------------------
@@ -32,27 +49,73 @@ public class ConcurrentDataManager {
      * Loads all data into the program, from Guests, Items, and Transactions
      */
     public static void loadAllData() {
-        if (allDataLoaded) return;
-        //TODO: Load All Items Into Program
+        guests.clear();
+        transactions.clear();
+        items.clear();
+        setupNetworkLocation();
 
-        //TODO: Load All Guests Into Program
+        loadItemData();
+
+        File itemDirectory = new File(networkLocation + "/" + folders[0]);
+        for (File f : Objects.requireNonNull(itemDirectory.listFiles())) {
+            if (!getFileExtension(f).equals(".csv")) return;
+            GuestFile gf = new GuestFile(f.getAbsolutePath());
+            guests.add(gf);
+        }
 
         //TODO: Load All Transactions Into Program
 
-        allDataLoaded = true;
     }
 
+
     /**
-     * Loads in the updated data for a specific Guest or Item from File. Any Existing Information In This
-     * Entry Will Be Overwritten.
-     * @param s File Number
+     * Loads in all items from file.
      */
-    public static Guest loadGuestData(String s) {
-        Guest g = null;
+    public static void loadItemData() {
+        File itemFile = new File(networkLocation+"/Items.csv");
+        if (itemFile.exists()) {
 
-        //TODO: Load Guest File Data into g
+            ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(readFile(itemFile).split("\n")));
+            ArrayList<String> header = new ArrayList<>(Arrays.asList(itemFileData.get(0).trim().split(",[ ]*")));
 
-        return g;
+            for (int k = 1; k < itemFileData.size(); k++) { //Loop through everything but header row
+                String lineAsString = itemFileData.get(k);
+                ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
+
+                for (int n = 0; n < line.size(); n++) { //Remove all special characters from loaded data
+                    String[] toReplace = {"\n","\t","\r"};
+                    for (String s : toReplace) {
+                        line.set(n, line.get(n).replaceAll(s, ""));
+                    }
+                }
+
+                //System.out.println(line.get(0) + " | " + line.get(1) + " | " + line.get(2));
+                Item i = new Item();
+
+                //
+                // Correctly Parse and Set The Item's Number
+                //
+
+                int number = -1;
+                try {
+                    number = Integer.parseInt(line.get(0));
+                } catch (Exception e) {
+                    System.out.println("Error Loading Data: Unable To Parse Item Number.");
+                }
+                i.setNumber(number);
+
+
+                //
+                // Correctly Enter The Hashmap Fields
+                //
+
+                i.add(header.get(1),line.get(1));
+                i.add(header.get(2),line.get(2));
+
+                items.add(i);
+            }
+
+        }
     }
 
     //
@@ -61,64 +124,54 @@ public class ConcurrentDataManager {
     // -------------------------------
     //
 
-
     /**
-     * Unlike the traditional data manager, this method will only update the saved data from a single loaded Guest or Item.
-     * @param g Guest to update data for
+     * Saves all data from the item List to a single CSV file
      */
-    public static void saveData(Guest g) {
-        setupNetworkLocation(); //Ensure Network Location is Correctly Set Up Before Accessing Fields
-        String fileContents = "";
+    public static void saveItemData() {
+        ArrayList<String> itemFileData = new ArrayList<>(); //Stores all of the data in the item file, line by line
 
-        //TODO: Write All Guest Data To CSV String
-
-        saveData(folders[0],""+g.getNumber(),fileContents);
-    }
-
-    /**
-     * Unlike the traditional data manager, this method will only update the saved data from a single loaded Guest or Item.
-     * @param i Item to update data for
-     */
-    public static void saveData(Item i) {
-        String fileContents = "";
-
-        //TODO: Write All Item Data To CSV String
-
-        saveData(folders[1],""+i.getNumber(),fileContents);
-    }
-
-    public static void saveData(PaymentContainer p) {
-        String fileContents = "";
-
-        //TODO: Write All Payment Data To CSV String
-
-        //TODO: Find Way To Give All Transactions Unique IDs.
-        saveData(folders[2],"",fileContents);
-    }
-
-    /**
-     * Generic Method For saving data.
-     * @param folder Subdirectory of network location containing the file to modify
-     * @param fileName Name Of File To Modify, Without File Extension
-     * @param fileContents New Contents Of File To Write
-     */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private static void saveData(String folder, String fileName, String fileContents) {
-        setupNetworkLocation(); //Ensure Network Location is Correctly Set Up Before Accessing Fields
-        // ------------------------------------------------------------
-        File f = new File(networkLocation+"/"+folder+"/"+fileName+".csv");
-        if (!f.exists()) { //Ensure That File Exists
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                System.out.println("[Error]: Critical Error Saving Data. Unable To Create Save File.");
-                e.printStackTrace();
+        if (!items.isEmpty()) {
+            ArrayList<String> header = new ArrayList<>();
+            header.add("number");
+            header.addAll(items.get(0).getHeader());
+            itemFileData.add(arrayListToDelimitedString(header, ","));
+            for (Item i : items) { //Iterate through all lines in the guest array list
+                ArrayList<String> lineToAdd = new ArrayList<>();
+                lineToAdd.add("" + i.getNumber());
+                lineToAdd.addAll(i.getAll());
+                itemFileData.add(arrayListToDelimitedString(lineToAdd, ",")); //Add all HashMap values from guest to the List
             }
         }
 
-        //TODO: Write The fileContents to the CSV file
+        String itemFileDataAsString;
+        StringBuilder sb = new StringBuilder();
+        for (String s : itemFileData) {
+            sb.append(s);
+            if (!itemFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+                sb.append("\n");
+            }
+        }
+        itemFileDataAsString = sb.toString();
 
-        //Note: No need to load the data into the program because if we are saving the data, we have the latest copy.
+        File itemFile = new File(networkLocation + "/Items.csv");
+        try { //Ensure Files Are Created
+            if (!itemFile.exists())   //Ensure file for items exists
+                //noinspection ResultOfMethodCallIgnored
+                itemFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error! Unable To Create New Item Data CSV File!");
+        }
+
+        FileWriter itemWriter;
+        try {
+            itemWriter = new FileWriter(networkLocation + "/Items.csv");
+            itemWriter.write(itemFileDataAsString);
+            itemWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error While Writing To CSV Files!");
+        }
     }
 
     //
@@ -127,14 +180,13 @@ public class ConcurrentDataManager {
     // -----------------------------------
     //
 
-    /**
-     * Checks Whether All Data Has Been Loaded Into Program Yet. If Data Needs To Be Loaded, Return true
-     * @return Whether Data Needs to be loaded still
-     */
-    public static boolean needToLoadData() {
-        return !allDataLoaded;
+    public static void removeGuestFile(GuestFile f) {
+        if (f.exists()) {
+         f.unlock(); //Unlock file
+         f.delete();
+        }
+        guests.remove(f);
     }
-
 
     /**
      * Ensures that the network location chosen has the correct folders
@@ -142,12 +194,100 @@ public class ConcurrentDataManager {
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void setupNetworkLocation() {
+        File dir = new File(networkLocation);
+        if (!dir.exists()) { //Create New Folder if Doesn't Exist
+            dir.mkdir();
+        }
+
         for (String s : folders) {
-            File f = new File(networkLocation+s);
+            File f = new File(networkLocation + "/" + s);
             if (!f.exists()) { //Create New Folder if Doesn't Exist
                 f.mkdir();
             }
         }
     }
+
+    /**
+     * Converts an ArrayList of Strings into a single string delimited by commas
+     *
+     * @param list List to be converted
+     * @return String with elements of list delimited by commas
+     */
+    public static String arrayListToDelimitedString(ArrayList<String> list, String delimiter) {
+        StringBuilder sb = new StringBuilder();
+        for (String val : list) {
+            sb.append(val); //Put in string
+            if (list.indexOf(val) != list.size() - 1) //Only add delimiter to elements that are not at the end
+                sb.append(delimiter);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Reads the contents of a file to a single string
+     * @param f File to read contents of
+     * @return String containing all of the file contents
+     */
+    public static String readFile(File f) {
+        if (f == null || !f.exists()) return "";
+
+        byte[] encoded = {};
+
+        try {
+            encoded = Files.readAllBytes(Paths.get(f.getAbsolutePath()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error Loading File: " + f.getName());
+        }
+        return new String(encoded, Charset.defaultCharset());
+    }
+
+    /**
+     * Returns the extension of the file
+     * @param file File to get extension of
+     * @return File extension (including .)
+     */
+    private static String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return "";
+        }
+        return name.substring(lastIndexOf);
+    }
+
+    /**
+     * Removes all problematic characters for CSV files from a String
+     *
+     * @param input String to have special characters removed from
+     * @return Clean string safe to be put into CSV file
+     */
+    public static String clean(String input) {
+        String result = input.replace('\n', ' ');
+        result = result.replace('\r', ' ');
+        result = result.replace('\n', ' ');
+        result = result.replace('\t', ' ');
+        result = result.replace('\\', ' ');
+        result = result.replace('\"', ' ');
+        result = result.replace('\'', ' ');
+        result = result.replace(',', ' ');
+        result = result.replace('_', ' ');
+        result = result.replace('|', ' ');
+        result = result.replace(';', ' ');
+        return result;
+    }
+
+    /**
+     * Removes all problematic characters from an arraylist of strings
+     * Order is preserved
+     * @param s ArrayList of String to clean
+     * @return Clean Arraylist
+     */
+    public static ArrayList<String> cleanAll(ArrayList<String> s) {
+        ArrayList<String> cleanList = new ArrayList<>();
+        s.forEach(x -> cleanList.add(clean(x)));
+        return cleanList;
+    }
+
 }
 

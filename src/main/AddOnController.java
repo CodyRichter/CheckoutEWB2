@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.GuestFile;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.AddOnItem;
 
@@ -23,7 +24,8 @@ import java.util.Arrays;
  */
 public class AddOnController {
 
-    public Guest selectedGuest = null;
+    public GuestFile selectedGuest;
+    public Guest selectedGuestLoaded = GuestController.selectedGuestLoaded;
 
     public AddOnController() {
     }
@@ -33,7 +35,7 @@ public class AddOnController {
 
         Main.addOnController = this;
 
-        selectedGuest = Main.guestController.guestSelect.getValue();
+        selectedGuest = GuestController.selectedGuest;
 
         itemType.getItems().addAll(Arrays.asList(AddOnItem.class.getEnumConstants())); //Add All Enums in AddOnItem to The List
         if (itemType.getItems().size() > 0) { //Set Value in Drop-Down
@@ -42,7 +44,7 @@ public class AddOnController {
             itemType.setDisable(true);
         }
         updateCost();
-        for (AddOnContainer a : selectedGuest.getAddOnItems()) {
+        for (AddOnContainer a : selectedGuestLoaded.getAddOnItems()) {
             itemList.getChildren().add(a);
         }
     }
@@ -74,8 +76,8 @@ public class AddOnController {
      */
     @FXML
     public void addItem() {
-        AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuest);
-        selectedGuest.addItem(aoc);
+        AddOnContainer aoc = new AddOnContainer(itemType.getValue(),itemType.getValue().getCost(),description.getText(),selectedGuestLoaded);
+        selectedGuestLoaded.addItem(aoc);
         description.clear();
         itemList.getChildren().add(aoc);
     }
@@ -96,6 +98,7 @@ public class AddOnController {
      */
     @FXML
     public void exit() {
+        selectedGuest.save(selectedGuestLoaded);
 
         try {
             Stage stage = (Stage) addItem.getScene().getWindow();

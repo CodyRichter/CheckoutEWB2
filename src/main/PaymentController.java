@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.GuestFile;
+import main.ConcurrentManagement.TransactionFile;
 import main.FXMLAddOn.AddOnContainer;
 import main.FXMLAddOn.PaymentContainer;
 import main.FXMLAddOn.PaymentMethod;
@@ -23,7 +25,9 @@ import java.util.Arrays;
 
 public class PaymentController {
 
-    public Guest selectedGuest = Main.guestController.guestSelect.getValue();
+    public GuestFile selectedGuest = GuestController.selectedGuest;
+    public Guest selectedGuestLoaded = selectedGuest.load();
+    private ArrayList<PaymentContainer> paymentList = new ArrayList<>();
 
     public PaymentController() {
 
@@ -33,8 +37,10 @@ public class PaymentController {
     public void initialize() {
         Main.paymentController = this;
 
-        selectedGuest = Main.guestController.guestSelect.getValue(); //Get the guest currently selected in the guest controller.
-        for (PaymentContainer p : selectedGuest.getPayments()) { //Add all current payments
+        selectedGuest = GuestController.selectedGuest; //Get the guest currently selected in the guest controller.
+        paymentList.clear();
+        paymentList = new TransactionFile(selectedGuestLoaded.getNumber()).load();
+        for (PaymentContainer p : paymentList) { //Add all current payments
             payments.getChildren().add(p);
         }
 
@@ -104,7 +110,7 @@ public class PaymentController {
         //Get values from input fields
         double paid = GuestController.parseInputToDouble(amountPaid);
         double change = GuestController.parseInputToDouble(changeGiven);
-        String desc = DataManager.clean(description.getText());
+        String desc = ConcurrentDataManager.clean(description.getText());
 
         PaymentContainer p = new PaymentContainer(paid,change,paymentMethod.getValue(),paymentType.getValue(),desc);
 
@@ -116,7 +122,7 @@ public class PaymentController {
         paymentMethod.setValue(PaymentMethod.CASH);
 
         payments.getChildren().add(p); //Add the payment to display on the form
-        selectedGuest.getPayments().add(p); //Add the payment to the list of all payments for the guest
+        paymentList.add(p); //Add the payment to the list of all payments for the guest
 
         updateMoneyCounters();
 
@@ -128,7 +134,7 @@ public class PaymentController {
      */
     public void removePayment(PaymentContainer p) {
         payments.getChildren().remove(p);
-        selectedGuest.getPayments().remove(p); //Remove the payment from the list of all the payments for the guest.
+        paymentList.remove(p); //Remove the payment from the list of all the payments for the guest.
         updateMoneyCounters();
     }
 
@@ -142,17 +148,17 @@ public class PaymentController {
     @FXML
     public void getTotal() {
         double totalAsDouble = 0;
-        for (Item i : selectedGuest.getItems()) {
+        for (Item i : selectedGuestLoaded.getItems()) {
             try {
                 totalAsDouble += Double.parseDouble(i.get("itemPrice")); //Gets the price of each item and adds it to the total
             } catch (Exception ignored) {}
         }
-        for (PaymentContainer p : selectedGuest.getPayments()) {
+        for (PaymentContainer p : paymentList) {
             if (p.getPaymentType() == PaymentType.DONATION) {
                 totalAsDouble += p.getPaid()-p.getChange();
             }
         }
-        for (AddOnContainer a : selectedGuest.getAddOnItems()) {
+        for (AddOnContainer a : selectedGuestLoaded.getAddOnItems()) {
             totalAsDouble += a.getCost();
         }
         total.setText("$"+new DecimalFormat("#.##").format(totalAsDouble));
@@ -164,7 +170,7 @@ public class PaymentController {
     @FXML
     public void getAmountPaid() {
         double paidAsDouble = 0;
-        for (PaymentContainer p : selectedGuest.getPayments()) {
+        for (PaymentContainer p : paymentList) {
             paidAsDouble += p.getPaid()-p.getChange();
         }
         totalPaid.setText("$"+new DecimalFormat("#.##").format(paidAsDouble));
@@ -209,7 +215,6 @@ public class PaymentController {
      */
     @FXML
     public void exit() {
-
         //Ensure that all data in the form is saved before exiting
         if (!amountPaid.getText().isEmpty() || !changeGiven.getText().isEmpty() || !description.getText().isEmpty()) {
             Alert a = new Alert(Alert.AlertType.CONFIRMATION);
@@ -222,6 +227,8 @@ public class PaymentController {
                 return;
             }
         }
+
+        new TransactionFile(selectedGuestLoaded.getNumber()).save(paymentList);
 
         try {
             Stage stage = (Stage) amountPaid.getScene().getWindow();

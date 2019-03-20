@@ -14,40 +14,30 @@ import java.util.*;
  */
 public class Guest implements Comparable<Guest> {
 
-    //TODO: Add mailing address as field
-
-    //TODO: Add warning to deleting user
-
     //TODO: Find nullpointer on deleting guest(?)
 
-
-    private static Set<Integer> usedNumbers;
     private ArrayList<AddOnContainer> addOnItems = new ArrayList<>();
 
     private HashMap<String,String> map = new HashMap<>();
     private ArrayList<Item> items = new ArrayList<>();
-    private ArrayList<PaymentContainer> payments = new ArrayList<>();
 
-    private int number = -1; //Identifying number for a Guest. Must be specific.
+    private double number = -1; //Identifying number for a Guest. Must be specific.
     private boolean temp; //Whether the current guest is for temporary use. (Temp guests have no item #)
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
-        if (usedNumbers == null) usedNumbers = new HashSet<>();
         for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
     /**
-     * Creates a temporary guest for use within the program. A temporary guest does not have an item number
-     * and is not meant to be saved into the config file
-     * @param temp
+     * Creates a guest for use within the program with no extra data allocated. An empty guest does not have a number
+     * and is only meant for use from file loading
+     * @param empty True if guest is created from file.
      */
     @SuppressWarnings("StatementWithEmptyBody")
-    public Guest(boolean temp,String name) {
-        if (!temp) { //Only run this if the guest is not a temp
+    public Guest(boolean empty) {
+        if (!empty) { //Only run this if the guest is not blank
             for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
-        } else {
-            map.put("firstName",name);
         }
     }
 
@@ -58,13 +48,8 @@ public class Guest implements Comparable<Guest> {
      * @param num Number to set the guest to
      * @return Successful set of guest's number
      */
-    public boolean setNumber(int num) {
-        if (temp || usedNumbers.contains(num)) {
-            return false; //Return false if the guest's desired number is already in use or if guest is temp
-        }
-        usedNumbers.remove(this.number); //Mark the current number as unused
+    public boolean setNumber(double num) {
         this.number = num;
-        usedNumbers.add(num); //Add the new number to the list of current numbers.
         return true;
     }
 
@@ -72,7 +57,7 @@ public class Guest implements Comparable<Guest> {
      * Provides the guest's unique identifying number.
      * @return Unique number
      */
-    public int getNumber() {
+    public double getNumber() {
         return number;
     }
 
@@ -223,14 +208,6 @@ public class Guest implements Comparable<Guest> {
         return result;
     }
 
-    /**
-     * Returns the ArrayList containing all of the guest's payments.
-     * @return ArrayList Containing All of Guest's Payments
-     */
-    public ArrayList<PaymentContainer> getPayments() {
-        return payments;
-    }
-
     @Override
     public String toString() {
         //Ensure We Have Data For All Fields, And Remove Null Entries
@@ -243,24 +220,12 @@ public class Guest implements Comparable<Guest> {
         if (firstName.equals("") && lastName.equals("")) {
             return "" + number;
         } else if (firstName.equals("")) {
-            return ""+number+" | " + lastName;
+            return ""+number+" - " + lastName;
         } else if (lastName.equals("")) {
-            return ""+number+" | " + firstName;
+            return ""+number+" - " + firstName;
         }
         //Ideal Case: Return:   # | Last Name, First Name
-        return ""+number+" | " + lastName + ", " + firstName;
-    }
-
-    /**
-     * Frees data associated with the guest, the main one being the number.
-     */
-    public void free() {
-        assert usedNumbers != null;
-        if (usedNumbers.size()>1 && usedNumbers.contains(number))
-            usedNumbers.remove(number);
-        else if (usedNumbers.size()==1) {
-            usedNumbers.clear();
-        }
+        return ""+number+" - " + lastName + ", " + firstName;
     }
 
     /**
