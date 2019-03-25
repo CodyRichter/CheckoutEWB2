@@ -1,4 +1,4 @@
-package main.FXMLAddOn;
+package main.Transactions;
 
 public enum PaymentType { //Ways that a user can pay
     PAYMENT,DONATION;

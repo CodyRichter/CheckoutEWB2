@@ -1,4 +1,4 @@
-package main.FXMLAddOn;
+package main.Transactions;
 
 public enum PaymentMethod { //Ways that a user can pay
     CASH,CHECK,OTHER;

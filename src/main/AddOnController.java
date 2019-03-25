@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.ConcurrentManagement.GuestFile;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.AddOnItem;
+import main.AddsOns.AddOnContainer;
+import main.AddsOns.AddOnItem;
 
 import java.util.Arrays;
 

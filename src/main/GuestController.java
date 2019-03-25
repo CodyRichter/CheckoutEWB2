@@ -11,9 +11,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.ConcurrentDataManager;
 import main.ConcurrentManagement.GuestFile;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.AddOnItem;
+import main.AddsOns.AddOnContainer;
+import main.AddsOns.AddOnItem;
 
 import java.net.URI;
 import java.util.HashMap;

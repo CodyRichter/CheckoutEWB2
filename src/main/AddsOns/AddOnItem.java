@@ -1,10 +1,10 @@
-package main.FXMLAddOn;
+package main.AddsOns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * CheckoutEWB2 - main.FXMLAddOn
+ * CheckoutEWB2 - main.Transactions
  *
  * @author AddOnItem
  * @version 1.0

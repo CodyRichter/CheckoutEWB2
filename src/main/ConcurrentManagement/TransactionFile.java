@@ -1,19 +1,12 @@
 package main.ConcurrentManagement;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
-import main.ConcurrentDataManager;
-import main.FXMLAddOn.*;
-import main.Guest;
-import main.Item;
+import main.Transactions.*;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static main.ConcurrentDataManager.*;
-import static main.ConcurrentDataManager.folders;
 
 public class TransactionFile extends File {
 

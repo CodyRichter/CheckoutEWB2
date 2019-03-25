@@ -1,4 +1,4 @@
-package main.FXMLAddOn;
+package main.Transactions;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

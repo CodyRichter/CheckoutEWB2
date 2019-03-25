@@ -1,7 +1,6 @@
 package main;
 
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.PaymentContainer;
+import main.AddsOns.AddOnContainer;
 
 import java.util.*;
 

@@ -1,9 +1,10 @@
-package main;
+package main.ConcurrentManagement;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.ConcurrentManagement.GuestFile;
 import main.ConcurrentManagement.TransactionFile;
+import main.Item;
 
 import java.io.File;
 import java.io.FileWriter;

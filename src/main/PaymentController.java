@@ -12,12 +12,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.ConcurrentDataManager;
 import main.ConcurrentManagement.GuestFile;
 import main.ConcurrentManagement.TransactionFile;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.PaymentContainer;
-import main.FXMLAddOn.PaymentMethod;
-import main.FXMLAddOn.PaymentType;
+import main.AddsOns.AddOnContainer;
+import main.Transactions.PaymentContainer;
+import main.Transactions.PaymentMethod;
+import main.Transactions.PaymentType;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

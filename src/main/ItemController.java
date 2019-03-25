@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import main.ConcurrentManagement.ConcurrentDataManager;
 import main.ConcurrentManagement.GuestFile;
 
 import java.net.URI;

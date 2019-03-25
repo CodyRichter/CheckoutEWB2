@@ -1,19 +1,17 @@
 package main.ConcurrentManagement;
 
-import main.ConcurrentDataManager;
-import main.FXMLAddOn.AddOnContainer;
-import main.FXMLAddOn.AddOnItem;
+import main.AddsOns.AddOnContainer;
+import main.AddsOns.AddOnItem;
 import main.Guest;
 import main.Item;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static main.ConcurrentDataManager.*;
+import static main.ConcurrentManagement.ConcurrentDataManager.*;
 
 /**
  * File object to store the current Guest's data. Can directly handle many actions
@@ -189,7 +187,7 @@ public class GuestFile extends File {
         //
         // Writing Data To File
         //
-        File guestFile = new File("Guests.csv");
+        File guestFile = this;
 
         try { //Ensure Files Are Created
             if (!guestFile.exists())  //Ensure file for guests exists
