@@ -59,8 +59,6 @@ public class ConcurrentDataManager {
             guests.add(gf);
         }
 
-        //TODO: Load All Transactions Into Program
-
     }
 
 

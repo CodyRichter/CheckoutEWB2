@@ -13,8 +13,6 @@ import java.util.*;
  */
 public class Guest implements Comparable<Guest> {
 
-    //TODO: Find nullpointer on deleting guest(?)
-
     private ArrayList<AddOnContainer> addOnItems = new ArrayList<>();
 
     private HashMap<String,String> map = new HashMap<>();
