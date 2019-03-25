@@ -54,6 +54,7 @@ public class GuestFile extends File {
      */
     public Guest load() {
         if (this == noOwner) return null;
+        System.out.println("Loading Guest: " + this.toString());
         Guest g = new Guest(true);
         g.setNumber(number);
         if (!this.exists()) return g;
@@ -145,6 +146,7 @@ public class GuestFile extends File {
 
     public GuestFile save(Guest g) {
         if (this == noOwner) return null;
+        System.out.println("Saving Guest: " + this.toString());
         GuestFile newFile = new GuestFile(ConcurrentDataManager.networkLocation + "/" + folders[0] + "/" + (g.toString() + ".csv"));
 
         if (newFile.exists()) {

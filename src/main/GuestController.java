@@ -143,7 +143,7 @@ public class GuestController {
 
         GuestFile newGuestFile = gf.save(selectedGuestLoaded);
         updateGuestSelector(ConcurrentDataManager.guests,newGuestFile); //Update selector to reflect on any changes that might be made when saving guest (e.g.: name change)
-        updateForm(newGuestFile);
+        //updateForm(newGuestFile);
     }
 
     /**
@@ -469,7 +469,6 @@ public class GuestController {
         if (g == null || c.size() == 0) return;
         Set<GuestFile> temp = new HashSet<>(c);
         c.clear();
-        //temp.forEach(value -> c.add(value));
         c.addAll(temp);
         guestSelect.setItems(c);
         guestSelect.getItems().sort(GuestFile::compareTo);
