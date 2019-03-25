@@ -242,6 +242,17 @@ public class GuestController {
         }
     }
 
+    @FXML
+    public void formatFiles() {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+        a.setTitle("Format Files");
+        a.setHeaderText("Are You Sure You Want To Format All Guest Files?");
+        a.setContentText("Formatting all of the guest files has the potential to erase data from other locations that hasn't been saved, and should only be used initially to fix imported file names. \nAre you sure you want to continue?");
+        a.showAndWait();
+        if (a.getResult() != ButtonType.OK) return;
+            GuestFile.formatAllGuestFiles();
+    }
+
     /**
      * Exits program and closes all windows.
      * Note: This WILL NOT save any data loaded into the program at the

@@ -33,12 +33,29 @@ public class GuestFile extends File {
         try {
             number = Double.parseDouble(numberAsString);
         } catch (Exception e) {
-            System.out.println("[Data Loading Error]: Unable To Parse Guest Number on file " + pathname + ". Number As String Parsed As: ["+this.toString()+"].");
+            System.out.println("[Data Loading Error]: Unable To Parse Guest Number on file " + pathname + ". Number As String Parsed As: [" + this.toString() + "].");
+        }
+    }
+
+    public GuestFile(String pathname, boolean withoutNumber) {
+        super(pathname);
+        if (withoutNumber) {
+            String numberAsString;
+            if (this.getName().indexOf(' ') >= 0) {
+                numberAsString = this.getName().substring(0, this.getName().indexOf(' '));
+            } else {
+                numberAsString = this.toString();
+            }
+            try {
+                number = Double.parseDouble(numberAsString);
+            } catch (Exception e) {
+                System.out.println("[Data Loading Error]: Unable To Parse Guest Number on file " + pathname + ". Number As String Parsed As: [" + this.toString() + "].");
+            }
         }
     }
 
     public GuestFile(Guest g) {
-        super(ConcurrentDataManager.networkLocation+"/"+ConcurrentDataManager.folders[0]+"/"+g.toString()+".csv");
+        super(ConcurrentDataManager.networkLocation + "/" + ConcurrentDataManager.folders[0] + "/" + g.toString() + ".csv");
         number = g.getNumber();
     }
 
@@ -54,9 +71,7 @@ public class GuestFile extends File {
      */
     public Guest load() {
         if (this == noOwner) return null;
-        System.out.println("Loading Guest: " + this.toString());
         Guest g = new Guest(true);
-        g.setNumber(number);
         if (!this.exists()) return g;
         ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(readFile(this).split("\n")));
         ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
@@ -73,8 +88,17 @@ public class GuestFile extends File {
         line.replaceAll(a -> a.replace("\t", ""));
         line.replaceAll(a -> a.replace("\r", ""));
 
+        if (number < 0) { //If number wasn't loaded from file name
 
+            try {
+                number = Double.parseDouble(line.get(0));
+            } catch (Exception e) {
+                System.out.println("[Data Loading Error]: Unable To Parse Guest Number With Fallback Number Loading Directly From File Data.");
+            }
 
+        }
+
+        g.setNumber(number);
         //
         // Correctly Enter The Hashmap Fields
         //
@@ -144,9 +168,22 @@ public class GuestFile extends File {
         return g;
     }
 
+    /**
+     * Takes all files in the directory of Guests and correctly formats their names
+     * to be consistent with the program.
+     */
+    public static void formatAllGuestFiles() {
+        File[] filesToFormat = new File(ConcurrentDataManager.networkLocation + "/" + ConcurrentDataManager.folders[0]).listFiles();
+        for (File f : filesToFormat) {
+            GuestFile gf = new GuestFile(f.getAbsolutePath(),true);
+            Guest g = gf.load();
+            gf.save(g);
+        }
+    }
+
+
     public GuestFile save(Guest g) {
         if (this == noOwner) return null;
-        System.out.println("Saving Guest: " + this.toString());
         GuestFile newFile = new GuestFile(ConcurrentDataManager.networkLocation + "/" + folders[0] + "/" + (g.toString() + ".csv"));
 
         if (newFile.exists()) {
@@ -267,6 +304,7 @@ public class GuestFile extends File {
 
     /**
      * Compares two files on the basis of number
+     *
      * @param that GuestFile to compare this to
      * @return 1 if this is greater, -1 if that is greater, 0 if equal
      */
@@ -278,6 +316,7 @@ public class GuestFile extends File {
 
     /**
      * Will check all guest files to see if a number has been used
+     *
      * @param numberToCheck Number to check availability of
      * @return true: available, false: used already
      */
