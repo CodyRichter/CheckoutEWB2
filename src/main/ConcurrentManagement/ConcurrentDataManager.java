@@ -2,8 +2,6 @@ package main.ConcurrentManagement;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import main.ConcurrentManagement.GuestFile;
-import main.ConcurrentManagement.TransactionFile;
 import main.Item;
 
 import java.io.File;
@@ -14,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Unlike the traditional data manager, this is intended to be used over the network with multiple instances of the program
@@ -26,7 +23,7 @@ import java.util.Objects;
 public class ConcurrentDataManager {
 
     //Location where common files are stored on network
-    public static final String networkLocation = System.getProperty("user.home") + "/Desktop/CheckoutEWB";
+    public static final String networkLocation = "//SENARII/Users/Cody/Desktop/CheckoutEWB" /*System.getProperty("user.home") + "/Desktop/CheckoutEWB"*/;
     //Note: Order Matters. Place Folder Names as {Guest Directory, Item Directory, Transaction Directory}
     public static final String[] folders = {"Guests", "Transactions"};
 
@@ -52,12 +49,13 @@ public class ConcurrentDataManager {
 
         loadItemData();
 
-        File itemDirectory = new File(networkLocation + "/" + folders[0]);
-        for (File f : Objects.requireNonNull(itemDirectory.listFiles())) {
-            if (!getFileExtension(f).equals(".csv")) return;
-            GuestFile gf = new GuestFile(f.getAbsolutePath());
-            guests.add(gf);
-        }
+        File[] itemDirectory = new File(networkLocation + "/" + folders[0]).listFiles();
+        if (itemDirectory != null)
+            for (File f : itemDirectory) {
+                if (!getFileExtension(f).equals(".csv")) return;
+                GuestFile gf = new GuestFile(f.getAbsolutePath());
+                guests.add(gf);
+            }
 
     }
 
@@ -66,7 +64,7 @@ public class ConcurrentDataManager {
      * Loads in all items from file.
      */
     public static void loadItemData() {
-        File itemFile = new File(networkLocation+"/Items.csv");
+        File itemFile = new File(networkLocation + "/Items.csv");
         if (itemFile.exists()) {
 
             ArrayList<String> itemFileData = new ArrayList<>(Arrays.asList(readFile(itemFile).split("\n")));
@@ -77,7 +75,7 @@ public class ConcurrentDataManager {
                 ArrayList<String> line = new ArrayList<>(Arrays.asList(lineAsString.split(",")));
 
                 for (int n = 0; n < line.size(); n++) { //Remove all special characters from loaded data
-                    String[] toReplace = {"\n","\t","\r"};
+                    String[] toReplace = {"\n", "\t", "\r"};
                     for (String s : toReplace) {
                         line.set(n, line.get(n).replaceAll(s, ""));
                     }
@@ -144,7 +142,7 @@ public class ConcurrentDataManager {
         StringBuilder sb = new StringBuilder();
         for (String s : itemFileData) {
             sb.append(s);
-            if (!itemFileData.get(itemFileData.size()-1).equals(s)) { //Prevent Newline @ End of File
+            if (!itemFileData.get(itemFileData.size() - 1).equals(s)) { //Prevent Newline @ End of File
                 sb.append("\n");
             }
         }
@@ -179,8 +177,8 @@ public class ConcurrentDataManager {
 
     public static void removeGuestFile(GuestFile f) {
         if (f.exists()) {
-         f.unlock(); //Unlock file
-         f.delete();
+            f.unlock(); //Unlock file
+            f.delete();
         }
         guests.remove(f);
     }
@@ -222,6 +220,7 @@ public class ConcurrentDataManager {
 
     /**
      * Reads the contents of a file to a single string
+     *
      * @param f File to read contents of
      * @return String containing all of the file contents
      */
@@ -241,6 +240,7 @@ public class ConcurrentDataManager {
 
     /**
      * Returns the extension of the file
+     *
      * @param file File to get extension of
      * @return File extension (including .)
      */
@@ -277,6 +277,7 @@ public class ConcurrentDataManager {
     /**
      * Removes all problematic characters from an arraylist of strings
      * Order is preserved
+     *
      * @param s ArrayList of String to clean
      * @return Clean Arraylist
      */

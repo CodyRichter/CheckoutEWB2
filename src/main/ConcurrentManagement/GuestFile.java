@@ -321,7 +321,7 @@ public class GuestFile extends File {
      * @return true: available, false: used already
      */
     public static boolean isNumberAvailable(double numberToCheck) {
-        if (numberToCheck < 0) return false;
+        if (numberToCheck < 300) return false;
         for (GuestFile g : ConcurrentDataManager.guests) {
             if (g.number == numberToCheck) return false;
         }

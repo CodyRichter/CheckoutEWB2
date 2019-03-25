@@ -23,7 +23,7 @@ public class Guest implements Comparable<Guest> {
 
     @SuppressWarnings("StatementWithEmptyBody")
     public Guest() {
-        for (int num = 0;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
+        for (int num = 300;!setNumber(num);num++) {} //Loop until we can set the number to be a valid number
     }
 
     /**
