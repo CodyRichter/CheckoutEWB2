@@ -74,8 +74,9 @@ public class Guest implements Comparable<Guest> {
      * @return Value stored in guest's hashmap of inventory items.
      */
     public String get(String key) {
+        if (key == null || map == null || !map.containsKey(key)) return "";
         String toReturn = map.get(key);
-        if (toReturn == null) toReturn = "";
+        if (toReturn == null || toReturn.length()==0 || toReturn.trim().length() == 0) toReturn = "";
         return toReturn;
     }
 
@@ -209,10 +210,9 @@ public class Guest implements Comparable<Guest> {
     public String toString() {
         //Ensure We Have Data For All Fields, And Remove Null Entries
         String firstName = get("firstName");
-        if (firstName==null) firstName="";
+        if (firstName==null || firstName.isEmpty()) firstName="";
         String lastName = get("lastName");
-        if (lastName==null) lastName="";
-
+        if (lastName==null|| lastName.isEmpty()) lastName="";
         //Only Return Fields That We Have
         if (firstName.equals("") && lastName.equals("")) {
             return "" + number;

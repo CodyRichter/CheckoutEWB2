@@ -56,7 +56,11 @@ public class GuestFile extends File {
 
     public GuestFile(Guest g) {
         super(ConcurrentDataManager.networkLocation + "/" + ConcurrentDataManager.folders[0] + "/" + g.toString() + ".csv");
-        number = g.getNumber();
+    }
+
+    public GuestFile(double num) {
+        super(ConcurrentDataManager.networkLocation + "/" + ConcurrentDataManager.folders[0] + "/" + num + ".csv");
+        number = num;
     }
 
     private GuestFile() {
@@ -72,7 +76,7 @@ public class GuestFile extends File {
     public Guest load() {
         if (this == noOwner) return null;
         Guest g = new Guest(true);
-        if (!this.exists()) return g;
+        if (!this.exists() || number < 0) return g;
         ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(readFile(this).split("\n")));
         ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
 //        System.out.println("Header: " + guestFileData.get(0));
@@ -186,8 +190,15 @@ public class GuestFile extends File {
         if (this == noOwner) return null;
         GuestFile newFile = new GuestFile(ConcurrentDataManager.networkLocation + "/" + folders[0] + "/" + (g.toString() + ".csv"));
 
-        if (newFile.exists()) {
+        if (newFile.getName().equalsIgnoreCase(this.getName())) {
             newFile = this;
+        }
+        if (!newFile.exists()) {
+            try {
+                newFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         ArrayList<String> guestFileData = new ArrayList<>(); //Stores all of the data in the guest file, line by line

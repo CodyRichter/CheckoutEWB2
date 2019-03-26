@@ -147,6 +147,21 @@ public class GuestController {
     }
 
     /**
+     * Saves the data from the form into a guest object and guest file
+     * @param gf Guest File to save to
+     * @param g Guest to save
+     * @return New File
+     */
+    private GuestFile saveGuestData(GuestFile gf, Guest g) {
+        if (gf == null) return gf;
+        for (String s : textFields.keySet()) {
+            g.add(s, textFields.get(s).getText()); //Puts Each TextField Into Guest's HashMap
+        }
+
+        return gf.save(g);
+    }
+
+    /**
      * Saves program data and exits program after saving.
      */
     @FXML
@@ -203,13 +218,15 @@ public class GuestController {
             }
         }
 
+        updateForm(null); //Wipe Form
         Guest g = new Guest(true);
         g.setNumber(gNum);
-        GuestFile newGuestFile = new GuestFile(g);
-        saveGuestData();
-        ConcurrentDataManager.guests.add(newGuestFile);
+        GuestFile gf = new GuestFile(gNum);
+        GuestFile newGuestFile = saveGuestData(gf,g);
+        if (!ConcurrentDataManager.guests.contains(newGuestFile))
+            ConcurrentDataManager.guests.add(newGuestFile);
+        updateForm(newGuestFile);
         updateGuestSelector(ConcurrentDataManager.guests,newGuestFile);
-        guestSelect.setValue(newGuestFile);
         guestSelect.setDisable(false);
     }
 
@@ -242,6 +259,9 @@ public class GuestController {
         }
     }
 
+    /**
+     * Renames all files in the Guest directory to the correct toString display format
+     */
     @FXML
     public void formatFiles() {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
