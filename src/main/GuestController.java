@@ -16,6 +16,7 @@ import main.ConcurrentManagement.GuestFile;
 import main.AddsOns.AddOnContainer;
 import main.AddsOns.AddOnItem;
 
+import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -88,9 +89,19 @@ public class GuestController {
         });
 
 
+        File f = new File(ConcurrentDataManager.networkLocation);
+
         //Using Network Data Management
         ConcurrentDataManager.loadAllData(); //Load in all Data From Network
 
+        if (!f.exists()) {
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("Critial Error");
+            a.setHeaderText("Unable To Locate Data Files");
+            a.setContentText("CheckoutEWB was unable to locate the data files required to run the program. Please ensure you are connected to the network and that you have permission to access the directory.");
+            a.showAndWait();
+            System.exit(0);
+        }
 
         guestSelect.setItems(ConcurrentDataManager.guests);
         if (!guestSelect.getItems().isEmpty()) {

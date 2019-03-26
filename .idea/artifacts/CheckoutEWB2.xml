@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="CheckoutEWB2">
+    <output-path>$PROJECT_DIR$/out/artifacts/CheckoutEWB2</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="main.Main" />
+        <option name="description" value="Payment Management System for Auction" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="CheckoutEWB2" />
+        <option name="vendor" value="UMass Amherst Engineers Without Borders" />
+        <option name="version" value="2.5" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="CheckoutEWB2.jar">
+        <element id="module-output" name="CheckoutEWB2" />
+      </element>
+    </root>
+  </artifact>
+</component>
