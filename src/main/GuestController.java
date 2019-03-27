@@ -509,6 +509,7 @@ public class GuestController {
      */
     private void updateGuestSelector(ObservableList<GuestFile> c, GuestFile g) {
         if (g == null || c.size() == 0) return;
+        if (c == ConcurrentDataManager.guests) ConcurrentDataManager.loadGuestData(); //Load in fresh guest data into form.
         Set<GuestFile> temp = new HashSet<>(c);
         c.clear();
         c.addAll(temp);

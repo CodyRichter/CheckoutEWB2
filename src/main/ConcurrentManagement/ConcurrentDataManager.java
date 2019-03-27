@@ -48,17 +48,21 @@ public class ConcurrentDataManager {
         setupNetworkLocation();
 
         loadItemData();
+        loadGuestData();
+    }
 
-        File[] itemDirectory = new File(networkLocation + "/" + folders[0]).listFiles();
-        if (itemDirectory != null)
-            for (File f : itemDirectory) {
+
+    public static void loadGuestData() {
+        guests.clear();
+        File[] guestDirectory = new File(networkLocation + "/" + folders[0]).listFiles();
+        if (guestDirectory != null) {
+            for (File f : guestDirectory) {
                 if (!getFileExtension(f).equals(".csv")) return;
                 GuestFile gf = new GuestFile(f.getAbsolutePath());
                 guests.add(gf);
             }
-
+        }
     }
-
 
     /**
      * Loads in all items from file.
