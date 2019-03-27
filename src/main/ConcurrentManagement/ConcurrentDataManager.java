@@ -23,7 +23,7 @@ import java.util.Arrays;
 public class ConcurrentDataManager {
 
     //Location where common files are stored on network
-    public static final String networkLocation = "//SENARII/Users/Cody/Desktop/CheckoutEWB" /*System.getProperty("user.home") + "/Desktop/CheckoutEWB"*/;
+    public static final String networkLocation = System.getProperty("user.home") + "/Onedrive/CheckoutEWB";
     //Note: Order Matters. Place Folder Names as {Guest Directory, Item Directory, Transaction Directory}
     public static final String[] folders = {"Guests", "Transactions"};
 
