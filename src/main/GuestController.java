@@ -285,6 +285,15 @@ public class GuestController {
     }
 
     /**
+     * Updates all of the values in the Guest selector before they are displayed from the file
+     */
+    @FXML
+    public void updateGuestSelectorFromFilesBeforeRender() {
+        updateGuestSelector(ConcurrentDataManager.guests,selectedGuest);
+    }
+
+
+    /**
      * Exits program and closes all windows.
      * Note: This WILL NOT save any data loaded into the program at the
      * time of exiting.
