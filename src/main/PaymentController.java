@@ -54,6 +54,7 @@ public class PaymentController {
         //Set correct values of Payment Method
         paymentMethod.getItems().add(PaymentMethod.CASH);
         paymentMethod.getItems().add(PaymentMethod.CHECK);
+        paymentMethod.getItems().add(PaymentMethod.ONLINE);
         paymentMethod.getItems().add(PaymentMethod.OTHER);
         paymentMethod.setValue(PaymentMethod.CASH);
 
