@@ -494,17 +494,18 @@ public class GuestController {
 
         //Load all add-on items into inventory
 
-        HashMap<AddOnItem,Integer> addOnsInInventory = new HashMap<>();
+        //HashMap<AddOnItem,Integer> addOnsInInventory = new HashMap<>();
+//        for (AddOnContainer a : selectedGuestLoaded.getAddOnItems()) {
+//            //Get the current amount of the item. If it isn't in the map yet, there is now 1.
+//            int amount = addOnsInInventory.getOrDefault(a.getItemType(), 0);
+//            addOnsInInventory.put(a.getItemType(),amount+1);
+//        }
 
-        for (AddOnContainer a : selectedGuestLoaded.getAddOnItems()) {
-            //Get the current amount of the item. If it isn't in the map yet, there is now 1.
-            int amount = addOnsInInventory.getOrDefault(a.getItemType(), 0);
-            addOnsInInventory.put(a.getItemType(),amount+1);
-        }
-
-        for (AddOnItem i : addOnsInInventory.keySet()) {
+        for (AddOnContainer ic : selectedGuestLoaded.getAddOnItems()) {
             Label l = new Label();
-            l.setText("$"+(i.getCost()*addOnsInInventory.get(i))+" : " + i + "      (Qty: "+ addOnsInInventory.get(i) +")");
+            l.setText("$"+(ic.getCost())+" : " + ic.getItemType().toString());
+            if (!ic.getDescription().isEmpty()) // If there is a description for the item
+                l.setText(l.getText()+ " | NOTE: " + ic.getDescription());
             itemList.getChildren().add(l);
         }
 

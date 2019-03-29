@@ -25,8 +25,8 @@ public enum  AddOnItem {
             new ItemAccessContainer(AddOnItem.SHIRT,"Shirt",10),
             new ItemAccessContainer(AddOnItem.GLASS,"Glass",7),
             new ItemAccessContainer(AddOnItem.TWO_GLASS,"2x Glass (Combo Deal)",12),
-            new ItemAccessContainer(AddOnItem.ADULT_TICKET,"Adult Ticket",20),
-            new ItemAccessContainer(AddOnItem.DISCOUNT_TICKET,"Student/Discount Ticket",10)));
+            new ItemAccessContainer(AddOnItem.ADULT_TICKET,"Online Adult Ticket",0),
+            new ItemAccessContainer(AddOnItem.DISCOUNT_TICKET,"Online Discount Ticket",0)));
 
 
     /**

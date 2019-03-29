@@ -39,7 +39,7 @@ public class GuestFile extends File {
 
     public GuestFile(String pathname, boolean withoutNumber) {
         super(pathname);
-        if (withoutNumber) {
+        if (!withoutNumber) {
             String numberAsString;
             if (this.getName().indexOf(' ') >= 0) {
                 numberAsString = this.getName().substring(0, this.getName().indexOf(' '));
@@ -76,7 +76,7 @@ public class GuestFile extends File {
     public Guest load() {
         if (this == noOwner) return null;
         Guest g = new Guest(true);
-        if (!this.exists() || number < 0) return g;
+        if (!this.exists()) return g;
         ArrayList<String> guestFileData = new ArrayList<>(Arrays.asList(readFile(this).split("\n")));
         ArrayList<String> header = new ArrayList<>(Arrays.asList(guestFileData.get(0).trim().split(",")));
 //        System.out.println("Header: " + guestFileData.get(0));
@@ -178,10 +178,15 @@ public class GuestFile extends File {
      */
     public static void formatAllGuestFiles() {
         File[] filesToFormat = new File(ConcurrentDataManager.networkLocation + "/" + ConcurrentDataManager.folders[0]).listFiles();
-        for (File f : filesToFormat) {
-            GuestFile gf = new GuestFile(f.getAbsolutePath(),true);
-            Guest g = gf.load();
-            gf.save(g);
+        if (filesToFormat != null) {
+            for (File f : filesToFormat) {
+                GuestFile gf = new GuestFile(f.getAbsolutePath(), true);
+                Guest g = gf.load();
+                gf.save(g);
+            }
+            System.out.println("[All Guest Files Formatted] Program Gracefully Exiting. Please restart to use load correctly formatted files");
+            System.exit(0);
+
         }
     }
 

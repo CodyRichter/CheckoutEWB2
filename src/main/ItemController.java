@@ -234,6 +234,7 @@ public class ItemController {
      */
     @FXML
     public void removeItemOwner() {
+        if (ownerSelect.getValue() == GuestFile.noOwner) return;
         GuestFile gf = ownerSelect.getValue();
         Guest owner = gf.load();
         owner.removeItem(selectedItem);
