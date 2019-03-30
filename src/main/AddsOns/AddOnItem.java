@@ -14,7 +14,7 @@ public enum  AddOnItem {
     //TODO: Add tracking to number of ticket available
 
     //All Add-On Items Are In The Enums Below. Simply Add a new Enum to Create a new Add-On Item
-    SHIRT,GLASS,TWO_GLASS,ADULT_TICKET,DISCOUNT_TICKET;
+    SHIRT,GLASS,ADULT_TICKET,DISCOUNT_TICKET,ONLINE_ADULT_TICKET,ONLINE_DISCOUNT_TICKET;
 
     /**
      * All Item Information Can Be Added Here.
@@ -24,9 +24,10 @@ public enum  AddOnItem {
     private static ArrayList<ItemAccessContainer> itemData = new ArrayList<>(Arrays.asList(
             new ItemAccessContainer(AddOnItem.SHIRT,"Shirt",10),
             new ItemAccessContainer(AddOnItem.GLASS,"Glass",7),
-            new ItemAccessContainer(AddOnItem.TWO_GLASS,"2x Glass (Combo Deal)",12),
-            new ItemAccessContainer(AddOnItem.ADULT_TICKET,"Online Adult Ticket",0),
-            new ItemAccessContainer(AddOnItem.DISCOUNT_TICKET,"Online Discount Ticket",0)));
+            new ItemAccessContainer(AddOnItem.ADULT_TICKET,"Adult Ticket",0),
+            new ItemAccessContainer(AddOnItem.DISCOUNT_TICKET,"Discount Ticket",0),
+            new ItemAccessContainer(AddOnItem.ONLINE_ADULT_TICKET,"Online Adult Ticket",0),
+            new ItemAccessContainer(AddOnItem.ONLINE_DISCOUNT_TICKET,"Online Discount Ticket",0)));
 
 
     /**
