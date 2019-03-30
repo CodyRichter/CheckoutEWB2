@@ -493,7 +493,7 @@ public class GuestController {
 
         for (Item i : selectedGuestLoaded.getItems()) {
             Label l = new Label();
-            l.setText("$" + i.get("itemPrice") + " : " + i.get("itemName"));
+            l.setText("$" + i.get("itemPrice") + " [" + i.getNumber() + "] : " + i.get("itemName"));
             itemList.getChildren().add(l);
         }
 
