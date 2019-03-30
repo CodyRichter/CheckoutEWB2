@@ -2,6 +2,7 @@ package main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -207,8 +208,12 @@ public class GuestController {
         TextInputDialog d = new TextInputDialog();
         d.setTitle("Create New Guest");
         d.setContentText("Please enter the desired Guest number. Leave blank to automatically assign.");
+        Button cancel = (Button) d.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancel.addEventFilter(ActionEvent.ACTION, event ->
+                d.setResult(null));
         d.showAndWait();
-        if (d.getResult() == null || d.getResult().isEmpty()) {
+        if (d.getResult() == null) return;
+        if (d.getResult().isEmpty()) {
             while (!GuestFile.isNumberAvailable(gNum)) {
                 gNum++;
             }
