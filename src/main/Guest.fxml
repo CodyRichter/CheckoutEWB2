@@ -49,6 +49,7 @@
                 <MenuItem fx:id="newGuest" mnemonicParsing="false" onAction="#createNewGuest" text="New User" />
                 <MenuItem fx:id="removeGuest" mnemonicParsing="false" onAction="#removeGuest" text="Delete User" />
             <MenuItem mnemonicParsing="false" onAction="#formatFiles" text="Format Guest Files" />
+            <MenuItem mnemonicParsing="false" onAction="#countCheckIn" text="Count Number Checked In" />
             </Menu>
         </MenuBar>
     </FlowPane>

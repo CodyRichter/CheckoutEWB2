@@ -12,10 +12,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.ConcurrentManagement.ConcurrentDataManager;
-import main.ConcurrentManagement.GuestFile;
 import main.AddsOns.AddOnContainer;
 import main.AddsOns.AddOnItem;
+import main.ConcurrentManagement.ConcurrentDataManager;
+import main.ConcurrentManagement.GuestFile;
 
 import java.io.File;
 import java.net.URI;
@@ -287,6 +287,25 @@ public class GuestController {
         a.showAndWait();
         if (a.getResult() != ButtonType.OK) return;
             GuestFile.formatAllGuestFiles();
+    }
+
+    @FXML
+    public void countCheckIn() {
+        int total = 0;
+        for (GuestFile gf : ConcurrentDataManager.guests) {
+            Guest g = gf.load();
+            for (AddOnContainer aoc : g.getAddOnItems()) {
+                if (aoc.getItemType() == AddOnItem.CHECK_IN) {
+                    total++;
+                    break;
+                }
+            }
+        }
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle("Total Check In");
+        a.setHeaderText("Total Number of Guests Checked In");
+        a.setContentText(""+total);
+        a.showAndWait();
     }
 
     /**

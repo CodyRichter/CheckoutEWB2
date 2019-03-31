@@ -4,11 +4,11 @@
     <properties id="javafx-properties">
       <options>
         <option name="appClass" value="main.Main" />
-        <option name="description" value="Payment Management System for Auction" />
+        <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
         <option name="title" value="CheckoutEWB2" />
         <option name="vendor" value="UMass Amherst Engineers Without Borders" />
-        <option name="version" value="2.5" />
+        <option name="version" value="" />
       </options>
     </properties>
     <root id="root">
